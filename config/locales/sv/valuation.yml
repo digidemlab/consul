@@ -47,7 +47,7 @@ sv:
         edit_dossier: Redigera rapport
         price: Kostnad
         price_first_year: Kostnad för första året
-        currency: "€"
+        currency: "kr"
         feasibility: Genomförbarhet
         feasible: Genomförbart
         unfeasible: Ej genomförbart
@@ -97,7 +97,7 @@ sv:
         edit_dossier: Redigera rapport
         price: Kostnad
         price_first_year: Kostnad för första året
-        currency: "€"
+        currency: "kr"
         feasibility: Genomförbarhet
         feasible: Genomförbart
         not_feasible: Ej genomförbart
@@ -112,7 +112,7 @@ sv:
         dossier: Rapport
         price_html: "Kostnad (%{currency})"
         price_first_year_html: "Kostnad under första året (%{currency})"
-        currency: "€"
+        currency: "kr"
         price_explanation_html: Kostnadsförklaring
         feasibility: Genomförbarhet
         feasible: Genomförbart

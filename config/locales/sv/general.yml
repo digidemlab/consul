@@ -104,7 +104,7 @@ sv:
         one: " med ämne '%{topic} '"
         other: " med ämne '%{topic} '"
       orders:
-        confidence_score: högst betyg
+        confidence_score: populära
         created_at: senaste
         hot_score: mest aktiva
         most_commented: mest kommenterade
@@ -170,13 +170,13 @@ sv:
   form:
     accept_terms: Jag godkänner %{policy} och %{conditions}
     accept_terms_title: Jag godkänner sekretesspolicyn och användarvillkoren
-    conditions: Användarvillkoren
+    conditions: användarvillkoren
     debate: Debattera
     direct_message: privat meddelande
     error: fel
     errors: fel
     not_saved_html: "gjorde att %{resource} inte kunde sparas. <br>Kontrollera och rätta till de markerade fälten:"
-    policy: Sekretesspolicy
+    policy: sekretesspolicyn
     proposal: Förslag
     proposal_notification: "Avisering"
     spending_proposal: Budgetförslag
@@ -201,13 +201,13 @@ sv:
       ie_title: Webbplatsen är inte optimerad för din webbläsare
     footer:
       accessibility: Tillgänglighet
-      conditions: Regler och användarvillkor
+      conditions: Användarvillkor
       consul: CONSUL
       consul_url: https://github.com/consul/consul
       contact_us: För teknisk support gå till
       copyright: CONSUL, %{year}
       description: Den här webbplatsen använder %{consul} som är %{open_source}.
-      open_source: program med öppen källkod
+      open_source: en plattform med öppen källkod
       open_source_url: http://www.gnu.org/licenses/agpl-3.0.html
       participation_text: Skapa den stad du vill ha.
       participation_title: Deltagande
@@ -221,7 +221,7 @@ sv:
       external_link_blog: Blogg
       locale: 'Språk:'
       logo: CONSULs logotyp
-      management: Förvaltning
+      management: Användarhantering
       moderation: Moderering
       valuation: Bedömning
       officing: Funktionärer
@@ -231,8 +231,8 @@ sv:
       open: öppen
       open_gov: Open Government
       proposals: Förslag
-      poll_questions: Omröstning
-      budgets: Medborgarbudget
+      poll_questions: Omröstningar
+      budgets: Medborgarbudgetar
       spending_proposals: Budgetförslag
       notification_item:
         new_notifications:
@@ -340,12 +340,12 @@ sv:
       map_remove_marker: "Ta bort kartmarkör"
       map_skip_checkbox: "Det finns ingen specifik geografisk plats för förslaget, eller jag känner inte till platsen."
     index:
-      featured_proposals: Stjärnmarkerade
+      featured_proposals: Utvalda
       filter_topic:
         one: " med ämne '%{topic} '"
         other: " med ämne '%{topic} '"
       orders:
-        confidence_score: högst rankade
+        confidence_score: populära
         created_at: senaste
         hot_score: mest aktiva
         most_commented: mest kommenterade
@@ -459,7 +459,7 @@ sv:
     index:
       filters:
         current: "Pågående"
-        incoming: "Inkommande"
+        incoming: "Kommande"
         expired: "Avslutade"
       title: "Omröstningar"
       participate_button: "Delta i omröstningen"
@@ -480,7 +480,7 @@ sv:
     show:
       already_voted_in_booth: "Du har redan röstat i en fysisk valstation. Du kan inte rösta igen."
       already_voted_in_web: "Du har redan deltagit i den här omröstningen. Om du röstar igen kommer din föregående röst att skrivas över."
-      back: Tillbaka till omröstning
+      back: Tillbaka till omröstningar
       cant_answer_not_logged_in: "Du behöver %{signin} eller %{signup} för att kunna delta."
       comments_tab: Kommentarer
       login_to_comment: Du behöver %{signin} eller %{signup} för att kunna kommentera.
@@ -544,9 +544,9 @@ sv:
       date_placeholder: 'DD/MM/ÅÅÅÅ'
       date_range_blank: 'Välj ett datum'
       date_1: 'Det senaste dygnet'
-      date_2: 'Förra veckan'
-      date_3: 'Förra månaden'
-      date_4: 'Förra året'
+      date_2: 'Senaste veckan'
+      date_3: 'Senaste månaden'
+      date_4: 'Senaste året'
       date_5: 'Anpassad'
       from: 'Från'
       general: 'Med texten'
@@ -788,7 +788,7 @@ sv:
       process_label: Process
       see_process: Visa process
     cards:
-      title: Stjärnmarkerade
+      title: Tips
     recommended:
       title: Rekommenderat innehåll
       help: "Rekommendationerna baseras på taggar för de debatter och förslag som du följer."

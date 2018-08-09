@@ -7,10 +7,10 @@ sv:
       confirm: Är du säker?
       confirm_hide: Bekräfta moderering
       hide: Dölj
-      hide_author: Dölj förslagslämnare
+      hide_author: Dölj skribent
       restore: Återställ
-      mark_featured: Stjärnmarkera
-      unmark_featured: Ta bort stjärnmarkering
+      mark_featured: Markera som utvald
+      unmark_featured: Ta bort markera som utvald
       edit: Redigera
       configure: Inställningar
       delete: Ta bort
@@ -33,7 +33,7 @@ sv:
         post_ended_at: Slutdatum
         sections_label: Avsnitt där det kommer visas
         sections:
-          homepage: Hemsida
+          homepage: Startsida
           debates: Debatter
           proposals: Förslag
           budgets: Medborgarbudget
@@ -139,7 +139,7 @@ sv:
         start_date: Startdatum
         end_date: Slutdatum
         summary: Sammanfattning
-        summary_help_text: Den här texten är för att informera användaren om fasen. Markera rutan nedan för att visa den även om fasen inte är aktiv
+        summary_help_text: Den här texten är för att informera användaren om fasen. Markera rutan nedan för att visa den även om fasen inte är pågående
         description: Beskrivning
         description_help_text: Den här texten visas i sidhuvudet när fasen är aktiv
         enabled: Fasen är aktiverad
@@ -389,8 +389,8 @@ sv:
           title: Planeringsprocesser
           filters:
             open: Pågående
-            next: Nästa
-            past: Föregående
+            next: Kommande
+            past: Avslutade
             all: Alla
         new:
           back: Tillbaka
@@ -538,7 +538,7 @@ sv:
       valuators: Bedömare
       poll_officers: Funktionärer
       polls: Omröstningar
-      poll_booths: Adress för röststation
+      poll_booths: Här finns röststationerna
       poll_booth_assignments: Tilldelning av röststation
       poll_shifts: Hantera arbetspass
       officials: Representanter för staden
@@ -546,9 +546,9 @@ sv:
       settings: Globala inställningar
       spending_proposals: Budgetförslag
       stats: Statistik
-      signature_sheets: Namninsamling
+      signature_sheets: Namninsamlingar
       site_customization:
-        homepage: Hemsida
+        homepage: Startsida
         pages: Anpassade sidor
         images: Anpassade bilder
         content_blocks: Anpassade innehållsblock
@@ -560,7 +560,7 @@ sv:
           polls: "Omröstningar"
           layouts: "Layouter"
           mailers: "E-post"
-          management: "Förvaltning"
+          management: "Användarhantering"
           guides: "Guider"
           welcome: "Välkommen"
         buttons:
@@ -572,7 +572,7 @@ sv:
       title_settings: Inställningar
       title_site_customization: Webbplatsens innehåll
       title_booths: Röststationer
-      legislation: Kollaborativ planering
+      legislation: Planeringsprocesser
       users: Användare
     administrators:
       index:
@@ -1039,7 +1039,7 @@ sv:
       index:
         banners: Bannerformat
         banner_imgs: Banner
-        no_banners_images: Inga banner
+        no_banners_images: Ingen banner
         no_banners_styles: Inga bannerformat
         title: Inställningar
         update_setting: Uppdatera
@@ -1152,7 +1152,7 @@ sv:
         cost_for_geozone: Kostnad
     geozones:
       index:
-        title: Geografiskt område
+        title: Geografiska områden
         create: Skapa geografiskt område
         edit: Redigera
         delete: Ta bort
@@ -1173,7 +1173,7 @@ sv:
         back: Gå tillbaka
       new:
         back: Gå tillbaka
-        creating: Skapa område
+        creating: Skapa stadsdel
       delete:
         success: Området har tagits bort
         error: Området kan inte raderas eftersom det finns förslag kopplade till det
@@ -1183,7 +1183,7 @@ sv:
       name: Namn
       no_signature_sheets: "Det finns inga namninsamlingar"
       index:
-        title: Namninsamling
+        title: Namninsamlingar
         new: Ny namninsamling
       new:
         title: Ny namninsamling
@@ -1224,7 +1224,7 @@ sv:
           visits: Visningar
           votes: Totalt antal röster
         spending_proposals_title: Budgetförslag
-        budgets_title: Medborgarbudget
+        budgets_title: Medborgarbudgetar
         visits_title: Visningar
         direct_messages: Direktmeddelanden
         proposal_notifications: Aviseringar om förslag
@@ -1350,8 +1350,8 @@ sv:
           status_published: Publicerad
           locale: Språk
     homepage:
-      title: Hemsida
-      description: De aktiva modulerna visas på hemsidan i samma ordning som här.
+      title: Startsida
+      description: De aktiva modulerna visas på startsidan i samma ordning som här.
       header_title: Sidhuvud
       no_header: Det finns inget sidhuvud.
       create_header: Skapa sidhuvud

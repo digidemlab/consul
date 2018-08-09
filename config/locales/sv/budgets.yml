@@ -47,7 +47,7 @@ sv:
         title: Medborgarbudgetar
         help: Hjälp med medborgarbudgetar
         all_phases: Visa alla faser
-      all_phases: Budgetförslagets faser
+      all_phases: Medborgarbudgetens faser
       map: Geografiskt baserade budgetförslag
       investment_proyects: Lista över budgetförslag
       unfeasible_investment_proyects: Lista över ej genomförbara budgetförslag
@@ -101,8 +101,8 @@ sv:
           feasible: Genomförbara projekt
           unfeasible: Ej genomförbara projekt
         orders:
-          random: slumpmässig
-          confidence_score: högst betyg
+          random: slumpvis ordning
+          confidence_score: populära
           price: efter pris
       show:
         author_deleted: Användare är borttagen
@@ -161,10 +161,10 @@ sv:
       link: Resultat
       page_title: "%{budget} - Resultat"
       heading: "Resultat av medborgarbudget"
-      heading_selection_title: "Efter distrikt"
+      heading_selection_title: "Efter stadsdel"
       spending_proposal: Förslagets titel
       ballot_lines_count: Antal röster
-      hide_discarded_link: Göm kasserade
+      hide_discarded_link: Göm avvisade
       show_all_link: Visa alla
       price: Kostnad
       amount_available: Tillgänglig budget

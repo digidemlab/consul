@@ -30,7 +30,7 @@ sv:
     check: Kontrollera dokument
     dashboard:
       index:
-        title: Förvaltning
+        title: Användarhantering
         info: Här kan du hantera användare med åtgärderna som listas i menyn till vänster.
     document_number: Dokumentnummer
     document_type_label: Identitetshandling

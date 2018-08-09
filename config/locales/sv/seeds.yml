@@ -7,9 +7,9 @@ sv:
       official_level_4_name: Representant för staden nivå 4
       official_level_5_name: Representant för staden nivå 5
     geozones:
-      north_district: Norra distriktet
-      west_district: Västra distriktet
-      east_district: Östra distriktet
+      north_district: Norra stadsdelen
+      west_district: Västra stadsdelen
+      east_district: Östra stadsdelen
       central_district: Centrum
     organizations:
       human_rights: Mänskliga rättigheter

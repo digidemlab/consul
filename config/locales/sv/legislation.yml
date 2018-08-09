@@ -54,13 +54,13 @@ sv:
         empty_proposals: Det finns inga förslag
       debate:
         empty_questions: Det finns inga frågor
-        participate: Delta i debatten
+        participate: Delta i diskussionen
       index:
         filter: Filtrera
         filters:
           open: Pågående processer
-          next: Nästa
-          past: Föregående
+          next: Kommande
+          past: Avslutade
         no_open_processes: Det finns inga pågående processer
         no_next_processes: Det finns inga planerade processer
         no_past_processes: Det finns inga avslutade processer
@@ -70,7 +70,7 @@ sv:
           help: Hjälp med planeringsprocesser
         section_footer:
           title: Hjälp med planeringsprocesser
-          description: Delta i debatter och processer inför beslut i staden. Dina åsikter kommer att tas i beaktande av kommunfullmäktige.
+          description: Delta i diskussioner och processer inför beslut i staden. Dina åsikter kommer att tas i beaktande av kommunfullmäktige.
       phase_not_open:
         not_open: Fasen är inte öppen ännu
       phase_empty:
@@ -80,7 +80,7 @@ sv:
         see_latest_comments_title: Kommentera till den här processen
       shared:
         key_dates: Viktiga datum
-        debate_dates: Debatt
+        debate_dates: Diskutera
         draft_publication_date: Publiceringsdatum för utkast
         allegations_dates: Kommentera utkast
         result_publication_date: Publiceringsdatum för resultat

@@ -98,9 +98,9 @@ sv:
           current_password_label: Nuvarande lösenord
           edit: Redigera
           email_label: E-post
-          leave_blank: Lämna tomt om du inte vill ändra
+          leave_blank: Lämna tomt om du inte vill ändra det
           need_current: Vi behöver ditt nuvarande lösenord för att bekräfta ändringarna
-          password_confirmation_label: Bekräfta nytt lösenord
+          password_confirmation_label: Bekräfta ditt nya lösenord
           password_label: Nytt lösenord
           update_submit: Uppdatera
           waiting_for: 'Väntar på bekräftelse av:'
