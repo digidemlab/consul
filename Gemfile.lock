@@ -328,6 +328,7 @@ GEM
       activerecord (>= 4.0, < 5.2)
     parser (2.5.0.5)
       ast (~> 2.4.0)
+    personnummer (0.1.0)
     pg (0.21.0)
     pg_search (2.0.1)
       activerecord (>= 4.2)
@@ -572,6 +573,7 @@ DEPENDENCIES
   omniauth-twitter (~> 1.4.0)
   paperclip (~> 5.2.1)
   paranoia (~> 2.4.0)
+  personnummer
   pg (~> 0.21.0)
   pg_search (~> 2.0.1)
   puma (~> 3.12.0)

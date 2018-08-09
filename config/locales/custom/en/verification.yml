@@ -1,0 +1,7 @@
+sv:
+  verification:
+    residence:
+      new:
+        document_number_help_text_html: '<strong>Personnummer</strong>: 199206239176<br> <strong>Pass</strong>: AAA000001<br> <strong>Övrig identitetshandling</strong>: X1234567P'
+        document_type:
+          spanish_id: Personnummer

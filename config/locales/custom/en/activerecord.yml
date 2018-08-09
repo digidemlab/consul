@@ -1,0 +1,5 @@
+en:
+  activerecord:
+    attributes:
+      user:
+        login: "Email or username or personal number"

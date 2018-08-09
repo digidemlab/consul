@@ -321,12 +321,23 @@ class User < ActiveRecord::Base
     public_activity? ? comments : User.none
   end
 
-  # overwritting of Devise method to allow login using email OR username
+  # overwritting of Devise method to allow login using email OR username OR personal number
   def self.find_for_database_authentication(warden_conditions)
     conditions = warden_conditions.dup
     login = conditions.delete(:login)
+    begin
+      personal_number = Personnummer.new(login)
+      if personal_number.valid?
+        personal_number = personal_number.to_s.delete '-'
+      else
+        personal_number = nil
+      end
+    rescue ArgumentError
+      personal_number = nil
+    end
     where(conditions.to_hash).where(["lower(email) = ?", login.downcase]).first ||
-    where(conditions.to_hash).where(["username = ?", login]).first
+    where(conditions.to_hash).where(["username = ?", login]).first ||
+    where(conditions.to_hash).where(document_type: '1').where(["document_number = ?", personal_number]).first
   end
 
   def interests

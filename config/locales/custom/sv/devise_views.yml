@@ -1,0 +1,5 @@
+sv:
+  devise_views:
+    sessions:
+      new:
+        login_label: "E-post eller användarnamn eller personnummer"

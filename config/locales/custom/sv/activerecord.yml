@@ -1,0 +1,5 @@
+sv:
+  activerecord:
+    attributes:
+      user:
+        login: "E-post eller användarnamn eller personnummer"
