@@ -10,8 +10,4 @@ group :staging, :production do
   gem 'heroku-deflater', '~> 0.6.3'
 end
 
-group :test do
-  gem 'fuubar'
-end
-
 ruby '2.3.2'
