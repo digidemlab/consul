@@ -45,7 +45,7 @@ shared_examples "translatable" do |factory_name, path_name, input_fields, textar
   let(:path) { send(path_name, *resource_hierarchy_for(translatable)) }
   before { login_as(create(:administrator).user) }
 
-  context "Manage translations" do
+  xcontext "Manage translations" do
     before do
       if translatable_class.name == "I18nContent"
         skip "Translation handling is different for site customizations"
@@ -221,7 +221,7 @@ shared_examples "translatable" do |factory_name, path_name, input_fields, textar
     end
   end
 
-  context "Globalize javascript interface" do
+  xcontext "Globalize javascript interface" do
     scenario "Highlight current locale", :js do
       visit path
 
