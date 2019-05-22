@@ -131,9 +131,10 @@ ActiveRecord::Schema.define(version: 20190411090023) do
   create_table "budget_ballots", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "budget_id"
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
-    t.boolean  "physical",       default: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+    t.integer  "ballot_lines_count", default: 0
+    t.boolean  "physical",           default: false
     t.integer  "poll_ballot_id"
   end
 
@@ -502,8 +503,9 @@ ActiveRecord::Schema.define(version: 20190411090023) do
     t.integer  "user_id"
     t.integer  "documentable_id"
     t.string   "documentable_type"
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+    t.boolean  "admin",                   default: false
     t.index ["documentable_type", "documentable_id"], name: "index_documents_on_documentable_type_and_documentable_id", using: :btree
     t.index ["user_id", "documentable_type", "documentable_id"], name: "access_documents", using: :btree
     t.index ["user_id"], name: "index_documents_on_user_id", using: :btree
@@ -727,8 +729,6 @@ ActiveRecord::Schema.define(version: 20190411090023) do
     t.integer  "legislation_process_id"
     t.string   "title",                  limit: 80
     t.text     "description"
-    t.string   "question"
-    t.string   "external_url"
     t.integer  "author_id"
     t.datetime "hidden_at"
     t.integer  "flags_count",                       default: 0
@@ -1125,6 +1125,7 @@ ActiveRecord::Schema.define(version: 20190411090023) do
     t.integer  "comments_count",     default: 0
     t.integer  "author_id"
     t.datetime "hidden_at"
+    t.string   "slug"
     t.boolean  "results_enabled",    default: false
     t.boolean  "stats_enabled",      default: false
     t.datetime "created_at"
@@ -1172,8 +1173,6 @@ ActiveRecord::Schema.define(version: 20190411090023) do
   create_table "proposals", force: :cascade do |t|
     t.string   "title",               limit: 80
     t.text     "description"
-    t.string   "question"
-    t.string   "external_url"
     t.integer  "author_id"
     t.datetime "hidden_at"
     t.integer  "flags_count",                    default: 0
@@ -1203,7 +1202,6 @@ ActiveRecord::Schema.define(version: 20190411090023) do
     t.index ["geozone_id"], name: "index_proposals_on_geozone_id", using: :btree
     t.index ["hidden_at"], name: "index_proposals_on_hidden_at", using: :btree
     t.index ["hot_score"], name: "index_proposals_on_hot_score", using: :btree
-    t.index ["question"], name: "index_proposals_on_question", using: :btree
     t.index ["summary"], name: "index_proposals_on_summary", using: :btree
     t.index ["title"], name: "index_proposals_on_title", using: :btree
     t.index ["tsv"], name: "index_proposals_on_tsv", using: :gin
@@ -1334,6 +1332,14 @@ ActiveRecord::Schema.define(version: 20190411090023) do
     t.index ["author_id"], name: "index_spending_proposals_on_author_id", using: :btree
     t.index ["geozone_id"], name: "index_spending_proposals_on_geozone_id", using: :btree
     t.index ["tsv"], name: "index_spending_proposals_on_tsv", using: :gin
+  end
+
+  create_table "stats_versions", force: :cascade do |t|
+    t.string   "process_type"
+    t.integer  "process_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.index ["process_type", "process_id"], name: "index_stats_versions_on_process_type_and_process_id", using: :btree
   end
 
   create_table "taggings", force: :cascade do |t|

@@ -106,7 +106,8 @@ en:
         blank_dates: Dates are blank
       destroy:
         success_notice: Budget deleted successfully
-        unable_notice: You cannot destroy a Budget that has associated investments
+        unable_notice: You cannot delete a budget that has associated investments
+        unable_notice_polls: You cannot delete a budget that has an associated poll
       new:
         title: New participatory budget
       winners:
@@ -129,7 +130,7 @@ en:
         notice: "Group updated successfully"
       destroy:
         success_notice: "Group deleted successfully"
-        unable_notice: "You cannot destroy a Group that has associated headings"
+        unable_notice: "You cannot delete a Group that has associated headings"
       form:
         create: "Create new group"
         edit: "Edit group"
@@ -149,7 +150,7 @@ en:
         notice: "Heading updated successfully"
       destroy:
         success_notice: "Heading deleted successfully"
-        unable_notice: "You cannot destroy a Heading that has associated investments"
+        unable_notice: "You cannot delete a Heading that has associated investments"
       form:
         name: "Heading name"
         amount: "Amount"
@@ -438,6 +439,23 @@ en:
           without_confirmed_hide: Pending
         title: Hidden debates
         no_hidden_debates: There is no hidden debates.
+    documents:
+      new:
+        title: "Upload a document"
+        label_attachment: "Choose document"
+        submit_button: "Upload"
+      index:
+        new_link: "Add new document"
+        no_documents: "There are no documents."
+        title: "Documents"
+        format: "Format"
+        size: "Size"
+        url: "URL"
+      create:
+        success_notice: "Document uploaded succesfully"
+        unable_notice: "Invalid document"
+      destroy:
+        success_notice: "Document deleted succesfully"
     hidden_users:
       index:
         filter: Filter
@@ -678,12 +696,14 @@ en:
       stats: Statistics
       signature_sheets: Signature Sheets
       site_customization:
+        documents: Custom documents
         homepage: Homepage
         pages: Custom pages
         images: Custom images
         content_blocks: Custom content blocks
         information_texts: Custom information texts
         information_texts_menu:
+          basic: "Basic customization"
           debates: "Debates"
           community: "Community"
           proposals: "Proposals"
@@ -734,6 +754,7 @@ en:
     segment_recipient:
       all_users: All users
       administrators: Administrators
+      all_proposal_authors: Proposal authors (including archived and retired)
       proposal_authors: Proposal authors
       investment_authors: Investment authors in the current budget
       feasible_and_undecided_investment_authors: "Authors of some investment in the current budget that does not comply with: [valuation finished unfesasible]"
@@ -761,6 +782,8 @@ en:
       new:
         title: New newsletter
         from: E-mail address that will appear as sending the newsletter
+        header_footer_help_text_html: "The heading and footer are the same for all emails, you can modify them on <code>app/views/layouts/mailer_header</code> and <code>app/views/layouts/mailer_footer</code>.<br>You can replace header image on %{link}."
+        image_link: "custom images"
       edit:
         title: Edit newsletter
       show:
@@ -775,7 +798,7 @@ en:
         segment_recipient: Recipients
         from: E-mail address that will appear as sending the newsletter
         body: Email content
-        body_help_text: This is how the users will see the email
+        body_help_text: This is how the users will see the email.
         send_alert: Are you sure you want to send this newsletter to %{n} users?
     admin_notifications:
       create_success: Notification created successfully
@@ -931,6 +954,7 @@ en:
         email_placeholder: Search user by email
         search: Search
         user_not_found: User not found
+        help: "To add or remove Poll officers use the search form below."
     poll_officer_assignments:
       index:
         officers_title: "List of officers"
@@ -1016,7 +1040,7 @@ en:
     polls:
       index:
         title: "List of polls"
-        no_polls: "There are no polls coming up."
+        no_polls: "There are no polls."
         create: "Create poll"
         name: "Name"
         dates: "Dates"
@@ -1047,6 +1071,10 @@ en:
       flash:
         question_added: "Question added to this poll"
         error_on_question_added: "Question could not be assigned to this poll"
+      destroy:
+        alert: "This action will remove the poll and all its associated questions."
+        success_notice: "Poll deleted successfully"
+        unable_notice: "You cannot delete a poll that has votes"
     questions:
       index:
         title: "Questions"
@@ -1433,13 +1461,34 @@ en:
           verified_users_who_didnt_vote_proposals: Verified users who didn't votes proposals
           visits: Visits
           votes: Total votes
-        spending_proposals_title: Spending Proposals
         budgets_title: Participatory budgeting
-        visits_title: Visits
+        participatory_budgets: Participatory Budgets
         direct_messages: Direct messages
         proposal_notifications: Proposal notifications
         incomplete_verifications: Incomplete verifications
         polls: Polls
+      graph:
+        debate_created: Debates
+        spending_proposals: Investment projects
+        visit: Visits
+        level_2_user: Level 2 users
+        proposal_created: Citizen proposals
+      budgets:
+        title: "Participatory Budgets - Participation stats"
+        supporting_phase: Supporting phase
+        balloting_phase: Final voting
+      budget_balloting:
+        title: "Final voting stats"
+        vote_count: Votes
+        participant_count: Participants
+        votes_per_heading: Votes per heading
+        participants_per_district: Participants per district
+      budget_supporting:
+        title: "Supporting phase stats"
+        headings: Headings
+        users: Users
+        vote_count: Votes
+        participant_count: Participants
       direct_messages:
         title: Direct messages
         total: Total
@@ -1462,7 +1511,7 @@ en:
           origin_total: Total participants
     tags:
       create: Create topic
-      destroy: Destroy topic
+      destroy: Delete topic
       index:
         add_tag: Add a new proposal topic
         title: Proposal topics
@@ -1556,6 +1605,7 @@ en:
           see_page: See page
         new:
           title: Create new custom page
+          slug_help_html: "Text to identify this page on URL, for example <code>https://consulproject.org/page-slug</code>"
         page:
           created_at: Created at
           status: Status

@@ -229,7 +229,7 @@ en:
       participation_title: Participation
       privacy: Privacy Policy
     header:
-      administration_menu: Admin
+      administration_menu: Menu
       administration: Administration
       available_locales: Available languages
       collaborative_legislation: Collaborative legislation
@@ -242,7 +242,7 @@ en:
       officing: Polling officers
       help: Help
       my_account_link: My account
-      my_activity_link: My activity
+      my_activity_link: My content
       open: open
       open_gov: Open government
       proposals: Proposals
@@ -338,9 +338,6 @@ en:
       other: Other
     form:
       geozone: Scope of operation
-      proposal_external_url: Link to additional documentation
-      proposal_question: Proposal question
-      proposal_question_example_html: "Must be summarised in one question with a Yes or No answer"
       proposal_responsible_name: Full name of the person submitting the proposal
       proposal_responsible_name_note: "(individually or as representative of a collective; will not be displayed publically)"
       proposal_summary: Proposal summary
@@ -462,7 +459,6 @@ en:
       share: Share
       no_notifications: "This proposal has no notifications."
       embed_video_title: "Video on %{proposal}"
-      title_external_url: "Additional documentation"
       title_video_url: "External video"
       author: Author
       draft: Proposal in draft. Cannot yet get supports, nor does it appear in the list of proposals.
@@ -654,15 +650,14 @@ en:
       stats_menu: "Participation statistics"
       results_menu: "Poll results"
       stats:
-        title: "Participation data"
-        total_participation: "Total participation"
         total_votes: "Total amount of given votes"
         votes: "VOTES"
         web: "WEB"
+        mail: "MAIL"
         booth: "BOOTH"
         total: "TOTAL"
         valid: "Valid"
-        white: "White votes"
+        white: "Fully blank"
         null_votes: "Invalid"
       results:
         title: "Questions"
@@ -683,7 +678,7 @@ en:
       info_about_receivers_html: "This message will be sent to <strong>%{count} people</strong> and it will be visible in %{proposal_page}.<br> Messages are not sent immediately, users will receive periodically an email with all proposal notifications."
       proposal_page: "the proposal's page"
     show:
-      back: "Go back to my activity"
+      back: "Go back to my content"
   shared:
     edit: "Edit"
     save: "Save"
