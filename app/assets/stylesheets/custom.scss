@@ -3,3 +3,130 @@
 // * English: https://github.com/consul/consul/blob/master/CUSTOMIZE_EN.md#css
 // * Spanish: https://github.com/consul/consul/blob/master/CUSTOMIZE_ES.md#css
 //
+
+header {
+  background: $white;
+}
+
+.top-bar {
+  color: $brand;
+  background: $white !important;
+
+  ul {
+    padding-right: 0;
+  }
+
+  .menu > li {
+
+    a {
+      color: $brand;
+    }
+
+    .button {
+
+      @include breakpoint(medium) {
+        background: $brand;
+        color: $white;
+      }
+    }
+  }
+
+  .top-bar-right {
+
+    .is-active {
+      text-decoration: none;
+    }
+  }
+
+  .has-submenu {
+
+    &.is-active a {
+      color: $brand;
+    }
+  }
+}
+
+.menu-icon {
+
+  &.dark {
+
+    &:hover::after,
+    &::after {
+      background: $brand;
+      box-shadow: 0 7px 0 $brand, 0 14px 0 $brand;
+    }
+  }
+}
+
+.subnavigation {
+
+  background: $brand;
+
+  ul {
+
+    li {
+      @include breakpoint(medium) {
+        margin: 0 -4px 0 -4px;
+      }
+    }
+  }
+
+  a {
+    color: $white;
+
+    font-weight: normal;
+    padding: 5px 18px 5px 18px;
+
+    &:hover {
+      color: $white;
+      text-decoration: none;
+      background: $dark;
+    }
+
+    @include breakpoint(small) {
+      padding: 5px 18px 5px 18px;
+    }
+
+    &.is-active {
+      color: $white;
+      font-weight: bold;
+      background: $dark;
+      border-bottom: 0px;
+    }
+  }
+  .input-group-button {
+    button {
+      background: $border;
+      color: $text;
+    }
+  }
+}
+
+.top-links {
+  background: $white;
+  color: $dark;
+
+  a {
+    color: $dark;
+  }
+}
+
+.locale-form {
+
+  label {
+    color: $dark;
+  }
+
+  select {
+
+    option {
+      background: #fff;
+      color: $text;
+    }
+  }
+
+  .locale-switcher {
+    background: $dark;
+    color: $white;
+  }
+}
