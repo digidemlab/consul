@@ -8,7 +8,7 @@ default: &default
 
 development: &development
   <<: *default
-  database: consul_development
+  database: consul_development_gbg_ml
 
 # The staging, preproduction and production dbs are only needed
 # for running rake assets:precompile locally before deploying
