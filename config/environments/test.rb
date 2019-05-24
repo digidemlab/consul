@@ -1,13 +1,14 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
-  # The tests for the translatable function require the following languages (en, es, fr, pt-BR)
-  # so we override the available languages for the test environment so they can pass.
+  # Some tests require the following languages (en, es, fr, nl, pt-BR)
+  # so we override the available languages for the test environment.
   config.i18n.default_locale = :en
   available_locales = [
     "en",
     "es",
     "fr",
+    "nl",
     "pt-BR"
   ]
   config.i18n.available_locales = available_locales
