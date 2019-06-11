@@ -1,28 +1,50 @@
 require "rails_helper"
 
-feature "Stats" do
+describe "Stats" do
 
-  let(:budget)  { create(:budget) }
+  let(:budget)  { create(:budget, :finished) }
   let(:group)   { create(:budget_group, budget: budget) }
   let(:heading) { create(:budget_heading, group: group, price: 1000) }
 
-  describe "Show" do
+  context "Load" do
 
-    it "is not accessible if supports phase is not finished" do
-      budget.update(phase: "selecting")
+    before { budget.update(slug: "budget_slug") }
 
-      visit budget_stats_path(budget.id)
-      expect(page).to have_content "You do not have permission to carry out the action "\
-                                   "'read_stats' on budget."
+    scenario "finds budget by slug" do
+      visit budget_stats_path("budget_slug")
+
+      expect(page).to have_content budget.name
     end
 
-    it "is accessible if supports phase is finished" do
-      budget.update(phase: "valuating")
+    scenario "raises an error if budget slug is not found" do
+      expect do
+        visit budget_stats_path("wrong_budget")
+      end.to raise_error ActiveRecord::RecordNotFound
+    end
 
-      visit budget_stats_path(budget.id)
-      expect(page).to have_content "Stats"
+    scenario "raises an error if budget id is not found" do
+      expect do
+        visit budget_stats_path(0)
+      end.to raise_error ActiveRecord::RecordNotFound
     end
 
   end
 
+  describe "Show" do
+    describe "advanced stats" do
+      scenario "advanced stats enabled" do
+        budget.update(advanced_stats_enabled: true)
+
+        visit budget_stats_path(budget)
+
+        expect(page).to have_content "Advanced statistics"
+      end
+
+      scenario "advanced stats disabled" do
+        visit budget_stats_path(budget)
+
+        expect(page).not_to have_content "Advanced statistics"
+      end
+    end
+  end
 end

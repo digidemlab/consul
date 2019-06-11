@@ -1,8 +1,8 @@
 require "rails_helper"
 
-feature "Executions" do
+describe "Executions" do
 
-  let(:budget)  { create(:budget, phase: "finished") }
+  let(:budget)  { create(:budget, :finished) }
   let(:group)   { create(:budget_group, budget: budget) }
   let(:heading) { create(:budget_heading, group: group) }
 
@@ -10,6 +10,22 @@ feature "Executions" do
   let!(:investment2) { create(:budget_investment, :winner,       heading: heading) }
   let!(:investment4) { create(:budget_investment, :winner,       heading: heading) }
   let!(:investment3) { create(:budget_investment, :incompatible, heading: heading) }
+
+  scenario "finds budget by id or slug" do
+    budget.update(slug: "budget_slug")
+
+    visit budget_executions_path("budget_slug")
+    within(".budgets-stats") { expect(page).to have_content budget.name }
+
+    visit budget_executions_path(budget)
+    within(".budgets-stats") { expect(page).to have_content budget.name }
+
+    visit budget_executions_path("budget_slug")
+    within(".budgets-stats") { expect(page).to have_content budget.name }
+
+    visit budget_executions_path(budget)
+    within(".budgets-stats") { expect(page).to have_content budget.name }
+  end
 
   scenario "only displays investments with milestones" do
     create(:milestone, milestoneable: investment1)
