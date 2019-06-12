@@ -1,10 +1,12 @@
 class Admin::BudgetsController < Admin::BaseController
   include Translatable
+  include ReportAttributes
   include FeatureFlags
   feature_flag :budgets
 
   has_filters %w{open finished}, only: :index
 
+  before_action :load_budget, except: [:index, :new, :create]
   load_and_authorize_resource
 
   def index
@@ -62,7 +64,11 @@ class Admin::BudgetsController < Admin::BaseController
     def budget_params
       descriptions = Budget::Phase::PHASE_KINDS.map{|p| "description_#{p}"}.map(&:to_sym)
       valid_attributes = [:phase, :currency_symbol] + descriptions
-      params.require(:budget).permit(*valid_attributes, translation_params(Budget))
+      params.require(:budget).permit(*valid_attributes, *report_attributes, translation_params(Budget))
+    end
+
+    def load_budget
+      @budget = Budget.find_by_slug_or_id! params[:id]
     end
 
 end

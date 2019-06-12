@@ -1,8 +1,8 @@
 require "rails_helper"
 
-feature "Stats" do
+describe "Stats" do
 
-  background do
+  before do
     admin = create(:administrator)
     login_as(admin.user)
     visit root_path
@@ -103,8 +103,9 @@ feature "Stats" do
   end
 
   describe "Budget investments" do
+
     context "Supporting phase" do
-      background do
+      before do
         @budget = create(:budget)
         @group_all_city   = create(:budget_group, budget: @budget)
         @heading_all_city = create(:budget_heading, group: @group_all_city)
@@ -191,7 +192,7 @@ feature "Stats" do
     end
 
     context "Balloting phase" do
-      background do
+      before do
         @budget = create(:budget, :balloting)
         @group = create(:budget_group, budget: @budget)
         @heading = create(:budget_heading, group: @group)
@@ -244,6 +245,7 @@ feature "Stats" do
   end
 
   context "graphs" do
+
     scenario "event graphs", :js do
       campaign = create(:campaign)
 
@@ -260,6 +262,7 @@ feature "Stats" do
         expect(page).to have_content event_created_at.strftime("%Y-%m-%d")
       end
     end
+
   end
 
   context "Proposal notifications" do
