@@ -46,6 +46,13 @@ header {
   }
 }
 
+.dropdown.menu > li {
+
+  &.is-dropdown-submenu-parent > a::after {
+    border-color: $brand transparent transparent;
+  }
+}
+
 .menu-icon {
 
   &.dark {
