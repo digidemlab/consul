@@ -139,5 +139,13 @@ header {
 }
 
 .auth-image {
-  background-position: center; 
+  background-position: center;
+}
+
+.expanded {
+  &.budget {
+    .info {
+      background: $budget-hover;
+    }
+  }
 }
