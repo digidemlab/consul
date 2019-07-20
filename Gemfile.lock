@@ -603,7 +603,7 @@ DEPENDENCIES
   omniauth-twitter (~> 1.4.0)
   paperclip (~> 6.1.0)
   paranoia (~> 2.4.1)
-  personnummer
+  personnummer (~> 0.1.0)
   pg (~> 0.21.0)
   pg_search (~> 2.0.1)
   puma (~> 3.12.1)
