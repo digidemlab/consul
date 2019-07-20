@@ -4,10 +4,12 @@
 # * Spanish: https://github.com/consul/consul/blob/master/CUSTOMIZE_ES.md#gemfile
 #
 
-gem 'aws-sdk-s3', '~> 1'
+gem "aws-sdk-s3", "~> 1"
 
 group :staging, :production do
-  gem 'heroku-deflater', '~> 0.6.3'
+  gem "heroku-deflater", "~> 0.6.3"
 end
 
-ruby '2.3.2'
+gem "personnummer", "~> 0.1.0"
+
+ruby "2.3.2"
