@@ -4,6 +4,8 @@
 # * Spanish: https://github.com/consul/consul/blob/master/CUSTOMIZE_ES.md#gemfile
 #
 
-gem 'aws-sdk-s3', '~> 1'
+gem "aws-sdk-s3", "~> 1"
 
-ruby '2.3.2'
+gem "rack-attack", "~> 5.4.2"
+
+ruby "2.3.2"
