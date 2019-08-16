@@ -10,6 +10,4 @@ group :staging, :production do
   gem "heroku-deflater", "~> 0.6.3"
 end
 
-gem "personnummer", "~> 0.1.0"
-
 ruby "2.3.2"
