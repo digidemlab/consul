@@ -10,4 +10,6 @@ group :staging, :production do
   gem "heroku-deflater", "~> 0.6.3"
 end
 
+gem "rack-attack", "~> 5.4.2"
+
 ruby "2.3.2"
