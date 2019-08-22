@@ -63,10 +63,19 @@
       </li>
       <li>
         <%= layout_menu_link_to "Regler och kriterier",
-                                  "https://goteborg.se/wps/portal/enhetssida/medborgarbudget-i-majorna-linné/lamna-forslag-rosta/kriterier/!ut/p/",
+                                  "https://goteborg.se/wps/portal/enhetssida/medborgarbudget-i-majorna-linné/lamna-forslag-rosta/kriterier/!ut/p",
                                   false,
                                   accesskey: "9",
-                                  title: t("shared.go_to_page") + "Regler och kriterier" %>
+                                  title: t("shared.go_to_page") + "Regler och kriterier",
+                                  target: "blank", rel: "nofollow" %>
+      </li>
+      <li>
+        <%= layout_menu_link_to "Resultat 2018",
+                                  "https://goteborg.se/wps/portal/enhetssida/medborgarbudget-i-majorna-linné/vad-ar-en-medborgarbudget-/medborgarbudget-2018/!ut/p",
+                                  false,
+                                  accesskey: "10",
+                                  title: t("shared.go_to_page") + "Resultat 2018",
+                                  target: "blank", rel: "nofollow" %>
       </li>
     <% end %>
     <% if feature?(:help_page) %>
