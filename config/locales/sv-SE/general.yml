@@ -216,8 +216,8 @@ sv:
       consul: CONSUL
       consul_url: http://consulproject.org/en/
       contact_us: Digidem Lab
-      copyright: CONSUL, %{year}
-      description: Den här webbplatsen använder %{consul} som är %{open_source}. Vill du använda CONSUL i din stad? Kontakta 
+      copyright: Göteborgs stad & Digidem Lab, %{year}
+      description: Den här webbplatsen använder %{consul} som är %{open_source}. Vill du använda CONSUL i din stad? Kontakta
       open_source: en plattform med öppen källkod
       open_source_url: https://github.com/consul/consul
       participation_text: Skapa den stad du vill ha.
