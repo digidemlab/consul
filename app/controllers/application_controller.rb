@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   include HasOrders
   include AccessDeniedHandler
 
+
   protect_from_forgery with: :exception
 
   before_action :authenticate_http_basic, if: :http_basic_auth_site?
@@ -15,6 +16,7 @@ class ApplicationController < ActionController::Base
   before_action :track_email_campaign
   before_action :set_return_url
   before_action :set_current_user
+  before_action :set_raven_context
 
   check_authorization unless: :devise_controller?
   self.responder = ApplicationResponder
@@ -123,5 +125,10 @@ class ApplicationController < ActionController::Base
 
     def set_current_user
       User.current_user = current_user
+    end
+
+    def set_raven_context
+      Raven.user_context(id: session[:current_user_id]) # or anything else in session
+      Raven.extra_context(params: params.to_unsafe_h, url: request.url)
     end
 end
