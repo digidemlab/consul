@@ -3,8 +3,7 @@ require "rails_helper"
 describe "Moderate budget investments" do
 
   let(:budget)  { create(:budget) }
-  let(:group)   { create(:budget_group, name: "Culture", budget: budget) }
-  let(:heading) { create(:budget_heading, name: "More libraries", price: 666666, group: group) }
+  let(:heading) { create(:budget_heading, budget: budget, price: 666666) }
 
   before do
     @mod        = create(:moderator)
@@ -15,7 +14,7 @@ describe "Moderate budget investments" do
     Setting["process.budgets"] = nil
     login_as(@mod.user)
 
-    expect{ visit moderation_budget_investments_path }.to raise_exception(FeatureFlags::FeatureDisabled)
+    expect { visit moderation_budget_investments_path }.to raise_exception(FeatureFlags::FeatureDisabled)
   end
 
   scenario "Hiding an investment", :js do

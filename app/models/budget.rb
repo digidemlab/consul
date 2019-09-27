@@ -22,8 +22,6 @@ class Budget < ApplicationRecord
 
   CURRENCY_SYMBOLS = %w(€ $ £ ¥ kr).freeze
 
-  before_validation :assign_model_to_translations
-
   validates_translation :name, presence: true
   validates :phase, inclusion: { in: Budget::Phase::PHASE_KINDS }
   validates :currency_symbol, presence: true
@@ -35,6 +33,12 @@ class Budget < ApplicationRecord
   has_many :headings, through: :groups
   has_many :lines, through: :ballots, class_name: "Budget::Ballot::Line"
   has_many :phases, class_name: "Budget::Phase"
+  has_many :budget_trackers
+  has_many :trackers, through: :budget_trackers
+  has_many :budget_administrators
+  has_many :administrators, through: :budget_administrators
+  has_many :budget_valuators
+  has_many :valuators, through: :budget_valuators
 
   has_one :poll
 
@@ -75,7 +79,7 @@ class Budget < ApplicationRecord
     if phases.exists? && phases.send(phase).description.present?
       phases.send(phase).description
     else
-      send("description_#{phase}").try(:html_safe)
+      send("description_#{phase}")&.html_safe
     end
   end
 
@@ -169,13 +173,13 @@ class Budget < ApplicationRecord
   def investments_orders
     case phase
     when "accepting", "reviewing"
-      %w{random}
+      %w[random]
     when "publishing_prices", "balloting", "reviewing_ballots"
-      %w{random price}
+      %w[random price]
     when "finished"
-      %w{random}
+      %w[random]
     else
-      %w{random confidence_score}
+      %w[random confidence_score]
     end
   end
 
@@ -195,29 +199,34 @@ class Budget < ApplicationRecord
     investments.winners.any?
   end
 
+  def milestone_tags
+    investments.winners.map(&:milestone_tag_list).flatten.uniq.sort
+  end
+
   private
 
-  def sanitize_descriptions
-    s = WYSIWYGSanitizer.new
-    Budget::Phase::PHASE_KINDS.each do |phase|
-      sanitized = s.sanitize(send("description_#{phase}"))
-      send("description_#{phase}=", sanitized)
+    def sanitize_descriptions
+      s = WYSIWYGSanitizer.new
+      Budget::Phase::PHASE_KINDS.each do |phase|
+        sanitized = s.sanitize(send("description_#{phase}"))
+        send("description_#{phase}=", sanitized)
+      end
     end
-  end
 
-  def generate_phases
-    Budget::Phase::PHASE_KINDS.each do |phase|
-      Budget::Phase.create(
-        budget: self,
-        kind: phase,
-        prev_phase: phases&.last,
-        starts_at: phases&.last&.ends_at || Date.current,
-        ends_at: (phases&.last&.ends_at || Date.current) + 1.month
-      )
+    def generate_phases
+      Budget::Phase::PHASE_KINDS.each do |phase|
+        Budget::Phase.create(
+          budget: self,
+          kind: phase,
+          prev_phase: phases&.last,
+          starts_at: phases&.last&.ends_at || Date.current,
+          ends_at: (phases&.last&.ends_at || Date.current) + 1.month
+        )
+      end
     end
-  end
 
-  def generate_slug?
-    slug.nil? || drafting?
-  end
+    def generate_slug?
+      slug.nil? || drafting?
+    end
+
 end

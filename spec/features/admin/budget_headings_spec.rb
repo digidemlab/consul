@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe "Admin budget headings" do
 
-  let(:budget) { create(:budget, phase: "drafting") }
+  let(:budget) { create(:budget, :drafting) }
   let(:group) { create(:budget_group, budget: budget) }
 
   before do
@@ -10,19 +10,10 @@ describe "Admin budget headings" do
     login_as(admin.user)
   end
 
-  it_behaves_like "translatable",
-                  "budget_heading",
-                  "edit_admin_budget_group_heading_path",
-                  %w[name]
-
   context "Feature flag" do
 
     before do
       Setting["process.budgets"] = nil
-    end
-
-    after do
-      Setting["process.budgets"] = true
     end
 
     scenario "Disabled with a feature flag" do
@@ -212,7 +203,7 @@ describe "Admin budget headings" do
 
       visit edit_admin_budget_group_heading_path(budget, group, heading)
 
-      select "Español", from: "translation_locale"
+      select "Español", from: :add_language
       fill_in "Heading name", with: "Spanish name"
       click_button "Save heading"
 
@@ -221,7 +212,7 @@ describe "Admin budget headings" do
 
       visit edit_admin_budget_group_heading_path(budget, group, heading)
 
-      click_link "English"
+      select "English", from: :select_language
       fill_in "Heading name", with: "New English Name"
       click_button "Save heading"
 

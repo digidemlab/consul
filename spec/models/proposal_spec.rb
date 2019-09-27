@@ -8,6 +8,9 @@ describe Proposal do
     it_behaves_like "has_public_author"
     it_behaves_like "notifiable"
     it_behaves_like "map validations"
+    it_behaves_like "globalizable", :retired_proposal
+    it_behaves_like "sanitizable"
+    it_behaves_like "acts as paranoid", :proposal
   end
 
   it "is valid" do
@@ -42,12 +45,6 @@ describe Proposal do
   end
 
   describe "#description" do
-    it "is sanitized" do
-      proposal.description = "<script>alert('danger');</script>"
-      proposal.valid?
-      expect(proposal.description).to eq("alert('danger');")
-    end
-
     it "is not valid when very long" do
       proposal.description = "a" * 6001
       expect(proposal).not_to be_valid
@@ -91,14 +88,14 @@ describe Proposal do
       proposal.responsible_name = "12345678Z"
     end
 
-     it "is the document_number if level three user" do
+    it "is the document_number if level three user" do
       author = create(:user, :level_three, document_number: "12345678Z")
       proposal.author = author
       proposal.responsible_name = nil
 
       expect(proposal).to be_valid
       proposal.responsible_name = "12345678Z"
-     end
+    end
 
     it "is not updated when the author is deleted" do
       author = create(:user, :level_three, document_number: "12345678Z")
@@ -113,12 +110,6 @@ describe Proposal do
   end
 
   describe "tag_list" do
-    it "sanitizes the tag list" do
-      proposal.tag_list = "user_id=1"
-      proposal.valid?
-      expect(proposal.tag_list).to eq(["user_id1"])
-    end
-
     it "is not valid with a tag list of more than 6 elements" do
       proposal.tag_list = ["Hacienda", "Economía", "Medio Ambiente", "Corrupción", "Fiestas populares", "Prensa", "Huelgas"]
       expect(proposal).not_to be_valid
@@ -143,11 +134,50 @@ describe Proposal do
     Setting["proposal_code_prefix"] = "MAD"
   end
 
+  describe "#retired_explanation" do
+    it "is valid when retired timestamp is present and retired explanation is defined" do
+      proposal.retired_at = Time.current
+      proposal.retired_explanation = "Duplicated of ..."
+      proposal.retired_reason = "duplicated"
+      expect(proposal).to be_valid
+    end
+
+    it "is not valid when retired_at is present and retired explanation is empty" do
+      proposal.retired_at = Time.current
+      proposal.retired_explanation = nil
+      proposal.retired_reason = "duplicated"
+      expect(proposal).not_to be_valid
+    end
+  end
+
+  describe "#retired_reason" do
+    it "is valid when retired timestamp is present and retired reason is defined" do
+      proposal.retired_at = Time.current
+      proposal.retired_explanation = "Duplicated of ..."
+      proposal.retired_reason = "duplicated"
+      expect(proposal).to be_valid
+    end
+
+    it "is not valid when retired timestamp is present but defined retired reason
+        is not included in retired reasons" do
+      proposal.retired_at = Time.current
+      proposal.retired_explanation = "Duplicated of ..."
+      proposal.retired_reason = "duplicate"
+      expect(proposal).not_to be_valid
+    end
+
+    it "is not valid when retired_at is present and retired reason is empty" do
+      proposal.retired_at = Time.current
+      proposal.retired_explanation = "Duplicated of ..."
+      proposal.retired_reason = nil
+      expect(proposal).not_to be_valid
+    end
+  end
+
   describe "#editable?" do
     let(:proposal) { create(:proposal) }
 
-    before {Setting["max_votes_for_proposal_edit"] = 5}
-    after {Setting["max_votes_for_proposal_edit"] = 1000}
+    before { Setting["max_votes_for_proposal_edit"] = 5 }
 
     it "is true if proposal has no votes yet" do
       expect(proposal.total_votes).to eq(0)
@@ -192,21 +222,21 @@ describe Proposal do
     describe "from level two verified users" do
       it "registers vote" do
         user = create(:user, residence_verified_at: Time.current, confirmed_phone: "666333111")
-        expect {proposal.register_vote(user, "yes")}.to change{proposal.reload.votes_for.size}.by(1)
+        expect { proposal.register_vote(user, "yes") }.to change { proposal.reload.votes_for.size }.by(1)
       end
     end
 
     describe "from level three verified users" do
       it "registers vote" do
         user = create(:user, verified_at: Time.current)
-        expect {proposal.register_vote(user, "yes")}.to change{proposal.reload.votes_for.size}.by(1)
+        expect { proposal.register_vote(user, "yes") }.to change { proposal.reload.votes_for.size }.by(1)
       end
     end
 
     describe "from anonymous users" do
       it "does not register vote" do
         user = create(:user)
-        expect {proposal.register_vote(user, "yes")}.to change{proposal.reload.votes_for.size}.by(0)
+        expect { proposal.register_vote(user, "yes") }.to change { proposal.reload.votes_for.size }.by(0)
       end
     end
 
@@ -214,7 +244,7 @@ describe Proposal do
       user = create(:user, verified_at: Time.current)
       archived_proposal = create(:proposal, :archived)
 
-      expect {archived_proposal.register_vote(user, "yes")}.to change{proposal.reload.votes_for.size}.by(0)
+      expect { archived_proposal.register_vote(user, "yes") }.to change { proposal.reload.votes_for.size }.by(0)
     end
   end
 
@@ -254,7 +284,7 @@ describe Proposal do
     it "remains the same for not voted proposals" do
       new = create(:proposal, created_at: now)
       old = create(:proposal, created_at: 1.day.ago)
-      older = create(:proposal, created_at: 2.month.ago)
+      older = create(:proposal, created_at: 2.months.ago)
       expect(new.hot_score).to be 0
       expect(old.hot_score).to be 0
       expect(older.hot_score).to be 0
@@ -456,35 +486,60 @@ describe Proposal do
 
     context "attributes" do
 
+      let(:attributes) { { title: "save the world",
+                           summary: "basically",
+                           description: "in order to save the world one must think about...",
+                           title_es: "para salvar el mundo uno debe pensar en...",
+                           summary_es: "basicamente",
+                           description_es: "uno debe pensar" } }
+
       it "searches by title" do
-        proposal = create(:proposal, title: "save the world")
-        results = described_class.search("save the world")
+        proposal = create(:proposal, attributes)
+        results = Proposal.search("save the world")
+        expect(results).to eq([proposal])
+      end
+
+      it "searches by title across all languages translations" do
+        proposal = create(:proposal, attributes)
+        results = Proposal.search("salvar el mundo")
         expect(results).to eq([proposal])
       end
 
       it "searches by summary" do
-        proposal = create(:proposal, summary: "basically...")
-        results = described_class.search("basically")
+        proposal = create(:proposal, attributes)
+        results = Proposal.search("basically")
+        expect(results).to eq([proposal])
+      end
+
+      it "searches by summary across all languages translations" do
+        proposal = create(:proposal, attributes)
+        results = Proposal.search("basicamente")
         expect(results).to eq([proposal])
       end
 
       it "searches by description" do
-        proposal = create(:proposal, description: "in order to save the world one must think about...")
-        results = described_class.search("one must think")
+        proposal = create(:proposal, attributes)
+        results = Proposal.search("one must think")
+        expect(results).to eq([proposal])
+      end
+
+      it "searches by description across all languages translations" do
+        proposal = create(:proposal, attributes)
+        results = Proposal.search("uno debe pensar")
         expect(results).to eq([proposal])
       end
 
       it "searches by author name" do
         author = create(:user, username: "Danny Trejo")
         proposal = create(:proposal, author: author)
-        results = described_class.search("Danny")
+        results = Proposal.search("Danny")
         expect(results).to eq([proposal])
       end
 
       it "searches by geozone" do
         geozone = create(:geozone, name: "California")
         proposal = create(:proposal, geozone: geozone)
-        results = described_class.search("California")
+        results = Proposal.search("California")
         expect(results).to eq([proposal])
       end
 
@@ -495,13 +550,13 @@ describe Proposal do
       it "searches word stems" do
         proposal = create(:proposal, summary: "Economía")
 
-        results = described_class.search("economía")
+        results = Proposal.search("economía")
         expect(results).to eq([proposal])
 
-        results = described_class.search("econo")
+        results = Proposal.search("econo")
         expect(results).to eq([proposal])
 
-        results = described_class.search("eco")
+        results = Proposal.search("eco")
         expect(results).to eq([proposal])
       end
 
@@ -511,15 +566,15 @@ describe Proposal do
       it "searches with accents" do
         proposal = create(:proposal, summary: "difusión")
 
-        results = described_class.search("difusion")
+        results = Proposal.search("difusion")
         expect(results).to eq([proposal])
 
         proposal2 = create(:proposal, summary: "estadisticas")
-        results = described_class.search("estadísticas")
+        results = Proposal.search("estadísticas")
         expect(results).to eq([proposal2])
 
         proposal3 = create(:proposal, summary: "público")
-        results = described_class.search("publico")
+        results = Proposal.search("publico")
         expect(results).to eq([proposal3])
       end
     end
@@ -528,11 +583,11 @@ describe Proposal do
       it "searches case insensite" do
         proposal = create(:proposal, title: "SHOUT")
 
-        results = described_class.search("shout")
+        results = Proposal.search("shout")
         expect(results).to eq([proposal])
 
         proposal2 = create(:proposal, title: "scream")
-        results = described_class.search("SCREAM")
+        results = Proposal.search("SCREAM")
         expect(results).to eq([proposal2])
       end
     end
@@ -541,10 +596,10 @@ describe Proposal do
       it "searches by tags" do
         proposal = create(:proposal, tag_list: "Latina")
 
-        results = described_class.search("Latina")
+        results = Proposal.search("Latina")
         expect(results.first).to eq(proposal)
 
-        results = described_class.search("Latin")
+        results = Proposal.search("Latin")
         expect(results.first).to eq(proposal)
       end
     end
@@ -556,7 +611,7 @@ describe Proposal do
         proposal_description = create(:proposal,  description: "stop corruption")
         proposal_summary     = create(:proposal,  summary:     "stop corruption")
 
-        results = described_class.search("stop corruption")
+        results = Proposal.search("stop corruption")
 
         expect(results.first).to eq(proposal_title)
         expect(results.second).to eq(proposal_summary)
@@ -570,7 +625,7 @@ describe Proposal do
 
         summary_most_voted  = create(:proposal, summary: "stop corruption", cached_votes_up: 10)
 
-        results = described_class.search("stop corruption")
+        results = Proposal.search("stop corruption")
 
         expect(results.first).to eq(title_most_voted)
         expect(results.second).to eq(title_some_votes)
@@ -582,7 +637,7 @@ describe Proposal do
         exact_title_few_votes    = create(:proposal, title: "stop corruption", cached_votes_up: 5)
         similar_title_many_votes = create(:proposal, title: "stop some of the corruption", cached_votes_up: 500)
 
-        results = described_class.search("stop corruption")
+        results = Proposal.search("stop corruption")
 
         expect(results.first).to eq(exact_title_few_votes)
         expect(results.second).to eq(similar_title_many_votes)
@@ -601,7 +656,7 @@ describe Proposal do
         highest_score.update_column(:hot_score, 100)
         average_score.update_column(:hot_score, 10)
 
-        results = described_class.search("stop corruption")
+        results = Proposal.search("stop corruption")
 
         expect(results.first).to eq(average_score)
         expect(results.second).to eq(highest_score)
@@ -623,7 +678,7 @@ describe Proposal do
         highest_score.update_column(:confidence_score, 100)
         average_score.update_column(:confidence_score, 10)
 
-        results = described_class.search("stop corruption")
+        results = Proposal.search("stop corruption")
 
         expect(results.first).to eq(average_score)
         expect(results.second).to eq(highest_score)
@@ -641,7 +696,7 @@ describe Proposal do
         newest  = create(:proposal,  title: "stop corruption", cached_votes_up: 2, created_at: Time.current)
         oldest  = create(:proposal,  title: "stop corruption", cached_votes_up: 3, created_at: 1.month.ago)
 
-        results = described_class.search("stop corruption")
+        results = Proposal.search("stop corruption")
 
         expect(results.first).to eq(oldest)
         expect(results.second).to eq(newest)
@@ -659,7 +714,7 @@ describe Proposal do
         most_commented  = create(:proposal,  title: "stop corruption",  cached_votes_up: 2, comments_count: 100)
         some_comments   = create(:proposal,  title: "stop corruption",  cached_votes_up: 3, comments_count: 10)
 
-        results = described_class.search("stop corruption")
+        results = Proposal.search("stop corruption")
 
         expect(results.first).to eq(some_comments)
         expect(results.second).to eq(most_commented)
@@ -679,28 +734,28 @@ describe Proposal do
       it "no words match" do
         create(:proposal, title: "save world")
 
-        results = described_class.search("destroy planet")
+        results = Proposal.search("destroy planet")
         expect(results).to eq([])
       end
 
       it "too many typos" do
         create(:proposal, title: "fantastic")
 
-        results = described_class.search("frantac")
+        results = Proposal.search("frantac")
         expect(results).to eq([])
       end
 
       it "too much stemming" do
         create(:proposal, title: "reloj")
 
-        results = described_class.search("superrelojimetro")
+        results = Proposal.search("superrelojimetro")
         expect(results).to eq([])
       end
 
       it "empty" do
         create(:proposal, title: "great")
 
-        results = described_class.search("")
+        results = Proposal.search("")
         expect(results).to eq([])
       end
 
@@ -710,12 +765,12 @@ describe Proposal do
   describe "#last_week" do
     it "returns proposals created this week" do
       proposal = create(:proposal)
-      expect(described_class.last_week).to include(proposal)
+      expect(Proposal.last_week).to include(proposal)
     end
 
     it "does not return proposals created more than a week ago" do
       proposal = create(:proposal, created_at: 8.days.ago)
-      expect(described_class.last_week).not_to include(proposal)
+      expect(Proposal.last_week).not_to include(proposal)
     end
   end
 
@@ -727,14 +782,14 @@ describe Proposal do
         create(:tag, :category, name: "culture")
         proposal = create(:proposal, tag_list: "culture")
 
-        expect(described_class.for_summary.values.flatten).to include(proposal)
+        expect(Proposal.for_summary.values.flatten).to include(proposal)
       end
 
       it "does not return proposals tagged without a category" do
         create(:tag, :category, name: "culture")
         proposal = create(:proposal, tag_list: "parks")
 
-        expect(described_class.for_summary.values.flatten).not_to include(proposal)
+        expect(Proposal.for_summary.values.flatten).not_to include(proposal)
       end
     end
 
@@ -744,27 +799,27 @@ describe Proposal do
         california = create(:geozone, name: "california")
         proposal   = create(:proposal, geozone: california)
 
-        expect(described_class.for_summary.values.flatten).to include(proposal)
+        expect(Proposal.for_summary.values.flatten).to include(proposal)
       end
 
       it "does not return proposals without a geozone" do
         create(:geozone, name: "california")
         proposal = create(:proposal)
 
-        expect(described_class.for_summary.values.flatten).not_to include(proposal)
+        expect(Proposal.for_summary.values.flatten).not_to include(proposal)
       end
     end
 
     it "returns proposals created this week" do
       create(:tag, :category, name: "culture")
       proposal = create(:proposal, tag_list: "culture")
-      expect(described_class.for_summary.values.flatten).to include(proposal)
+      expect(Proposal.for_summary.values.flatten).to include(proposal)
     end
 
     it "does not return proposals created more than a week ago" do
       create(:tag, :category, name: "culture")
       proposal = create(:proposal, tag_list: "culture", created_at: 8.days.ago)
-      expect(described_class.for_summary.values.flatten).not_to include(proposal)
+      expect(Proposal.for_summary.values.flatten).not_to include(proposal)
     end
 
     it "orders proposals by votes" do
@@ -773,7 +828,7 @@ describe Proposal do
       create(:proposal, tag_list: "culture").update_column(:confidence_score, 10)
       create(:proposal, tag_list: "culture").update_column(:confidence_score, 5)
 
-      results = described_class.for_summary.values.flatten
+      results = Proposal.for_summary.values.flatten
 
       expect(results.first.confidence_score).to  be(10)
       expect(results.second.confidence_score).to be(5)
@@ -789,7 +844,7 @@ describe Proposal do
       culture_proposal = create(:proposal,  tag_list: "culture")
       social_proposal  = create(:proposal,  tag_list: "social services")
 
-      results = described_class.for_summary.values.flatten
+      results = Proposal.for_summary.values.flatten
 
       expect(results.first).to  eq(culture_proposal)
       expect(results.second).to eq(health_proposal)
@@ -808,7 +863,7 @@ describe Proposal do
       proposal1.update_column(:confidence_score, 10)
       proposal2.update_column(:confidence_score, 9)
 
-      expect(described_class.for_summary).to include("culture" => [proposal1, proposal2], "health" => [proposal3])
+      expect(Proposal.for_summary).to include("culture" => [proposal1, proposal2], "health" => [proposal3])
     end
   end
 
@@ -820,7 +875,7 @@ describe Proposal do
 
   describe "retired" do
     let!(:proposal1) { create(:proposal) }
-    let!(:proposal2) { create(:proposal, retired_at: Time.current) }
+    let!(:proposal2) { create(:proposal, :retired) }
 
     it "retired? is true" do
       expect(proposal1.retired?).to eq false
@@ -828,17 +883,11 @@ describe Proposal do
     end
 
     it "scope retired" do
-      retired = described_class.retired
-
-      expect(retired.size).to eq(1)
-      expect(retired.first).to eq(proposal2)
+      expect(Proposal.retired).to eq [proposal2]
     end
 
     it "scope not_retired" do
-      not_retired = described_class.not_retired
-
-      expect(not_retired.size).to eq(1)
-      expect(not_retired.first).to eq(proposal1)
+      expect(Proposal.not_retired).to eq [proposal1]
     end
   end
 
@@ -852,17 +901,11 @@ describe Proposal do
     end
 
     it "scope archived" do
-      archived = described_class.archived
-
-      expect(archived.size).to eq(1)
-      expect(archived.first).to eq(archived_proposal)
+      expect(Proposal.archived).to eq [archived_proposal]
     end
 
     it "scope not archived" do
-      not_archived = described_class.not_archived
-
-      expect(not_archived.size).to eq(1)
-      expect(not_archived.first).to eq(new_proposal)
+      expect(Proposal.not_archived).to eq [new_proposal]
     end
   end
 
@@ -876,29 +919,23 @@ describe Proposal do
     end
 
     it "scope selected" do
-      selected = Proposal.selected
-
-      expect(selected.size).to be 1
-      expect(selected.first).to eq selected_proposal
+      expect(Proposal.selected).to eq [selected_proposal]
     end
 
     it "scope not_selected" do
-      not_selected = Proposal.not_selected
-
-      expect(not_selected.size).to be 1
-      expect(not_selected.first).to eq not_selected_proposal
+      expect(Proposal.not_selected).to eq [not_selected_proposal]
     end
   end
 
   describe "public_for_api scope" do
     it "returns proposals" do
       proposal = create(:proposal)
-      expect(described_class.public_for_api).to include(proposal)
+      expect(Proposal.public_for_api).to include(proposal)
     end
 
     it "does not return hidden proposals" do
       proposal = create(:proposal, :hidden)
-      expect(described_class.public_for_api).not_to include(proposal)
+      expect(Proposal.public_for_api).not_to include(proposal)
     end
   end
 
@@ -945,7 +982,7 @@ describe Proposal do
     it "does not return any proposals when user has not interests" do
       create(:proposal)
 
-      expect(described_class.recommendations(user).size).to eq 0
+      expect(Proposal.recommendations(user)).to be_empty
     end
 
     it "returns proposals ordered by cached_votes_up" do
@@ -955,7 +992,7 @@ describe Proposal do
       proposal4 = create(:proposal, tag_list: "Sport")
       create(:follow, followable: proposal4, user: user)
 
-      result = described_class.recommendations(user).sort_by_recommendations
+      result = Proposal.recommendations(user).sort_by_recommendations
 
       expect(result.first).to eq proposal3
       expect(result.second).to eq proposal2
@@ -968,19 +1005,18 @@ describe Proposal do
       proposal3 =  create(:proposal, tag_list: "Politics")
       create(:follow, followable: proposal1, user: user)
 
-      result = described_class.recommendations(user)
+      result = Proposal.recommendations(user)
 
-      expect(result.size).to eq 1
       expect(result).to eq [proposal2]
     end
 
     it "does not return proposals when user is follower" do
-      proposal1 =  create(:proposal, tag_list: "Sport")
+      proposal1 = create(:proposal, tag_list: "Sport")
       create(:follow, followable: proposal1, user: user)
 
-      result = described_class.recommendations(user)
+      result = Proposal.recommendations(user)
 
-      expect(result.size).to eq 0
+      expect(result).to be_empty
     end
 
     it "does not return proposals when user is the author" do
@@ -989,9 +1025,8 @@ describe Proposal do
       proposal3 =  create(:proposal, tag_list: "Sport")
       create(:follow, followable: proposal3, user: user)
 
-      result = described_class.recommendations(user)
+      result = Proposal.recommendations(user)
 
-      expect(result.size).to eq 1
       expect(result).to eq [proposal2]
     end
 
@@ -1001,8 +1036,8 @@ describe Proposal do
       archived_proposal = create(:proposal, :archived)
       create(:follow, followable: proposal1, user: user)
 
-      result = described_class.recommendations(user)
-      expect(result.size).to eq(1)
+      result = Proposal.recommendations(user)
+
       expect(result).to eq([proposal2])
     end
 
@@ -1013,8 +1048,8 @@ describe Proposal do
       create(:vote, votable: proposal1, voter: user)
       create(:follow, followable: proposal2, user: user)
 
-      result = described_class.recommendations(user)
-      expect(result.size).to eq(1)
+      result = Proposal.recommendations(user)
+
       expect(result).to eq([proposal3])
     end
 
@@ -1025,10 +1060,6 @@ describe Proposal do
     before do
       Setting["dashboard.emails"] = true
       ActionMailer::Base.deliveries.clear
-    end
-
-    after do
-      Setting["dashboard.emails"] = nil
     end
 
     it "send notification after create when there are new actived actions" do
@@ -1058,10 +1089,6 @@ describe Proposal do
       ActionMailer::Base.deliveries.clear
     end
 
-    after do
-      Setting["dashboard.emails"] = nil
-    end
-
     it "send notification after published when there are new actived actions" do
       create(:dashboard_action, :proposed_action, :active, day_offset: 0, published_proposal: true)
       create(:dashboard_action, :resource, :active, day_offset: 0, published_proposal: true)
@@ -1082,6 +1109,34 @@ describe Proposal do
       expect(ActionMailer::Base.deliveries.count).to eq(0)
     end
 
+  end
+
+  describe "milestone_tags" do
+
+    context "without milestone_tags" do
+
+      let(:proposal) { create(:proposal) }
+
+      it "do not have milestone_tags" do
+        expect(proposal.milestone_tag_list).to eq([])
+        expect(proposal.milestone_tags).to eq([])
+      end
+
+      it "add a new milestone_tag" do
+        proposal.milestone_tag_list = "tag1,tag2"
+
+        expect(proposal.milestone_tag_list).to eq(["tag1", "tag2"])
+      end
+    end
+
+    context "with milestone_tags" do
+
+      let(:proposal) { create(:proposal, :with_milestone_tags) }
+
+      it "has milestone_tags" do
+        expect(proposal.milestone_tag_list.count).to eq(1)
+      end
+    end
   end
 
 end

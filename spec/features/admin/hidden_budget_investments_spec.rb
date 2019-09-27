@@ -3,8 +3,7 @@ require "rails_helper"
 describe "Admin hidden budget investments" do
 
   let(:budget)  { create(:budget) }
-  let(:group)   { create(:budget_group, name: "Music", budget: budget) }
-  let(:heading) { create(:budget_heading, name: "Black metal", price: 666666, group: group) }
+  let(:heading) { create(:budget_heading, budget: budget, price: 666666) }
 
   before do
     admin = create(:administrator)
@@ -14,7 +13,7 @@ describe "Admin hidden budget investments" do
   scenario "Disabled with a feature flag" do
     Setting["process.budgets"] = nil
 
-    expect{ visit admin_hidden_budget_investments_path }.to raise_exception(FeatureFlags::FeatureDisabled)
+    expect { visit admin_hidden_budget_investments_path }.to raise_exception(FeatureFlags::FeatureDisabled)
   end
 
   scenario "List shows all relevant info" do

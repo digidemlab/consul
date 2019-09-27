@@ -125,6 +125,9 @@ en:
       link:
         one: Link
         other: Links
+      local_census_record:
+        one: Local census record
+        other: Local census records
     attributes:
       budget:
         name: "Name"
@@ -137,6 +140,9 @@ en:
         description_finished: "Description when the budget is finished"
         phase: "Phase"
         currency_symbol: "Currency"
+        budget_milestone_tags: "Milestone tags"
+        budget_valuation_tags: "Valuation tags"
+        help_link: "Help link"
       budget/investment:
         heading_id: "Heading"
         title: "Title"
@@ -147,6 +153,9 @@ en:
         organization_name: "If you are proposing in the name of a collective/organization, or on behalf of more people, write its name"
         image: "Proposal descriptive image"
         image_title: "Image title"
+      budget/investment/translation:
+        title: "Title"
+        description: "Description"
       geozone:
         name: Name
         external_code: "External code (optional)"
@@ -179,6 +188,9 @@ en:
         description: "Opinion"
         terms_of_service: "Terms of service"
         title: "Title"
+      debate/translation:
+        title: "Debate title"
+        description: "Initial debate text"
       proposal:
         author: "Author"
         title: "Title"
@@ -186,6 +198,11 @@ en:
         description: "Description"
         selected: "Mark as selected"
         terms_of_service: "Terms of service"
+      proposal/translation:
+        title: "Proposal title"
+        description: "Proposal text"
+        summary: "Proposal summary"
+        retired_explanation: "Explanation"
       user:
         login: "Email or username"
         email: "Email"
@@ -352,6 +369,16 @@ en:
       link:
         label: Title
         url: Link
+      valuator:
+        description: Description
+        valuator_group_id: Valuator group
+        can_comment: Can create comments
+        can_edit_dossier: Can edit dossiers
+      local_census_record:
+        document_type: Document type
+        document_number: Document number
+        date_of_birth: Date of birth
+        postal_code: Postal code
     errors:
       models:
         user:
@@ -429,6 +456,7 @@ en:
             valuation:
               cannot_comment_valuation: "You cannot comment a valuation"
       messages:
+        translations_too_short: Is mandatory to provide one translation at least
         record_invalid: "Validation failed: %{errors}"
         another_poll_active: There is another poll active for the given period
         restrict_dependent_destroy:

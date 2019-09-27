@@ -7,10 +7,10 @@ describe Budget::Stats do
 
   describe "#participants" do
     let(:author) { investment.author }
-    let(:author_and_voter) { create(:user, hidden_at: Time.current) }
+    let(:author_and_voter) { create(:user, :hidden) }
     let(:voter) { create(:user) }
     let(:voter_and_balloter) { create(:user) }
-    let(:balloter) { create(:user, hidden_at: Time.current) }
+    let(:balloter) { create(:user, :hidden) }
     let(:poll_balloter) { create(:user, :level_two) }
     let(:non_participant) { create(:user, :level_two) }
 
@@ -87,7 +87,7 @@ describe Budget::Stats do
 
     it "doesn't count nil user ids" do
       create(:budget_ballot_line, investment: investment,
-        ballot: create(:budget_ballot, budget: budget, user: nil, physical: true)
+        ballot: create(:budget_ballot, budget: budget.reload, user: nil, physical: true)
       )
 
       expect(stats.total_participants_vote_phase).to be 0

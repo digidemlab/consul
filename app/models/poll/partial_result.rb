@@ -1,6 +1,6 @@
 class Poll::PartialResult < ApplicationRecord
 
-  VALID_ORIGINS = %w{web booth}
+  VALID_ORIGINS = %w[web booth]
 
   belongs_to :question, -> { with_hidden }
   belongs_to :author, ->   { with_hidden }, class_name: "User", foreign_key: "author_id"
@@ -11,6 +11,7 @@ class Poll::PartialResult < ApplicationRecord
   validates :author, presence: true
   validates :answer, presence: true
   validates :answer, inclusion: { in: ->(a) { a.question.question_answers
+                                                        .visibles
                                                         .joins(:translations)
                                                         .pluck("poll_question_answer_translations.title") }},
                      unless: ->(a) { a.question.blank? }

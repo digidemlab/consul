@@ -138,6 +138,14 @@ section "Creating Investments" do
       terms_of_service: "1"
     )
 
+    random_locales.map do |locale|
+      Globalize.with_locale(locale) do
+        investment.title = "Title for locale #{locale}"
+        investment.description = "<p>Description for locale #{locale}</p>"
+        investment.save!
+      end
+    end
+
     add_image_to(investment) if Random.rand > 0.5
   end
 end
@@ -151,8 +159,8 @@ end
 section "Geolocating Investments" do
   Budget.find_each do |budget|
     budget.investments.each do |investment|
-      MapLocation.create(latitude: Setting["map.latitude"].to_f + rand(-10..10)/100.to_f,
-                         longitude: Setting["map.longitude"].to_f + rand(-10..10)/100.to_f,
+      MapLocation.create(latitude: Setting["map.latitude"].to_f + rand(-10..10) / 100.to_f,
+                         longitude: Setting["map.longitude"].to_f + rand(-10..10) / 100.to_f,
                          zoom: Setting["map.zoom"],
                          investment_id: investment.id)
     end

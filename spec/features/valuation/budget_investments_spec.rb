@@ -37,7 +37,7 @@ describe "Valuation budget investments" do
 
   scenario "Disabled with a feature flag" do
     Setting["process.budgets"] = nil
-    expect{
+    expect {
       visit valuation_budget_budget_investments_path(create(:budget))
     }.to raise_exception(FeatureFlags::FeatureDisabled)
   end
@@ -188,8 +188,8 @@ describe "Valuation budget investments" do
     end
 
     scenario "Current filter is properly highlighted" do
-      filters_links = {"valuating" => "Under valuation",
-                       "valuation_finished" => "Valuation finished"}
+      filters_links = { "valuating" => "Under valuation",
+                        "valuation_finished" => "Valuation finished" }
 
       visit valuation_budget_budget_investments_path(budget)
 
@@ -210,9 +210,9 @@ describe "Valuation budget investments" do
     scenario "Index filtering by valuation status" do
       valuating = create(:budget_investment, :visible_to_valuators, budget: budget,
                                                                     title: "Ongoing valuation")
-      valuated  = create(:budget_investment, :visible_to_valuators, budget: budget,
-                                                                    title: "Old idea",
-                                                                    valuation_finished: true)
+      valuated  = create(:budget_investment, :visible_to_valuators, :finished,
+                                                                    budget: budget,
+                                                                    title: "Old idea")
       valuating.valuators << valuator
       valuated.valuators << valuator
 
@@ -241,7 +241,7 @@ describe "Valuation budget investments" do
       create(:valuator, user: create(:user, username: "Rick", email: "rick@valuators.org"))
     end
     let(:investment) do
-      create(:budget_investment, budget: budget, price: 1234, feasibility: "unfeasible",
+      create(:budget_investment, :unfeasible, budget: budget, price: 1234,
                                  unfeasibility_explanation: "It is impossible",
                                  administrator: administrator,)
     end
@@ -254,9 +254,9 @@ describe "Valuation budget investments" do
       investment.update(visible_to_valuators: true)
       visit valuation_budget_budget_investments_path(budget)
 
-
       click_link investment.title
 
+      expect(page).to have_content("Investment preview")
       expect(page).to have_content(investment.title)
       expect(page).to have_content(investment.description)
       expect(page).to have_content(investment.author.name)
@@ -278,6 +278,7 @@ describe "Valuation budget investments" do
 
       visit valuation_budget_budget_investment_path(budget, investment)
 
+      expect(page).to have_content("Investment preview")
       expect(page).to have_content(investment.title)
       expect(page).to have_content(investment.description)
       expect(page).to have_content(investment.author.name)
@@ -297,20 +298,33 @@ describe "Valuation budget investments" do
       logout
       login_as create(:valuator).user
 
-      expect{
+      expect {
         visit valuation_budget_budget_investment_path(budget, investment)
       }.to raise_error "Not Found"
     end
 
+    scenario "preview is visible" do
+      logout
+      login_as create(:administrator).user
+
+      visit valuation_budget_budget_investment_path(budget, investment)
+
+      expect(page).to have_content("Investment preview")
+      expect(page).to have_content(investment.title)
+      expect(page).to have_content(investment.description)
+      expect(page).to have_content(investment.author.name)
+      expect(page).to have_content(investment.heading.name)
+      expect(page).to have_content("1234")
+      expect(page).to have_content("Unfeasible")
+      expect(page).to have_content("It is impossible")
+      expect(page).to have_content("Ana (ana@admins.org)")
+    end
   end
 
   describe "Valuate" do
     let(:admin) { create(:administrator) }
     let(:investment) do
-      group = create(:budget_group, budget: budget)
-      heading = create(:budget_heading, group: group)
-      create(:budget_investment, heading: heading, group: group, budget: budget, price: nil,
-                                 administrator: admin)
+      create(:budget_investment, budget: budget, price: nil, administrator: admin)
     end
 
     before do
@@ -529,7 +543,6 @@ describe "Valuation budget investments" do
 
       investment = create(:budget_investment, budget: budget)
       investment.valuators << [valuator]
-
 
       login_as(admin.user)
       visit valuation_budget_budget_investment_path(budget, investment)

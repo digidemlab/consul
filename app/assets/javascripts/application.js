@@ -42,12 +42,10 @@
 //= require users
 //= require votes
 //= require allow_participation
-//= require annotatable
 //= require advanced_search
 //= require registration_form
 //= require suggest
 //= require forms
-//= require tracks
 //= require valuation_budget_investment_form
 //= require embed_video
 //= require fixed_bar
@@ -82,9 +80,16 @@
 //= require managers
 //= require globalize
 //= require send_admin_notification_alert
+//= require modal_download
 //= require settings
+//= require cookies
+//= require columns_selector
+//= require budget_edit_associations
+//= require votations
 
 var initialize_modules = function() {
+  "use strict";
+
   App.Answers.initialize();
   App.Questions.initialize();
   App.Comments.initialize();
@@ -97,12 +102,10 @@ var initialize_modules = function() {
   App.CheckAllNone.initialize();
   App.PreventDoubleSubmission.initialize();
   App.IeAlert.initialize();
-  App.Annotatable.initialize();
   App.AdvancedSearch.initialize();
   App.RegistrationForm.initialize();
   App.Suggest.initialize();
   App.Forms.initialize();
-  App.Tracks.initialize();
   App.ValuationBudgetInvestmentForm.initialize();
   App.EmbedVideo.initialize();
   App.FixedBar.initialize();
@@ -113,8 +116,9 @@ var initialize_modules = function() {
   App.LegislationAdmin.initialize();
   App.LegislationAllegations.initialize();
   App.Legislation.initialize();
-  if ( $(".legislation-annotatable").length )
+  if ($(".legislation-annotatable").length) {
     App.LegislationAnnotatable.initialize();
+  }
   App.WatchFormChanges.initialize();
   App.TreeNavigator.initialize();
   App.Documentable.initialize();
@@ -130,10 +134,20 @@ var initialize_modules = function() {
   App.Managers.initialize();
   App.Globalize.initialize();
   App.SendAdminNotificationAlert.initialize();
+  App.ModalDownload.initialize();
   App.Settings.initialize();
+  if ($("#js-columns-selector").length) {
+    App.ColumnsSelector.initialize();
+  }
+  App.BudgetEditAssociations.initialize();
+  if ($("#votation_type_enum_type").length) {
+    App.Votations.initialize();
+  }
 };
 
-$(function(){
+$(function() {
+  "use strict";
+
   Turbolinks.enableProgressBar();
 
   $(document).ready(initialize_modules);

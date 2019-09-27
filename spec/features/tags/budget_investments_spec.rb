@@ -40,8 +40,7 @@ describe "Tags" do
     end
   end
 
-  scenario "Index shows up to 5 tags per proposal" do
-    create_featured_proposals
+  scenario "Index shows up to 5 tags per investment" do
     tag_list = ["Hacienda", "Economía", "Medio Ambiente", "Corrupción", "Fiestas populares", "Prensa"]
     create :budget_investment, heading: heading, tag_list: tag_list
 
@@ -67,8 +66,8 @@ describe "Tags" do
     visit new_budget_investment_path(budget_id: budget.id)
 
     select  heading.name, from: "budget_investment_heading_id"
-    fill_in "budget_investment_title", with: "Build a skyscraper"
-    fill_in "budget_investment_description", with: "I want to live in a high tower over the clouds"
+    fill_in "Title", with: "Build a skyscraper"
+    fill_in "Description", with: "I want to live in a high tower over the clouds"
     check   "budget_investment_terms_of_service"
 
     fill_in "budget_investment_tag_list", with: "#{tag_medio_ambiente.name}, #{tag_economia.name}"
@@ -86,8 +85,8 @@ describe "Tags" do
     visit new_budget_investment_path(budget_id: budget.id)
 
     select  heading.name, from: "budget_investment_heading_id"
-    fill_in "budget_investment_title", with: "Build a skyscraper"
-    fill_in_ckeditor "budget_investment_description", with: "If I had a gym near my place I could go do Zumba"
+    fill_in "Title", with: "Build a skyscraper"
+    fill_in_ckeditor "Description", with: "If I had a gym near my place I could go do Zumba"
     check "budget_investment_terms_of_service"
 
     find(".js-add-tag-link", text: tag_economia.name).click
@@ -102,17 +101,16 @@ describe "Tags" do
   end
 
   scenario "Turbolinks sanity check from budget's show", :js do
+    create(:tag, name: "Education", kind: "category")
+    create(:tag, name: "Health",    kind: "category")
+
     login_as(author)
-
-    education = create(:tag, name: "Education", kind: "category")
-    health    = create(:tag, name: "Health",    kind: "category")
-
     visit budget_path(budget)
     click_link "Create a budget investment"
 
     select  heading.name, from: "budget_investment_heading_id"
-    fill_in "budget_investment_title", with: "Build a skyscraper"
-    fill_in_ckeditor "budget_investment_description", with: "If I had a gym near my place I could go do Zumba"
+    fill_in "Title", with: "Build a skyscraper"
+    fill_in_ckeditor "Description", with: "If I had a gym near my place I could go do Zumba"
     check "budget_investment_terms_of_service"
 
     find(".js-add-tag-link", text: "Education").click
@@ -127,17 +125,16 @@ describe "Tags" do
   end
 
   scenario "Turbolinks sanity check from budget heading's show", :js do
+    create(:tag, name: "Education", kind: "category")
+    create(:tag, name: "Health",    kind: "category")
+
     login_as(author)
-
-    education = create(:tag, name: "Education", kind: "category")
-    health    = create(:tag, name: "Health",    kind: "category")
-
     visit budget_investments_path(budget, heading_id: heading.id)
     click_link "Create a budget investment"
 
     select  heading.name, from: "budget_investment_heading_id"
-    fill_in "budget_investment_title", with: "Build a skyscraper"
-    fill_in_ckeditor "budget_investment_description", with: "If I had a gym near my place I could go do Zumba"
+    fill_in "Title", with: "Build a skyscraper"
+    fill_in_ckeditor "Description", with: "If I had a gym near my place I could go do Zumba"
     check "budget_investment_terms_of_service"
 
     find(".js-add-tag-link", text: "Education").click
@@ -157,8 +154,8 @@ describe "Tags" do
     visit new_budget_investment_path(budget_id: budget.id)
 
     select  heading.name, from: "budget_investment_heading_id"
-    fill_in "budget_investment_title", with: "Build a skyscraper"
-    fill_in "budget_investment_description", with: "I want to live in a high tower over the clouds"
+    fill_in "Title", with: "Build a skyscraper"
+    fill_in "Description", with: "I want to live in a high tower over the clouds"
     check   "budget_investment_terms_of_service"
 
     fill_in "budget_investment_tag_list", with: "Impuestos, Economía, Hacienda, Sanidad, Educación, Política, Igualdad"
@@ -175,8 +172,8 @@ describe "Tags" do
     visit new_budget_investment_path(budget_id: budget.id)
 
     select  heading.name, from: "budget_investment_heading_id"
-    fill_in "budget_investment_title", with: "Build a skyscraper"
-    fill_in "budget_investment_description", with: "I want to live in a high tower over the clouds"
+    fill_in "Title", with: "Build a skyscraper"
+    fill_in "Description", with: "I want to live in a high tower over the clouds"
     check   "budget_investment_terms_of_service"
 
     fill_in "budget_investment_tag_list", with: "user_id=1, &a=3, <script>alert('hey');</script>"

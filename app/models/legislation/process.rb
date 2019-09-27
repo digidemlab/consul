@@ -1,3 +1,5 @@
+require "csv"
+
 class Legislation::Process < ApplicationRecord
   include ActsAsParanoidAliases
   include Taggable
@@ -15,6 +17,7 @@ class Legislation::Process < ApplicationRecord
   translates :milestones_summary, touch: true
   translates :homepage,           touch: true
   include Globalizable
+  extend DownloadSettings::LegislationProcessCsv
 
   PHASES_AND_PUBLICATIONS = %i[homepage_phase draft_phase debate_phase allegations_phase
                                proposals_phase people_proposals_phase draft_publication
@@ -59,6 +62,10 @@ class Legislation::Process < ApplicationRecord
   scope :not_in_draft, -> { where("draft_phase_enabled = false or (draft_start_date IS NOT NULL and
                                    draft_end_date IS NOT NULL and (draft_start_date > ? or
                                    draft_end_date < ?))", Date.current, Date.current) }
+
+  def past?
+    end_date < Date.current
+  end
 
   def homepage_phase
     Legislation::Process::Phase.new(start_date, end_date, homepage_enabled)
@@ -119,6 +126,20 @@ class Legislation::Process < ApplicationRecord
     end
   end
 
+  def get_last_draft_version
+    Legislation::DraftVersion.where(process: self, status: "published").last
+  end
+
+  def get_annotations_from_draft
+    Legislation::Annotation.where(legislation_draft_version_id: get_last_draft_version)
+  end
+
+  def get_best_annotation_comments
+    Comment.where(commentable_id: get_annotations_from_draft,
+                  commentable_type: "Legislation::Annotation", ancestry: nil)
+      .order("cached_votes_up - cached_votes_down DESC")
+  end
+
   private
 
     def valid_date_ranges
@@ -136,5 +157,4 @@ class Legislation::Process < ApplicationRecord
         errors.add(:allegations_end_date, :invalid_date_range)
       end
     end
-
 end

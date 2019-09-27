@@ -4,7 +4,7 @@ describe "Votes" do
 
   describe "Investments" do
     let(:manuela) { create(:user, verified_at: Time.current) }
-    let(:budget)  { create(:budget, phase: "selecting") }
+    let(:budget)  { create(:budget, :selecting) }
     let(:group)   { create(:budget_group, budget: budget) }
     let(:heading) { create(:budget_heading, group: group) }
 
@@ -54,7 +54,7 @@ describe "Votes" do
     end
 
     describe "Single investment" do
-      let(:investment) { create(:budget_investment, budget: budget, heading: heading)}
+      let(:investment) { create(:budget_investment, budget: budget, heading: heading) }
 
       scenario "Show no votes" do
         visit budget_investment_path(budget, investment)
@@ -86,12 +86,11 @@ describe "Votes" do
     end
 
     scenario "Disable voting on investments", :js do
-      manuela = create(:user, verified_at: Time.current)
-
-      login_as(manuela)
-
       budget.update(phase: "reviewing")
       investment = create(:budget_investment, budget: budget, heading: heading)
+
+      manuela = create(:user, verified_at: Time.current)
+      login_as(manuela)
 
       visit budget_investments_path(budget, heading_id: heading.id)
 
@@ -189,6 +188,13 @@ describe "Votes" do
         expect(page).not_to have_content "1 support"
         expect(page).not_to have_content "You have already supported this investment project. "\
                                          "Share it!"
+      end
+
+      scenario "Confirm message shows the right text", :js do
+        visit budget_investments_path(budget, heading_id: new_york.id)
+        find(".in-favor a").click
+
+        expect(page.driver.send(:find_modal).text).to match "You can only support investments in 2 districts."
       end
 
     end

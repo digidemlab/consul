@@ -59,12 +59,15 @@ module Abilities
 
       can :manage, Dashboard::Action
 
-      can [:index, :read, :new, :create, :update, :destroy, :calculate_winners], Budget
+      can [:index, :read, :new, :create, :update, :destroy, :calculate_winners, :assigned_users_translation], Budget
       can [:read, :create, :update, :destroy], Budget::Group
       can [:read, :create, :update, :destroy], Budget::Heading
       can [:hide, :update, :toggle_selection], Budget::Investment
       can [:valuate, :comment_valuation], Budget::Investment
       can :create, Budget::ValuatorAssignment
+      can [:edit_dossier], Budget::Investment
+
+      can(:read_admin_stats, Budget) { |budget| budget.balloting_or_later? }
 
       can [:search, :edit, :update, :create, :index, :destroy], Banner
 
@@ -75,8 +78,8 @@ module Abilities
       can [:search, :create, :index, :destroy], ::Poll::Officer
       can [:create, :destroy, :manage], ::Poll::BoothAssignment
       can [:create, :destroy], ::Poll::OfficerAssignment
-      can [:read, :create, :update], Poll::Question
-      can :destroy, Poll::Question # , comments_count: 0, votes_up: 0
+      can [:read, :create, :update, :get_options_traductions], Poll::Question
+      can :destroy, Poll::Question
 
       can :manage, SiteCustomization::Page
       can :manage, SiteCustomization::Image
@@ -96,7 +99,13 @@ module Abilities
       can [:create, :destroy], DirectUpload
 
       can [:deliver], Newsletter, hidden_at: nil
+      can [:manage], ::Tracker
       can [:manage], Dashboard::AdministratorTask
+
+      can [:edit, :update], DownloadSetting
+
+      can :manage, LocalCensusRecord
+      can [:create, :read], LocalCensusRecords::Import
     end
   end
 end

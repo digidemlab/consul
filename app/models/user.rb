@@ -15,6 +15,7 @@ class User < ApplicationRecord
   has_one :administrator
   has_one :moderator
   has_one :valuator
+  has_one :tracker
   has_one :manager
   has_one :poll_officer, class_name: "Poll::Officer"
   has_one :organization
@@ -32,6 +33,9 @@ class User < ApplicationRecord
   has_many :direct_messages_received, class_name: "DirectMessage", foreign_key: :receiver_id
   has_many :legislation_answers, class_name: "Legislation::Answer", dependent: :destroy, inverse_of: :user
   has_many :follows
+  has_many :budget_rol_assignments
+  has_many :budgets, through: :budget_rol_assignments
+  has_many :votation_set_answers
   belongs_to :geozone
 
   validates :username, presence: true, if: :username_required?
@@ -40,7 +44,7 @@ class User < ApplicationRecord
 
   validate :validate_username_length
 
-  validates :official_level, inclusion: {in: 0..5}
+  validates :official_level, inclusion: { in: 0..5 }
   validates :terms_of_service, acceptance: { allow_nil: false }, on: :create
 
   validates_associated :organization, message: false
@@ -124,7 +128,7 @@ class User < ApplicationRecord
 
   def comment_flags(comments)
     comment_flags = flags.for_comments(comments)
-    comment_flags.each_with_object({}){ |f, h| h[f.flaggable_id] = true }
+    comment_flags.each_with_object({}) { |f, h| h[f.flaggable_id] = true }
   end
 
   def voted_in_group?(group)
@@ -149,6 +153,10 @@ class User < ApplicationRecord
 
   def valuator?
     valuator.present?
+  end
+
+  def tracker?
+    tracker.present?
   end
 
   def manager?
@@ -348,6 +356,14 @@ class User < ApplicationRecord
   def interests
     followables = follows.map(&:followable)
     followables.compact.map { |followable| followable.tags.map(&:name) }.flatten.compact.uniq
+  end
+
+  def self.current_user
+    Thread.current[:user]
+  end
+
+  def self.current_user=(user)
+    Thread.current[:user] = user
   end
 
   def send_devise_notification(notification, *args)

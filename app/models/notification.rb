@@ -11,8 +11,9 @@ class Notification < ApplicationRecord
   scope :recent,      -> { order(id: :desc) }
   scope :for_render,  -> { includes(:notifiable) }
 
-  delegate :notifiable_title, :notifiable_available?, :check_availability,
-           :linkable_resource, to: :notifiable, allow_nil: true
+  delegate :notifiable_title, :notifiable_body, :notifiable_available?,
+           :check_availability, :linkable_resource,
+           to: :notifiable, allow_nil: true
 
   def mark_as_read
     update(read_at: Time.current)
@@ -81,16 +82,16 @@ class Notification < ApplicationRecord
 
   private
 
-  def self.batch_size
-    10000
-  end
+    def self.batch_size
+      10000
+    end
 
-  def self.batch_interval
-    20.minutes
-  end
+    def self.batch_interval
+      20.minutes
+    end
 
-  def self.first_batch_run_at
-    Time.current
-  end
+    def self.first_batch_run_at
+      Time.current
+    end
 
 end

@@ -15,10 +15,10 @@ describe Abilities::Common do
   let(:own_comment)  { create(:comment,  author: user) }
   let(:own_proposal) { create(:proposal, author: user) }
 
-  let(:accepting_budget) { create(:budget, phase: "accepting") }
-  let(:reviewing_budget) { create(:budget, phase: "reviewing") }
-  let(:selecting_budget) { create(:budget, phase: "selecting") }
-  let(:balloting_budget) { create(:budget, phase: "balloting") }
+  let(:accepting_budget) { create(:budget, :accepting) }
+  let(:reviewing_budget) { create(:budget, :reviewing) }
+  let(:selecting_budget) { create(:budget, :selecting) }
+  let(:balloting_budget) { create(:budget, :balloting) }
 
   let(:investment_in_accepting_budget) { create(:budget_investment, budget: accepting_budget) }
   let(:investment_in_reviewing_budget) { create(:budget_investment, budget: reviewing_budget) }
@@ -94,6 +94,8 @@ describe Abilities::Common do
   it { should be_able_to(:destroy, own_budget_investment_image) }
   it { should_not be_able_to(:destroy, budget_investment_image) }
   it { should_not be_able_to(:manage, Dashboard::Action) }
+
+  it { should_not be_able_to(:manage, LocalCensusRecord) }
 
   describe "flagging content" do
     it { should be_able_to(:flag, debate)   }
@@ -187,7 +189,7 @@ describe Abilities::Common do
   describe "when level 2 verified" do
     let(:own_direct_message) { create(:direct_message, sender: user) }
 
-    before{ user.update(residence_verified_at: Time.current, confirmed_phone: "1") }
+    before { user.update(residence_verified_at: Time.current, confirmed_phone: "1") }
 
     describe "Proposal" do
       it { should be_able_to(:vote, Proposal) }
@@ -212,6 +214,18 @@ describe Abilities::Common do
       it { should_not be_able_to(:answer, expired_poll_question_from_own_geozone)   }
       it { should_not be_able_to(:answer, expired_poll_question_from_all_geozones)  }
       it { should_not be_able_to(:answer, expired_poll_question_from_other_geozone) }
+
+      it { should     be_able_to(:prioritized_answers, poll_question_from_own_geozone)   }
+      it { should     be_able_to(:prioritized_answers, poll_question_from_all_geozones)  }
+      it { should_not be_able_to(:prioritized_answers, poll_question_from_other_geozone) }
+
+      it { should_not be_able_to(:prioritized_answers, expired_poll_question_from_own_geozone)   }
+      it { should_not be_able_to(:prioritized_answers, expired_poll_question_from_all_geozones)  }
+      it { should_not be_able_to(:prioritized_answers, expired_poll_question_from_other_geozone) }
+
+      context "Poll::Question" do
+        it { should be_able_to(:load_answers, Poll::Question) }
+      end
 
       context "without geozone" do
         before { user.geozone = nil }
@@ -260,7 +274,7 @@ describe Abilities::Common do
   describe "when level 3 verified" do
     let(:own_direct_message) { create(:direct_message, sender: user) }
 
-    before{ user.update(verified_at: Time.current) }
+    before { user.update(verified_at: Time.current) }
 
     it { should be_able_to(:vote, Proposal)          }
     it { should be_able_to(:vote_featured, Proposal) }

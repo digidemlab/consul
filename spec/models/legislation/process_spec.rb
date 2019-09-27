@@ -3,6 +3,9 @@ require "rails_helper"
 describe Legislation::Process do
   let(:process) { create(:legislation_process) }
 
+  it_behaves_like "acts as paranoid", :legislation_process
+  it_behaves_like "globalizable", :legislation_process
+
   it "is valid" do
     expect(process).to be_valid
   end
@@ -183,15 +186,42 @@ describe Legislation::Process do
 
     it "invalid format colors" do
       expect {
-        process = create(:legislation_process, background_color: "#123ghi", font_color: "#fff")
+        create(:legislation_process, background_color: "#123ghi", font_color: "#fff")
       }.to raise_error(ActiveRecord::RecordInvalid,
                        "Validation failed: Background color is invalid")
 
       expect {
-        process = create(:legislation_process, background_color: "#fff", font_color: "ggg")
+        create(:legislation_process, background_color: "#fff", font_color: "ggg")
       }.to raise_error(ActiveRecord::RecordInvalid,
                        "Validation failed: Font color is invalid")
     end
+  end
+
+  describe "milestone_tags" do
+    context "without milestone_tags" do
+      let(:process) { create(:legislation_process) }
+
+      it "do not have milestone_tags" do
+        expect(process.milestone_tag_list).to eq([])
+        expect(process.milestone_tags).to eq([])
+      end
+
+      it "add a new milestone_tag" do
+        process.milestone_tag_list = "tag1,tag2"
+
+        expect(process.milestone_tag_list).to eq(["tag1", "tag2"])
+      end
+    end
+
+    context "with milestone_tags" do
+
+      let(:process) { create(:legislation_process, :with_milestone_tags) }
+
+      it "has milestone_tags" do
+        expect(process.milestone_tag_list.count).to eq(1)
+      end
+    end
+
   end
 
 end

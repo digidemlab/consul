@@ -28,9 +28,9 @@ class LocalCensus
     end
 
     def district_code
-        @body.district_code
+      @body.district_code
     rescue
-        nil
+      nil
     end
 
     def gender
@@ -45,9 +45,9 @@ class LocalCensus
     end
 
     def name
-        "#{@body.nombre} #{@body.apellido1}"
+      "#{@body.nombre} #{@body.apellido1}"
     rescue
-        nil
+      nil
     end
 
     private
@@ -61,10 +61,6 @@ class LocalCensus
 
     def get_record(document_type, document_number)
       LocalCensusRecord.find_by(document_type: document_type, document_number: document_number)
-    end
-
-    def dni?(document_type)
-      document_type.to_s == "1"
     end
 
 end

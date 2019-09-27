@@ -13,17 +13,18 @@ describe "Budget Investments" do
                   :budget_investment,
                   "budget_investment_path"
 
-  before do
-    Setting["feature.allow_images"] = true
-  end
-
-  after do
-    Setting["feature.allow_images"] = nil
-  end
-
   context "Concerns" do
     it_behaves_like "notifiable in-app", Budget::Investment
     it_behaves_like "relationable", Budget::Investment
+    it_behaves_like "remotely_translatable",
+                    :budget_investment,
+                    "budget_investments_path",
+                    { "budget_id": "budget_id" }
+
+    it_behaves_like "remotely_translatable",
+                    :budget_investment,
+                    "budget_investment_path",
+                    { "budget_id": "budget_id", "id": "id" }
   end
 
   context "Load" do
@@ -126,8 +127,7 @@ describe "Budget Investments" do
 
   scenario "Index should show investment descriptive image only when is defined" do
     investment = create(:budget_investment, heading: heading)
-    investment_with_image = create(:budget_investment, heading: heading)
-    image = create(:image, imageable: investment_with_image)
+    investment_with_image = create(:budget_investment, :with_image, heading: heading)
 
     visit budget_investments_path(budget, heading_id: heading.id)
 
@@ -181,9 +181,9 @@ describe "Budget Investments" do
     context "Advanced search" do
 
       scenario "Search by text", :js do
-        bdgt_invest1 = create(:budget_investment, heading: heading,title: "Get Schwifty")
-        bdgt_invest2 = create(:budget_investment, heading: heading,title: "Schwifty Hello")
-        bdgt_invest3 = create(:budget_investment, heading: heading,title: "Do not show me")
+        bdgt_invest1 = create(:budget_investment, heading: heading, title: "Get Schwifty")
+        bdgt_invest2 = create(:budget_investment, heading: heading, title: "Schwifty Hello")
+        bdgt_invest3 = create(:budget_investment, heading: heading, title: "Do not show me")
 
         visit budget_investments_path(budget)
 
@@ -325,9 +325,9 @@ describe "Budget Investments" do
         context "Predefined date ranges" do
 
           scenario "Last day", :js do
-            bdgt_invest1 = create(:budget_investment, heading: heading,created_at: 1.minute.ago)
-            bdgt_invest2 = create(:budget_investment, heading: heading,created_at: 1.hour.ago)
-            bdgt_invest3 = create(:budget_investment, heading: heading,created_at: 2.days.ago)
+            bdgt_invest1 = create(:budget_investment, heading: heading, created_at: 1.minute.ago)
+            bdgt_invest2 = create(:budget_investment, heading: heading, created_at: 1.hour.ago)
+            bdgt_invest3 = create(:budget_investment, heading: heading, created_at: 2.days.ago)
 
             visit budget_investments_path(budget)
 
@@ -345,9 +345,9 @@ describe "Budget Investments" do
           end
 
           scenario "Last week", :js do
-            bdgt_invest1 = create(:budget_investment, heading: heading,created_at: 1.day.ago)
-            bdgt_invest2 = create(:budget_investment, heading: heading,created_at: 5.days.ago)
-            bdgt_invest3 = create(:budget_investment, heading: heading,created_at: 8.days.ago)
+            bdgt_invest1 = create(:budget_investment, heading: heading, created_at: 1.day.ago)
+            bdgt_invest2 = create(:budget_investment, heading: heading, created_at: 5.days.ago)
+            bdgt_invest3 = create(:budget_investment, heading: heading, created_at: 8.days.ago)
 
             visit budget_investments_path(budget)
 
@@ -365,9 +365,9 @@ describe "Budget Investments" do
           end
 
           scenario "Last month", :js do
-            bdgt_invest1 = create(:budget_investment, heading: heading,created_at: 10.days.ago)
-            bdgt_invest2 = create(:budget_investment, heading: heading,created_at: 20.days.ago)
-            bdgt_invest3 = create(:budget_investment, heading: heading,created_at: 33.days.ago)
+            bdgt_invest1 = create(:budget_investment, heading: heading, created_at: 10.days.ago)
+            bdgt_invest2 = create(:budget_investment, heading: heading, created_at: 20.days.ago)
+            bdgt_invest3 = create(:budget_investment, heading: heading, created_at: 33.days.ago)
 
             visit budget_investments_path(budget)
 
@@ -385,9 +385,9 @@ describe "Budget Investments" do
           end
 
           scenario "Last year", :js do
-            bdgt_invest1 = create(:budget_investment, heading: heading,created_at: 300.days.ago)
-            bdgt_invest2 = create(:budget_investment, heading: heading,created_at: 350.days.ago)
-            bdgt_invest3 = create(:budget_investment, heading: heading,created_at: 370.days.ago)
+            bdgt_invest1 = create(:budget_investment, heading: heading, created_at: 300.days.ago)
+            bdgt_invest2 = create(:budget_investment, heading: heading, created_at: 350.days.ago)
+            bdgt_invest3 = create(:budget_investment, heading: heading, created_at: 370.days.ago)
 
             visit budget_investments_path(budget)
 
@@ -407,9 +407,9 @@ describe "Budget Investments" do
         end
 
         scenario "Search by custom date range", :js do
-          bdgt_invest1 = create(:budget_investment, heading: heading,created_at: 2.days.ago)
-          bdgt_invest2 = create(:budget_investment, heading: heading,created_at: 3.days.ago)
-          bdgt_invest3 = create(:budget_investment, heading: heading,created_at: 9.days.ago)
+          bdgt_invest1 = create(:budget_investment, heading: heading, created_at: 2.days.ago)
+          bdgt_invest2 = create(:budget_investment, heading: heading, created_at: 3.days.ago)
+          bdgt_invest3 = create(:budget_investment, heading: heading, created_at: 9.days.ago)
 
           visit budget_investments_path(budget)
 
@@ -429,9 +429,9 @@ describe "Budget Investments" do
         end
 
         scenario "Search by custom invalid date range", :js do
-          bdgt_invest1 = create(:budget_investment, heading: heading,created_at: 2.days.ago)
-          bdgt_invest2 = create(:budget_investment, heading: heading,created_at: 3.days.ago)
-          bdgt_invest3 = create(:budget_investment, heading: heading,created_at: 9.days.ago)
+          bdgt_invest1 = create(:budget_investment, heading: heading, created_at: 2.days.ago)
+          bdgt_invest2 = create(:budget_investment, heading: heading, created_at: 3.days.ago)
+          bdgt_invest3 = create(:budget_investment, heading: heading, created_at: 9.days.ago)
 
           visit budget_investments_path(budget)
 
@@ -454,9 +454,9 @@ describe "Budget Investments" do
           ana  = create :user, official_level: 1
           john = create :user, official_level: 1
 
-          bdgt_invest1 = create(:budget_investment, heading: heading,title: "Get Schwifty",   author: ana,  created_at: 1.minute.ago)
-          bdgt_invest2 = create(:budget_investment, heading: heading,title: "Hello Schwifty", author: john, created_at: 2.days.ago)
-          bdgt_invest3 = create(:budget_investment, heading: heading,title: "Save the forest")
+          bdgt_invest1 = create(:budget_investment, heading: heading, title: "Get Schwifty",   author: ana,  created_at: 1.minute.ago)
+          bdgt_invest2 = create(:budget_investment, heading: heading, title: "Hello Schwifty", author: john, created_at: 2.days.ago)
+          bdgt_invest3 = create(:budget_investment, heading: heading, title: "Save the forest")
 
           visit budget_investments_path(budget)
 
@@ -518,7 +518,7 @@ describe "Budget Investments" do
   context("Filters") do
 
     scenario "by unfeasibility" do
-      investment1 = create(:budget_investment, :unfeasible, heading: heading, valuation_finished: true)
+      investment1 = create(:budget_investment, :unfeasible, :finished, heading: heading)
       investment2 = create(:budget_investment, :feasible, heading: heading)
       investment3 = create(:budget_investment, heading: heading)
       investment4 = create(:budget_investment, :feasible, heading: heading)
@@ -595,8 +595,7 @@ describe "Budget Investments" do
       end
 
       scenario "unfeasible", :js do
-        investment1 = create(:budget_investment, :unfeasible, heading: heading,
-                             valuation_finished: true)
+        investment1 = create(:budget_investment, :unfeasible, :finished, heading: heading)
         investment2 = create(:budget_investment, :feasible, heading: heading)
 
         visit budget_results_path(budget)
@@ -787,7 +786,6 @@ describe "Budget Investments" do
 
     scenario "Set votes for investments randomized with a seed" do
       voter = create(:user, :level_two)
-      login_as(voter)
 
       per_page.times { create(:budget_investment, heading: heading) }
 
@@ -798,6 +796,7 @@ describe "Budget Investments" do
         voted_investments << investment
       end
 
+      login_as(voter)
       visit budget_investments_path(budget, heading_id: heading.id)
 
       voted_investments.each do |investment|
@@ -847,7 +846,7 @@ describe "Budget Investments" do
     end
 
     def investments_order
-      all(".budget-investment h3").collect {|i| i.text }
+      all(".budget-investment h3").collect { |i| i.text }
     end
 
   end
@@ -860,9 +859,9 @@ describe "Budget Investments" do
       visit new_budget_investment_path(budget)
 
       select  heading.name, from: "budget_investment_heading_id"
-      fill_in "budget_investment_title", with: "I am a bot"
+      fill_in "Title", with: "I am a bot"
       fill_in "budget_investment_subtitle", with: "This is the honeypot"
-      fill_in "budget_investment_description", with: "This is the description"
+      fill_in "Description", with: "This is the description"
       check   "budget_investment_terms_of_service"
 
       click_button "Create Investment"
@@ -879,8 +878,8 @@ describe "Budget Investments" do
       visit new_budget_investment_path(budget)
 
       select  heading.name, from: "budget_investment_heading_id"
-      fill_in "budget_investment_title", with: "I am a bot"
-      fill_in "budget_investment_description", with: "This is the description"
+      fill_in "Title", with: "I am a bot"
+      fill_in "Description", with: "This is the description"
       check   "budget_investment_terms_of_service"
 
       click_button "Create Investment"
@@ -895,8 +894,8 @@ describe "Budget Investments" do
       visit new_budget_investment_path(budget)
 
       select  heading.name, from: "budget_investment_heading_id"
-      fill_in "budget_investment_title", with: "Build a skyscraper"
-      fill_in "budget_investment_description", with: "I want to live in a high tower over the clouds"
+      fill_in "Title", with: "Build a skyscraper"
+      fill_in "Description", with: "I want to live in a high tower over the clouds"
       fill_in "budget_investment_location", with: "City center"
       fill_in "budget_investment_organization_name", with: "T.I.A."
       fill_in "budget_investment_tag_list", with: "Towers"
@@ -928,47 +927,44 @@ describe "Budget Investments" do
       factory = :budget_investment
 
       scenario "Show up to 5 suggestions", :js do
-        login_as(author)
-
-        %w(first second third fourth fifth sixth).each do |ordinal|
+        %w[first second third fourth fifth sixth].each do |ordinal|
           create(factory, title: "#{ordinal.titleize} #{factory}, has search term", budget: budget)
         end
         create(factory, title: "This is the last #{factory}", budget: budget)
 
+        login_as(author)
         visit new_budget_investment_path(budget)
-        fill_in "budget_investment_title", with: "search"
+        fill_in "Title", with: "search"
 
-        within("div#js-suggest") do
+        within("div.js-suggest") do
           expect(page).to have_content "You are seeing 5 of 6 investments containing the term 'search'"
         end
       end
 
       scenario "No found suggestions", :js do
-        login_as(author)
-
-        %w(first second third fourth fifth sixth).each do |ordinal|
+        %w[first second third fourth fifth sixth].each do |ordinal|
           create(factory, title: "#{ordinal.titleize} #{factory}, has search term", budget: budget)
         end
 
+        login_as(author)
         visit new_budget_investment_path(budget)
-        fill_in "budget_investment_title", with: "item"
+        fill_in "Title", with: "item"
 
-        within("div#js-suggest") do
+        within("div.js-suggest") do
           expect(page).not_to have_content "You are seeing"
         end
       end
 
       scenario "Don't show suggestions from a different budget", :js do
-        login_as(author)
-
-        %w(first second third fourth fifth sixth).each do |ordinal|
+        %w[first second third fourth fifth sixth].each do |ordinal|
           create(factory, title: "#{ordinal.titleize} #{factory}, has search term", budget: budget)
         end
 
+        login_as(author)
         visit new_budget_investment_path(other_budget)
-        fill_in "budget_investment_title", with: "search"
+        fill_in "Title", with: "search"
 
-        within("div#js-suggest") do
+        within("div.js-suggest") do
           expect(page).not_to have_content "You are seeing"
         end
       end
@@ -1006,10 +1002,10 @@ describe "Budget Investments" do
   end
 
   scenario "Show" do
+    investment = create(:budget_investment, heading: heading)
+
     user = create(:user)
     login_as(user)
-
-    investment = create(:budget_investment, heading: heading)
 
     visit budget_investment_path(budget, id: investment.id)
 
@@ -1093,8 +1089,6 @@ describe "Budget Investments" do
     investment = create(:budget_investment, heading: heading)
     visit budget_investment_path(budget, id: investment.id)
     expect(page).to have_content "Access the community"
-
-    Setting["feature.community"] = false
   end
 
   scenario "Can not access the community" do
@@ -1149,9 +1143,6 @@ describe "Budget Investments" do
   end
 
   scenario "Show (unfeasible budget investment) only when valuation finished" do
-    user = create(:user)
-    login_as(user)
-
     investment = create(:budget_investment,
                         :unfeasible,
                         budget: budget,
@@ -1166,6 +1157,9 @@ describe "Budget Investments" do
                         group: group,
                         heading: heading,
                         unfeasibility_explanation: "The unfeasible explanation")
+
+    user = create(:user)
+    login_as(user)
 
     visit budget_investment_path(budget, id: investment.id)
 
@@ -1183,9 +1177,6 @@ describe "Budget Investments" do
   end
 
   scenario "Show (selected budget investment)" do
-    user = create(:user)
-    login_as(user)
-
     investment = create(:budget_investment,
                         :feasible,
                         :finished,
@@ -1194,6 +1185,9 @@ describe "Budget Investments" do
                         group: group,
                         heading: heading)
 
+    user = create(:user)
+    login_as(user)
+
     visit budget_investment_path(budget, id: investment.id)
 
     expect(page).to have_content("This investment project has been selected for balloting phase")
@@ -1201,8 +1195,6 @@ describe "Budget Investments" do
 
   scenario "Show (winner budget investment) only if budget is finished" do
     budget.update(phase: "balloting")
-    user = create(:user)
-    login_as(user)
 
     investment = create(:budget_investment,
                         :feasible,
@@ -1212,6 +1204,9 @@ describe "Budget Investments" do
                         budget: budget,
                         group: group,
                         heading: heading)
+
+    user = create(:user)
+    login_as(user)
 
     visit budget_investment_path(budget, id: investment.id)
 
@@ -1226,8 +1221,6 @@ describe "Budget Investments" do
 
   scenario "Show (not selected budget investment)" do
     budget.update(phase: "balloting")
-    user = create(:user)
-    login_as(user)
 
     investment = create(:budget_investment,
                         :feasible,
@@ -1235,6 +1228,9 @@ describe "Budget Investments" do
                         budget: budget,
                         group: group,
                         heading: heading)
+
+    user = create(:user)
+    login_as(user)
 
     visit budget_investment_path(budget, id: investment.id)
 
@@ -1242,15 +1238,15 @@ describe "Budget Investments" do
   end
 
   scenario "Show title (no message)" do
-    user = create(:user)
-    login_as(user)
-
     investment = create(:budget_investment,
                         :feasible,
                         :finished,
                         budget: budget,
                         group: group,
                         heading: heading)
+
+    user = create(:user)
+    login_as(user)
 
     visit budget_investment_path(budget, id: investment.id)
 
@@ -1261,34 +1257,16 @@ describe "Budget Investments" do
   end
 
   scenario "Show (unfeasible budget investment with valuation not finished)" do
-    user = create(:user)
-    login_as(user)
-
     investment = create(:budget_investment,
                         :unfeasible,
-                        valuation_finished: false,
+                        :unfinished,
                         budget: budget,
                         group: group,
                         heading: heading,
                         unfeasibility_explanation: "Local government is not competent in this matter")
 
-    visit budget_investment_path(budget, id: investment.id)
-
-    expect(page).not_to have_content("Unfeasibility explanation")
-    expect(page).not_to have_content("Local government is not competent in this matter")
-  end
-
-  scenario "Show (unfeasible budget investment with valuation not finished)" do
     user = create(:user)
     login_as(user)
-
-    investment = create(:budget_investment,
-                        :unfeasible,
-                        valuation_finished: false,
-                        budget: budget,
-                        group: group,
-                        heading: heading,
-                        unfeasibility_explanation: "Local government is not competent in this matter")
 
     visit budget_investment_path(budget, id: investment.id)
 
@@ -1330,11 +1308,10 @@ describe "Budget Investments" do
   context "Destroy" do
 
     scenario "Admin cannot destroy budget investments" do
-      admin = create(:administrator)
       user = create(:user, :level_two)
       investment = create(:budget_investment, heading: heading, author: user)
 
-      login_as(admin.user)
+      login_as(create(:administrator).user)
       visit user_path(user)
 
       within("#budget_investment_#{investment.id}") do
@@ -1405,7 +1382,7 @@ describe "Budget Investments" do
         another_heading1 = create(:budget_heading, group: group2)
         another_heading2 = create(:budget_heading, group: group2)
 
-        heading_investment   = create(:budget_investment, heading: heading)
+        heading_investment = create(:budget_investment, heading: heading)
         another_group_investment = create(:budget_investment, heading: another_heading1)
 
         create(:vote, votable: heading_investment, voter: author)
@@ -1689,10 +1666,10 @@ describe "Budget Investments" do
     end
 
     scenario "Show unselected budget investments" do
-      investment1 = create(:budget_investment, :unselected, :feasible, heading: heading, valuation_finished: true)
-      investment2 = create(:budget_investment, :selected,   :feasible, heading: heading, valuation_finished: true)
-      investment3 = create(:budget_investment, :selected,   :feasible, heading: heading, valuation_finished: true)
-      investment4 = create(:budget_investment, :selected,   :feasible, heading: heading, valuation_finished: true)
+      investment1 = create(:budget_investment, :unselected, :feasible, :finished, heading: heading)
+      investment2 = create(:budget_investment, :selected,   :feasible, :finished, heading: heading)
+      investment3 = create(:budget_investment, :selected,   :feasible, :finished, heading: heading)
+      investment4 = create(:budget_investment, :selected,   :feasible, :finished, heading: heading)
 
       visit budget_investments_path(budget, heading_id: heading.id, filter: "unselected")
 
@@ -1779,7 +1756,6 @@ describe "Budget Investments" do
       scenario "Due to being unfeasible" do
         user = create(:user, :level_two)
         investment = create(:budget_investment, :selected, heading: heading)
-        heading2 = create(:budget_heading, group: group)
 
         ballot = create(:budget_ballot, user: user, budget: budget)
         ballot.investments << investment

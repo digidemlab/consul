@@ -27,12 +27,11 @@ module DocumentsHelper
                   remote: true,
                   class: "delete remove-cached-attachment"
     else
-      link_to_remove_association document.new_record? ? t("documents.form.cancel_button") : t("documents.form.delete_button") , builder, class: "delete remove-document"
+      link_to_remove_association document.new_record? ? t("documents.form.cancel_button") : t("documents.form.delete_button"), builder, class: "delete remove-document"
     end
   end
 
   def render_attachment(builder, document)
-    klass = document.errors[:attachment].any? ? "error" : ""
     klass = document.persisted? || document.cached_attachment.present? ? " hide" : ""
     html = builder.label :attachment,
                          t("documents.form.attachment_label"),

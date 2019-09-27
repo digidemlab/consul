@@ -9,28 +9,31 @@ describe "Proposals" do
 
   scenario "Disabled with a feature flag" do
     Setting["process.proposals"] = nil
-    expect{ visit proposals_path }.to raise_exception(FeatureFlags::FeatureDisabled)
+    expect { visit proposals_path }.to raise_exception(FeatureFlags::FeatureDisabled)
   end
 
   context "Concerns" do
     it_behaves_like "notifiable in-app", Proposal
     it_behaves_like "relationable", Proposal
+    it_behaves_like "remotely_translatable",
+                    :proposal,
+                    "proposals_path",
+                    {}
+    it_behaves_like "remotely_translatable",
+                    :proposal,
+                    "proposal_path",
+                    { "id": "id" }
   end
 
   context "Index" do
 
     before do
-      Setting["feature.allow_images"] = true
       Setting["feature.featured_proposals"] = true
       Setting["featured_proposals_number"] = 3
     end
-
-    after do
-      Setting["feature.allow_images"] = nil
-    end
+    let!(:featured_proposals) { create_featured_proposals }
 
     scenario "Lists featured and regular proposals" do
-      featured_proposals = create_featured_proposals
       proposals = [create(:proposal), create(:proposal), create(:proposal)]
 
       visit proposals_path
@@ -54,7 +57,6 @@ describe "Proposals" do
     end
 
     scenario "Index view mode" do
-      featured_proposals = create_featured_proposals
       proposals = [create(:proposal), create(:proposal), create(:proposal)]
 
       visit proposals_path
@@ -82,9 +84,18 @@ describe "Proposals" do
       end
     end
 
+    scenario "Index view mode is not shown with selected filter" do
+      visit proposals_path
+
+      click_link "View selected proposals"
+
+      expect(page).not_to have_selector(".view-mode")
+      expect(page).not_to have_button("View mode")
+    end
+
     scenario "Pagination" do
       per_page = Kaminari.config.default_per_page
-      (per_page + 5).times { create(:proposal) }
+      (per_page + 2).times { create(:proposal) }
 
       visit proposals_path
 
@@ -102,12 +113,10 @@ describe "Proposals" do
     end
 
     scenario "Index should show proposal descriptive image only when is defined" do
-      featured_proposals = create_featured_proposals
       proposal = create(:proposal)
-      proposal_with_image = create(:proposal)
-      image = create(:image, imageable: proposal_with_image)
+      proposal_with_image = create(:proposal, :with_image)
 
-      visit proposals_path(proposal)
+      visit proposals_path
 
       within("#proposal_#{proposal.id}") do
         expect(page).not_to have_css("div.with-image")
@@ -176,6 +185,22 @@ describe "Proposals" do
       visit proposal_path(proposal)
       expect(page).not_to have_content "Access the community"
     end
+
+    scenario "Selected proposals does not show all information" do
+      proposal = create(:proposal, :selected)
+      login_as(create(:user))
+
+      visit proposal_path(proposal)
+      expect(page).not_to have_content proposal.code
+      expect(page).not_to have_content("Proposal code:")
+
+      expect(page).not_to have_content("Related content")
+      expect(page).not_to have_button("Add related content")
+
+      within(".proposal-info") do
+        expect(page).not_to have_link("No comments", href: "#comments")
+      end
+    end
   end
 
   context "Show on mobile screens" do
@@ -238,9 +263,9 @@ describe "Proposals" do
 
     visit new_proposal_path
 
-    fill_in "proposal_title", with: "Help refugees"
-    fill_in "proposal_summary", with: "In summary, what we want is..."
-    fill_in "proposal_description", with: "This is very important because..."
+    fill_in "Proposal title", with: "Help refugees"
+    fill_in "Proposal summary", with: "In summary, what we want is..."
+    fill_in "Proposal text", with: "This is very important because..."
     fill_in "proposal_video_url", with: "https://www.youtube.com/watch?v=yPQfcG-eimk"
     fill_in "proposal_responsible_name", with: "Isabel Garcia"
     fill_in "proposal_tag_list", with: "Refugees, Solidarity"
@@ -272,10 +297,10 @@ describe "Proposals" do
     login_as(author)
 
     visit new_proposal_path
-    fill_in "proposal_title", with: "I am a bot"
+    fill_in "Proposal title", with: "I am a bot"
     fill_in "proposal_subtitle", with: "This is the honeypot field"
-    fill_in "proposal_summary", with: "This is the summary"
-    fill_in "proposal_description", with: "This is the description"
+    fill_in "Proposal summary", with: "This is the summary"
+    fill_in "Proposal text", with: "This is the description"
     fill_in "proposal_responsible_name", with: "Some other robot"
     check "proposal_terms_of_service"
 
@@ -293,9 +318,9 @@ describe "Proposals" do
     login_as(author)
 
     visit new_proposal_path
-    fill_in "proposal_title", with: "I am a bot"
-    fill_in "proposal_summary", with: "This is the summary"
-    fill_in "proposal_description", with: "This is the description"
+    fill_in "Proposal title", with: "I am a bot"
+    fill_in "Proposal summary", with: "This is the summary"
+    fill_in "Proposal text", with: "This is the description"
     fill_in "proposal_responsible_name", with: "Some other robot"
     check "proposal_terms_of_service"
 
@@ -311,9 +336,9 @@ describe "Proposals" do
     login_as(author)
 
     visit new_proposal_path
-    fill_in "proposal_title", with: "Help refugees"
-    fill_in "proposal_summary", with: "In summary, what we want is..."
-    fill_in "proposal_description", with: "This is very important because..."
+    fill_in "Proposal title", with: "Help refugees"
+    fill_in "Proposal summary", with: "In summary, what we want is..."
+    fill_in "Proposal text", with: "This is very important because..."
     fill_in "proposal_responsible_name", with: "Isabel Garcia"
     fill_in "proposal_responsible_name", with: "Isabel Garcia"
     check "proposal_terms_of_service"
@@ -334,9 +359,9 @@ describe "Proposals" do
     visit new_proposal_path
     expect(page).not_to have_selector("#proposal_responsible_name")
 
-    fill_in "proposal_title", with: "Help refugees"
-    fill_in "proposal_summary", with: "In summary, what we want is..."
-    fill_in "proposal_description", with: "This is very important because..."
+    fill_in "Proposal title", with: "Help refugees"
+    fill_in "Proposal summary", with: "In summary, what we want is..."
+    fill_in "Proposal text", with: "This is very important because..."
     check "proposal_terms_of_service"
 
     click_button "Create proposal"
@@ -362,9 +387,9 @@ describe "Proposals" do
     login_as(author)
 
     visit new_proposal_path
-    fill_in "proposal_title", with: "Testing an attack"
-    fill_in "proposal_summary", with: "In summary, what we want is..."
-    fill_in "proposal_description", with: "<p>This is <script>alert('an attack');</script></p>"
+    fill_in "Proposal title", with: "Testing an attack"
+    fill_in "Proposal summary", with: "In summary, what we want is..."
+    fill_in "Proposal text", with: "<p>This is <script>alert('an attack');</script></p>"
     fill_in "proposal_responsible_name", with: "Isabel Garcia"
     check "proposal_terms_of_service"
 
@@ -385,9 +410,9 @@ describe "Proposals" do
     login_as(author)
 
     visit new_proposal_path
-    fill_in "proposal_title", with: "Testing auto link"
-    fill_in "proposal_summary", with: "In summary, what we want is..."
-    fill_in "proposal_description", with: "<p>This is a link www.example.org</p>"
+    fill_in "Proposal title", with: "Testing auto link"
+    fill_in "Proposal summary", with: "In summary, what we want is..."
+    fill_in "Proposal text", with: "<p>This is a link www.example.org</p>"
     fill_in "proposal_responsible_name", with: "Isabel Garcia"
     check "proposal_terms_of_service"
 
@@ -407,9 +432,9 @@ describe "Proposals" do
     login_as(author)
 
     visit new_proposal_path
-    fill_in "proposal_title", with: "Testing auto link"
-    fill_in "proposal_summary", with: "In summary, what we want is..."
-    fill_in "proposal_description", with: js_injection_string
+    fill_in "Proposal title", with: "Testing auto link"
+    fill_in "Proposal summary", with: "In summary, what we want is..."
+    fill_in "Proposal text", with: js_injection_string
     fill_in "proposal_responsible_name", with: "Isabel Garcia"
     check "proposal_terms_of_service"
 
@@ -458,16 +483,15 @@ describe "Proposals" do
     end
 
     scenario "Specific geozone" do
-      geozone = create(:geozone, name: "California")
-      geozone = create(:geozone, name: "New York")
-      author = create(:user)
-      login_as(author)
+      create(:geozone, name: "California")
+      create(:geozone, name: "New York")
+      login_as(create(:user))
 
       visit new_proposal_path
 
-      fill_in "proposal_title", with: "Help refugees"
-      fill_in "proposal_summary", with: "In summary, what we want is..."
-      fill_in "proposal_description", with: "This is very important because..."
+      fill_in "Proposal title", with: "Help refugees"
+      fill_in "Proposal summary", with: "In summary, what we want is..."
+      fill_in "Proposal text", with: "This is very important because..."
       fill_in "proposal_video_url", with: "https://www.youtube.com/watch?v=yPQfcG-eimk"
       fill_in "proposal_responsible_name", with: "Isabel Garcia"
       check "proposal_terms_of_service"
@@ -505,7 +529,7 @@ describe "Proposals" do
       expect(page).to have_current_path(retire_form_proposal_path(proposal))
 
       select "Duplicated", from: "proposal_retired_reason"
-      fill_in "proposal_retired_explanation", with: "There are three other better proposals with the same subject"
+      fill_in "Explanation", with: "There are three other better proposals with the same subject"
       click_button "Retire proposal"
 
       expect(page).to have_content "Proposal retired"
@@ -518,7 +542,7 @@ describe "Proposals" do
       expect(page).to have_content "There are three other better proposals with the same subject"
     end
 
-    scenario "Fields are mandatory" do
+    scenario "Fields are mandatory", :js do
       proposal = create(:proposal)
       login_as(proposal.author)
 
@@ -534,7 +558,7 @@ describe "Proposals" do
       Setting["feature.featured_proposals"] = true
       create_featured_proposals
       not_retired = create(:proposal)
-      retired = create(:proposal, retired_at: Time.current)
+      retired = create(:proposal, :retired)
 
       visit proposals_path
 
@@ -546,9 +570,8 @@ describe "Proposals" do
     end
 
     scenario "Index has a link to retired proposals list" do
-      create_featured_proposals
       not_retired = create(:proposal)
-      retired = create(:proposal, retired_at: Time.current)
+      retired = create(:proposal, :retired)
 
       visit proposals_path
 
@@ -568,8 +591,8 @@ describe "Proposals" do
     end
 
     scenario "Retired proposals index has links to filter by retired_reason" do
-      unfeasible = create(:proposal, retired_at: Time.current, retired_reason: "unfeasible")
-      duplicated = create(:proposal, retired_at: Time.current, retired_reason: "duplicated")
+      unfeasible = create(:proposal, :retired, retired_reason: "unfeasible")
+      duplicated = create(:proposal, :retired, retired_reason: "duplicated")
 
       visit proposals_path(retired: "all")
 
@@ -585,6 +608,20 @@ describe "Proposals" do
 
       expect(page).to have_content unfeasible.title
       expect(page).not_to have_content duplicated.title
+    end
+
+    context "Special interface translation behaviour" do
+      before { Setting["feature.translation_interface"] = true }
+
+      scenario "Cant manage translations" do
+        proposal = create(:proposal)
+        login_as(proposal.author)
+
+        visit retire_form_proposal_path(proposal)
+
+        expect(page).not_to have_css "#add_language"
+        expect(page).not_to have_link "Remove language"
+      end
     end
   end
 
@@ -622,9 +659,9 @@ describe "Proposals" do
     visit edit_proposal_path(proposal)
     expect(page).to have_current_path(edit_proposal_path(proposal))
 
-    fill_in "proposal_title", with: "End child poverty"
-    fill_in "proposal_summary", with: "Basically..."
-    fill_in "proposal_description", with: "Let's do something to end child poverty"
+    fill_in "Proposal title", with: "End child poverty"
+    fill_in "Proposal summary", with: "Basically..."
+    fill_in "Proposal text", with: "Let's do something to end child poverty"
     fill_in "proposal_responsible_name", with: "Isabel Garcia"
 
     click_button "Save changes"
@@ -640,7 +677,7 @@ describe "Proposals" do
     login_as(proposal.author)
 
     visit edit_proposal_path(proposal)
-    fill_in "proposal_title", with: ""
+    fill_in "Proposal title", with: ""
     click_button "Save changes"
 
     expect(page).to have_content error_message
@@ -649,8 +686,6 @@ describe "Proposals" do
   describe "Proposal index order filters" do
 
     scenario "Default order is hot_score", :js do
-      create_featured_proposals
-
       best_proposal = create(:proposal, title: "Best proposal")
       best_proposal.update_column(:hot_score, 10)
       worst_proposal = create(:proposal, title: "Worst proposal")
@@ -665,8 +700,6 @@ describe "Proposals" do
     end
 
     scenario "Proposals are ordered by confidence_score", :js do
-      create_featured_proposals
-
       best_proposal = create(:proposal, title: "Best proposal")
       best_proposal.update_column(:confidence_score, 10)
       worst_proposal = create(:proposal, title: "Worst proposal")
@@ -688,8 +721,6 @@ describe "Proposals" do
     end
 
     scenario "Proposals are ordered by newest", :js do
-      create_featured_proposals
-
       best_proposal = create(:proposal, title: "Best proposal", created_at: Time.current)
       medium_proposal = create(:proposal, title: "Medium proposal", created_at: Time.current - 1.hour)
       worst_proposal = create(:proposal, title: "Worst proposal", created_at: Time.current - 1.day)
@@ -712,16 +743,6 @@ describe "Proposals" do
       let!(:best_proposal)   { create(:proposal, title: "Best",   cached_votes_up: 10, tag_list: "Sport") }
       let!(:medium_proposal) { create(:proposal, title: "Medium", cached_votes_up: 5,  tag_list: "Sport") }
       let!(:worst_proposal)  { create(:proposal, title: "Worst",  cached_votes_up: 1,  tag_list: "Sport") }
-
-      before do
-        Setting["feature.user.recommendations"] = true
-        Setting["feature.user.recommendations_on_proposals"] = true
-      end
-
-      after do
-        Setting["feature.user.recommendations"] = nil
-        Setting["feature.user.recommendations_on_proposals"] = nil
-      end
 
       scenario "can't be sorted if there's no logged user" do
         visit proposals_path
@@ -834,7 +855,6 @@ describe "Proposals" do
   describe "Archived proposals" do
 
     scenario "show on proposals list" do
-      create_featured_proposals
       archived_proposals = create_archived_proposals
 
       visit proposals_path
@@ -848,7 +868,6 @@ describe "Proposals" do
     end
 
     scenario "do not show in other index tabs" do
-      create_featured_proposals
       archived_proposal = create(:proposal, :archived)
 
       visit proposals_path
@@ -857,7 +876,7 @@ describe "Proposals" do
         expect(page).not_to have_content archived_proposal.title
       end
 
-      orders = %w{hot_score confidence_score created_at relevance}
+      orders = %w[hot_score confidence_score created_at relevance]
       orders.each do |order|
         visit proposals_path(order: order)
 
@@ -868,7 +887,6 @@ describe "Proposals" do
     end
 
     scenario "do not show support buttons in index" do
-      create_featured_proposals
       archived_proposals = create_archived_proposals
 
       visit proposals_path(order: "archival_date")
@@ -1419,9 +1437,9 @@ describe "Proposals" do
     end
 
     scenario "Order by relevance by default", :js do
-      proposal1 = create(:proposal, title: "Show you got",      cached_votes_up: 10)
-      proposal2 = create(:proposal, title: "Show what you got", cached_votes_up: 1)
-      proposal3 = create(:proposal, title: "Show you got",      cached_votes_up: 100)
+      create(:proposal, title: "Show you got",      cached_votes_up: 10)
+      create(:proposal, title: "Show what you got", cached_votes_up: 1)
+      create(:proposal, title: "Show you got",      cached_votes_up: 100)
 
       visit proposals_path
       fill_in "search", with: "Show what you got"
@@ -1437,15 +1455,19 @@ describe "Proposals" do
     end
 
     scenario "Reorder results maintaing search", :js do
-      proposal1 = create(:proposal, title: "Show you got",      cached_votes_up: 10,  created_at: 1.week.ago)
-      proposal2 = create(:proposal, title: "Show what you got", cached_votes_up: 1,   created_at: 1.month.ago)
-      proposal3 = create(:proposal, title: "Show you got",      cached_votes_up: 100, created_at: Time.current)
-      proposal4 = create(:proposal, title: "Do not display",    cached_votes_up: 1,   created_at: 1.week.ago)
+      create(:proposal, title: "Show you got",      cached_votes_up: 10,  created_at: 1.week.ago)
+      create(:proposal, title: "Show what you got", cached_votes_up: 1,   created_at: 1.month.ago)
+      create(:proposal, title: "Show you got",      cached_votes_up: 100, created_at: Time.current)
+      create(:proposal, title: "Do not display",    cached_votes_up: 1,   created_at: 1.week.ago)
 
       visit proposals_path
       fill_in "search", with: "Show what you got"
       click_button "Search"
+
+      expect(page).to have_content "Search results"
+
       click_link "newest"
+
       expect(page).to have_selector("a.is-active", text: "newest")
 
       within("#proposals") do
@@ -1457,11 +1479,7 @@ describe "Proposals" do
     end
 
     scenario "Reorder by recommendations results maintaing search" do
-      Setting["feature.user.recommendations"] = true
-      Setting["feature.user.recommendations_for_proposals"] = true
-
       user = create(:user, recommended_proposals: true)
-      login_as(user)
 
       proposal1 = create(:proposal, title: "Show you got",      cached_votes_up: 10,  tag_list: "Sport")
       proposal2 = create(:proposal, title: "Show what you got", cached_votes_up: 1,   tag_list: "Sport")
@@ -1470,6 +1488,7 @@ describe "Proposals" do
       proposal5 = create(:proposal, tag_list: "Sport")
       create(:follow, followable: proposal5, user: user)
 
+      login_as(user)
       visit proposals_path
       fill_in "search", with: "Show you got"
       click_button "Search"
@@ -1482,12 +1501,10 @@ describe "Proposals" do
         expect(page).not_to have_content "Do not display with same tag"
         expect(page).not_to have_content "Do not display"
       end
-
-      Setting["feature.user.recommendations"] = nil
-      Setting["feature.user.recommendations_for_proposals"] = nil
     end
 
     scenario "After a search do not show featured proposals" do
+      Setting["feature.featured_proposals"] = true
       featured_proposals = create_featured_proposals
       proposal = create(:proposal, title: "Abcdefghi")
 
@@ -1584,7 +1601,7 @@ describe "Proposals" do
   it_behaves_like "nested imageable",
                   "proposal",
                   "new_proposal_path",
-                  { },
+                  {},
                   "imageable_fill_new_valid_proposal",
                   "Create proposal",
                   "Proposal created successfully"
@@ -1603,7 +1620,7 @@ describe "Proposals" do
                   "user",
                   "proposal",
                   "new_proposal_path",
-                  { },
+                  {},
                   "documentable_fill_new_valid_proposal",
                   "Create proposal",
                   "Proposal created successfully"
@@ -1623,9 +1640,10 @@ describe "Proposals" do
                   "new_proposal_path",
                   "edit_proposal_path",
                   "proposal_path",
-                  { }
+                  {}
 
   scenario "Erased author" do
+    Setting["feature.featured_proposals"] = true
     user = create(:user)
     proposal = create(:proposal, author: user)
     user.erase
@@ -1707,9 +1725,6 @@ describe "Proposals" do
 
   context "Suggesting proposals" do
     scenario "Show up to 5 suggestions", :js do
-      author = create(:user)
-      login_as(author)
-
       create(:proposal, title: "First proposal, has search term")
       create(:proposal, title: "Second title")
       create(:proposal, title: "Third proposal, has search term")
@@ -1718,27 +1733,26 @@ describe "Proposals" do
       create(:proposal, title: "Sixth proposal, has search term")
       create(:proposal, title: "Seventh proposal, has search term")
 
+      login_as(create(:user))
       visit new_proposal_path
-      fill_in "proposal_title", with: "search"
+      fill_in "Proposal title", with: "search"
       check "proposal_terms_of_service"
 
-      within("div#js-suggest") do
+      within("div.js-suggest") do
         expect(page).to have_content "You are seeing 5 of 6 proposals containing the term 'search'"
       end
     end
 
     scenario "No found suggestions", :js do
-      author = create(:user)
-      login_as(author)
-
       create(:proposal, title: "First proposal").update_column(:confidence_score, 10)
       create(:proposal, title: "Second proposal").update_column(:confidence_score, 8)
 
+      login_as(create(:user))
       visit new_proposal_path
-      fill_in "proposal_title", with: "debate"
+      fill_in "Proposal title", with: "debate"
       check "proposal_terms_of_service"
 
-      within("div#js-suggest") do
+      within("div.js-suggest") do
         expect(page).not_to have_content "You are seeing"
       end
     end
@@ -1897,10 +1911,6 @@ describe "Successful proposals" do
       Setting["feature.user.skip_verification"] = "true"
     end
 
-    after do
-      Setting["feature.user.skip_verification"] = nil
-    end
-
     scenario "Create" do
       author = create(:user)
       login_as(author)
@@ -1911,11 +1921,11 @@ describe "Successful proposals" do
         click_link "Create a proposal"
       end
 
-      expect(current_path).to eq(new_proposal_path)
+      expect(page).to have_current_path(new_proposal_path)
 
-      fill_in "proposal_title", with: "Help refugees"
-      fill_in "proposal_summary", with: "In summary what we want is..."
-      fill_in "proposal_description", with: "This is very important because..."
+      fill_in "Proposal title", with: "Help refugees"
+      fill_in "Proposal summary", with: "In summary what we want is..."
+      fill_in "Proposal text", with: "This is very important because..."
       fill_in "proposal_video_url", with: "https://www.youtube.com/watch?v=yPQfcG-eimk"
       fill_in "proposal_tag_list", with: "Refugees, Solidarity"
       check "proposal_terms_of_service"

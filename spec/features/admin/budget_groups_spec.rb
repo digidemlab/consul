@@ -2,26 +2,17 @@ require "rails_helper"
 
 describe "Admin budget groups" do
 
-  let(:budget) { create(:budget, phase: "drafting") }
+  let(:budget) { create(:budget, :drafting) }
 
   before do
     admin = create(:administrator)
     login_as(admin.user)
   end
 
-  it_behaves_like "translatable",
-                  "budget_group",
-                  "edit_admin_budget_group_path",
-                  %w[name]
-
   context "Feature flag" do
 
     before do
       Setting["process.budgets"] = nil
-    end
-
-    after do
-      Setting["process.budgets"] = true
     end
 
     scenario "Disabled with a feature flag" do
@@ -188,7 +179,7 @@ describe "Admin budget groups" do
 
       visit edit_admin_budget_group_path(budget, group)
 
-      select "Español", from: "translation_locale"
+      select "Español", from: :add_language
       fill_in "Group name", with: "Spanish name"
       click_button "Save group"
 
@@ -197,7 +188,7 @@ describe "Admin budget groups" do
 
       visit edit_admin_budget_group_path(budget, group)
 
-      click_link "English"
+      select "English", from: :select_language
       fill_in "Group name", with: "New English Name"
       click_button "Save group"
 

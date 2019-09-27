@@ -7,11 +7,6 @@ describe "Admin polls" do
     login_as(admin.user)
   end
 
-  it_behaves_like "translatable",
-                  "poll",
-                  "edit_admin_poll_path",
-                  %w[name summary description]
-
   scenario "Index empty", :js do
     visit admin_root_path
 
@@ -90,8 +85,7 @@ describe "Admin polls" do
   end
 
   scenario "Edit" do
-    poll = create(:poll)
-    create(:image, imageable: poll)
+    poll = create(:poll, :with_image)
 
     visit admin_poll_path(poll)
     click_link "Edit poll"
@@ -138,9 +132,7 @@ describe "Admin polls" do
 
     scenario "Can destroy poll with questions and answers", :js do
       poll = create(:poll)
-      question = create(:poll_question, poll: poll)
-      create(:poll_question_answer, question: question, title: "Yes")
-      create(:poll_question_answer, question: question, title: "No")
+      question = create(:poll_question, :yes_no, poll: poll)
 
       visit admin_polls_path
 
@@ -220,7 +212,7 @@ describe "Admin polls" do
         booth = create(:poll_booth, polls: [poll])
 
         booth.booth_assignments.each do |booth_assignment|
-          3.times {create(:poll_officer_assignment, booth_assignment: booth_assignment) }
+          3.times { create(:poll_officer_assignment, booth_assignment: booth_assignment) }
         end
 
         visit admin_poll_path(poll)
@@ -248,14 +240,17 @@ describe "Admin polls" do
       scenario "Question list", :js do
         poll = create(:poll)
         question = create(:poll_question, poll: poll)
+        votation_type_question = create(:poll_question_unique, poll: poll)
         other_question = create(:poll_question)
 
         visit admin_poll_path(poll)
 
-        expect(page).to have_content "Questions (1)"
+        expect(page).to have_content "Questions (2)"
         expect(page).to have_content question.title
+        expect(page).to have_content votation_type_question.title
         expect(page).not_to have_content other_question.title
         expect(page).not_to have_content "There are no questions assigned to this poll"
+
       end
 
     end
@@ -324,6 +319,27 @@ describe "Admin polls" do
           expect(page).to have_content("55555")
           expect(page).to have_content("2")
         end
+      end
+
+      scenario "Recounts list with old polls" do
+        poll = create(:poll, :old)
+        booth_assignment = create(:poll_booth_assignment, poll: poll)
+
+        create(:poll_recount, booth_assignment: booth_assignment, total_amount: 10)
+        create(:poll_voter, :from_booth, poll: poll, booth_assignment: booth_assignment)
+
+        visit admin_poll_recounts_path(poll)
+
+        within("#totals") do
+          within("#total_final") do
+            expect(page).to have_content("10")
+          end
+
+          expect(page).not_to have_selector "#total_system"
+        end
+
+        expect(page).to have_selector "#poll_booth_assignment_#{booth_assignment.id}_recounts"
+        expect(page).not_to have_selector "#poll_booth_assignment_#{booth_assignment.id}_system"
       end
     end
   end
@@ -419,9 +435,7 @@ describe "Admin polls" do
         booth_assignment_2 = create(:poll_booth_assignment, poll: poll)
         booth_assignment_3 = create(:poll_booth_assignment, poll: poll)
 
-        question_1 = create(:poll_question, poll: poll)
-        create(:poll_question_answer, title: "Yes", question: question_1)
-        create(:poll_question_answer, title: "No", question: question_1)
+        question_1 = create(:poll_question, :yes_no, poll: poll)
 
         question_2 = create(:poll_question, poll: poll)
         create(:poll_question_answer, title: "Today", question: question_2)
@@ -475,9 +489,7 @@ describe "Admin polls" do
         booth_assignment1 = create(:poll_booth_assignment, poll: poll)
         booth_assignment2 = create(:poll_booth_assignment, poll: poll)
 
-        question = create(:poll_question, poll: poll)
-        create(:poll_question_answer, title: "Yes", question: question)
-        create(:poll_question_answer, title: "No", question: question)
+        question = create(:poll_question, :yes_no, poll: poll)
 
         create(:poll_partial_result,
                booth_assignment: booth_assignment1,

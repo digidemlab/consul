@@ -3,6 +3,11 @@ require "rails_helper"
 RSpec.describe Poll::Question, type: :model do
   let(:poll_question) { build(:poll_question) }
 
+  describe "Concerns" do
+    it_behaves_like "acts as paranoid", :poll_question
+    it_behaves_like "globalizable", :poll_question
+  end
+
   describe "#poll_question_id" do
     it "is invalid if a poll is not selected" do
       poll_question.poll_id = nil
@@ -28,10 +33,7 @@ RSpec.describe Poll::Question, type: :model do
     end
 
     context "locale with non-underscored name" do
-      before do
-        I18n.locale = :"pt-BR"
-        Globalize.locale = I18n.locale
-      end
+      before { I18n.locale = :"pt-BR" }
 
       it "correctly creates a translation" do
         poll_question.copy_attributes_from_proposal(proposal)
@@ -44,4 +46,35 @@ RSpec.describe Poll::Question, type: :model do
     end
   end
 
+  describe "#enum_type" do
+
+    it "returns nil if not has votation_type association" do
+      expect(poll_question.votation_type).to be_nil
+      expect(poll_question.enum_type).to be_nil
+    end
+
+    it "returns enum_type from votation_type association" do
+      question = create(:poll_question_answer_couples_open)
+
+      expect(question.votation_type).not_to be_nil
+      expect(question.enum_type).to eq("answer_couples_open")
+    end
+
+  end
+
+  describe "#max_votes" do
+
+    it "returns nil if not has votation_type association" do
+      expect(poll_question.votation_type).to be_nil
+      expect(poll_question.max_votes).to be_nil
+    end
+
+    it "returns max_votes from votation_type association" do
+      question = create(:poll_question_answer_couples_open)
+
+      expect(question.votation_type).not_to be_nil
+      expect(question.max_votes).to eq(5)
+    end
+
+  end
 end

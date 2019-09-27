@@ -1,7 +1,4 @@
-shared_examples "nested imageable" do |imageable_factory_name, path,
-                                       imageable_path_arguments, fill_resource_method_name,
-                                       submit_button, imageable_success_notice,
-                                       has_many_images = false|
+shared_examples "nested imageable" do |imageable_factory_name, path, imageable_path_arguments, fill_resource_method_name, submit_button, imageable_success_notice, has_many_images = false|
   include ActionView::Helpers
   include ImagesHelper
   include ImageablesHelper
@@ -12,18 +9,11 @@ shared_examples "nested imageable" do |imageable_factory_name, path,
   let!(:imageable)           { create(imageable_factory_name) }
 
   before do
-
-    Setting["feature.allow_images"] = true
-
     imageable_path_arguments&.each do |argument_name, path_to_value|
-        arguments.merge!("#{argument_name}": imageable.send(path_to_value))
+      arguments.merge!("#{argument_name}": imageable.send(path_to_value))
     end
 
     imageable.update(author: user) if imageable.respond_to?(:author)
-  end
-
-  after do
-    Setting["feature.allow_images"] = nil
   end
 
   describe "at #{path}" do
@@ -176,7 +166,7 @@ shared_examples "nested imageable" do |imageable_factory_name, path,
 
     scenario "Should show successful notice when resource filled correctly without any nested images", :js do
       if has_many_images
-         skip "no need to test, there are no attributes for the parent resource"
+        skip "no need to test, there are no attributes for the parent resource"
       else
         login_as user
         visit send(path, arguments)
@@ -226,24 +216,24 @@ shared_examples "nested imageable" do |imageable_factory_name, path,
     if path.include? "edit"
 
       scenario "Should show persisted image" do
-        login_as user
         create(:image, imageable: imageable)
+        login_as user
         visit send(path, arguments)
 
         expect(page).to have_css ".image", count: 1
       end
 
       scenario "Should not show add image button when image already exists", :js do
-        login_as user
         create(:image, imageable: imageable)
+        login_as user
         visit send(path, arguments)
 
         expect(page).to have_css "a#new_image_link", visible: false
       end
 
       scenario "Should remove nested field after remove image", :js do
-        login_as user
         create(:image, imageable: imageable)
+        login_as user
         visit send(path, arguments)
         click_on "Remove image"
 
@@ -251,8 +241,8 @@ shared_examples "nested imageable" do |imageable_factory_name, path,
       end
 
       scenario "Should show add image button after remove image", :js do
-        login_as user
         create(:image, imageable: imageable)
+        login_as user
         visit send(path, arguments)
         click_on "Remove image"
 
@@ -289,15 +279,15 @@ def imageable_attach_new_file(_imageable_factory_name, path, success = true)
 end
 
 def imageable_fill_new_valid_proposal
-  fill_in :proposal_title, with: "Proposal title"
-  fill_in :proposal_summary, with: "Proposal summary"
+  fill_in "Proposal title", with: "Proposal title"
+  fill_in "Proposal summary", with: "Proposal summary"
   check :proposal_terms_of_service
 end
 
 def imageable_fill_new_valid_budget_investment
   page.select imageable.heading.name_scoped_by_group, from: :budget_investment_heading_id
-  fill_in :budget_investment_title, with: "Budget investment title"
-  fill_in_ckeditor "budget_investment_description", with: "Budget investment description"
+  fill_in "Title", with: "Budget investment title"
+  fill_in_ckeditor "Description", with: "Budget investment description"
   check :budget_investment_terms_of_service
 end
 

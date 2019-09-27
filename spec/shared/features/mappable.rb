@@ -1,10 +1,4 @@
-shared_examples "mappable" do |mappable_factory_name,
-                               mappable_association_name,
-                               mappable_new_path,
-                               mappable_edit_path,
-                               mappable_show_path,
-                               mappable_path_arguments,
-                               management = false|
+shared_examples "mappable" do |mappable_factory_name, mappable_association_name, mappable_new_path, mappable_edit_path, mappable_show_path, mappable_path_arguments, management: false|
 
   include ActionView::Helpers
 
@@ -147,7 +141,7 @@ shared_examples "mappable" do |mappable_factory_name,
       do_login_for mappable.author
 
       visit send(mappable_edit_path, id: mappable.id)
-      fill_in "#{mappable_factory_name}_title", with: "New title"
+      fill_in "#{mappable_factory_name.camelize} title", with: "New title"
       click_on("Save changes")
       mappable.reload
 
@@ -172,7 +166,7 @@ shared_examples "mappable" do |mappable_factory_name,
       do_login_for mappable.author
 
       visit send(mappable_edit_path, id: mappable.id)
-      fill_in "#{mappable_factory_name}_title", with: "New title"
+      fill_in "#{mappable_factory_name.camelize} title", with: "New title"
       click_on("Save changes")
 
       expect(page).not_to have_css(".map_location")
@@ -249,8 +243,8 @@ def do_login_for(user)
 end
 
 def fill_in_proposal_form
-  fill_in "proposal_title", with: "Help refugees"
-  fill_in "proposal_summary", with: "In summary, what we want is..."
+  fill_in "Proposal title", with: "Help refugees"
+  fill_in "Proposal summary", with: "In summary, what we want is..."
 end
 
 def submit_proposal_form
@@ -271,8 +265,8 @@ end
 
 def fill_in_budget_investment_form
   page.select mappable.heading.name_scoped_by_group, from: :budget_investment_heading_id
-  fill_in :budget_investment_title, with: "Budget investment title"
-  fill_in_ckeditor "budget_investment_description", with: "Budget investment description"
+  fill_in "Title", with: "Budget investment title"
+  fill_in_ckeditor "Description", with: "Budget investment description"
   check :budget_investment_terms_of_service
 end
 
@@ -283,6 +277,6 @@ end
 
 def set_arguments(arguments, mappable, mappable_path_arguments)
   mappable_path_arguments&.each do |argument_name, path_to_value|
-      arguments.merge!("#{argument_name}": mappable.send(path_to_value))
+    arguments.merge!("#{argument_name}": mappable.send(path_to_value))
   end
 end

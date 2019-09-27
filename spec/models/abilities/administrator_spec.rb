@@ -76,8 +76,8 @@ describe Abilities::Administrator do
   it { should be_able_to(:update, Budget::Investment) }
   it { should be_able_to(:hide,   Budget::Investment) }
 
-  it { should be_able_to(:valuate, create(:budget_investment, budget: create(:budget, phase: "valuating"))) }
-  it { should be_able_to(:valuate, create(:budget_investment, budget: create(:budget, phase: "finished"))) }
+  it { should be_able_to(:valuate, create(:budget_investment, budget: create(:budget, :valuating))) }
+  it { should be_able_to(:valuate, create(:budget_investment, budget: create(:budget, :finished))) }
 
   it { should be_able_to(:destroy, proposal_image) }
   it { should be_able_to(:destroy, proposal_document) }
@@ -88,6 +88,15 @@ describe Abilities::Administrator do
   it { should be_able_to(:stats, poll) }
   it { should be_able_to(:results, poll) }
 
+  it { should be_able_to(:read, Poll::Question) }
+  it { should be_able_to(:create, Poll::Question) }
+  it { should be_able_to(:update, Poll::Question) }
+  it { should be_able_to(:get_options_traductions, Poll::Question) }
+
   it { is_expected.to be_able_to :manage, Dashboard::AdministratorTask }
   it { is_expected.to be_able_to :manage, dashboard_administrator_task }
+
+  it { should be_able_to(:manage, LocalCensusRecord) }
+  it { should be_able_to(:create, LocalCensusRecords::Import) }
+  it { should be_able_to(:show, LocalCensusRecords::Import) }
 end

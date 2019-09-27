@@ -7,18 +7,12 @@ describe "Admin legislation draft versions" do
     login_as(admin.user)
   end
 
-  it_behaves_like "translatable",
-                  "legislation_draft_version",
-                  "edit_admin_legislation_process_draft_version_path",
-                  %w[title changelog],
-                  { "body" => :markdownit }
-
   context "Feature flag" do
 
     scenario "Disabled with a feature flag" do
       Setting["process.legislation"] = nil
       process = create(:legislation_process)
-      expect{ visit admin_legislation_process_draft_versions_path(process) }.to raise_exception(FeatureFlags::FeatureDisabled)
+      expect { visit admin_legislation_process_draft_versions_path(process) }.to raise_exception(FeatureFlags::FeatureDisabled)
     end
 
   end
@@ -42,7 +36,7 @@ describe "Admin legislation draft versions" do
 
   context "Create" do
     scenario "Valid legislation draft version" do
-      process = create(:legislation_process, title: "An example legislation process")
+      create(:legislation_process, title: "An example legislation process")
 
       visit admin_root_path
 
@@ -63,7 +57,7 @@ describe "Admin legislation draft versions" do
       fill_in "Changes", with: "Version 3 changes"
       fill_in "Text", with: "Version 3 body"
 
-      within(".end") do
+      within("form .end") do
         click_button "Create version"
       end
 

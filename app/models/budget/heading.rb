@@ -26,8 +26,6 @@ class Budget
     has_many :investments
     has_many :content_blocks
 
-    before_validation :assign_model_to_translations
-
     validates_translation :name, presence: true
     validates :group_id, presence: true
     validates :price, presence: true
@@ -58,9 +56,8 @@ class Budget
 
     private
 
-    def generate_slug?
-      slug.nil? || budget.drafting?
-    end
-
+      def generate_slug?
+        slug.nil? || budget.drafting?
+      end
   end
 end

@@ -3,15 +3,9 @@ require "rails_helper"
 describe "Admin Notifications" do
 
   before do
-    admin = create(:administrator)
-    login_as(admin.user)
     create(:budget)
+    login_as(create(:administrator).user)
   end
-
-  it_behaves_like "translatable",
-                  "admin_notification",
-                  "edit_admin_admin_notification_path",
-                  %w[title body]
 
   context "Show" do
     scenario "Valid Admin Notification" do
@@ -97,7 +91,6 @@ describe "Admin Notifications" do
       within("#admin_notification_#{notification.id}") do
         click_link "Edit"
       end
-
 
       fill_in_admin_notification_form(segment_recipient: "All users",
                                       title: "Other title",
@@ -195,8 +188,6 @@ describe "Admin Notifications" do
     scenario "A draft Admin notification can be sent", :js do
       2.times { create(:user) }
       notification = create(:admin_notification, segment_recipient: :all_users)
-      total_users = notification.list_of_recipients.count
-      confirm_message = "Are you sure you want to send this notification to #{total_users} users?"
 
       visit admin_admin_notification_path(notification)
 

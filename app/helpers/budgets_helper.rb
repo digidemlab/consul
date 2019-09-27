@@ -19,11 +19,11 @@ module BudgetsHelper
   end
 
   def budget_phases_select_options
-    Budget::Phase::PHASE_KINDS.map { |ph| [ t("budgets.phase.#{ph}"), ph ] }
+    Budget::Phase::PHASE_KINDS.map { |ph| [t("budgets.phase.#{ph}"), ph] }
   end
 
   def budget_currency_symbol_select_options
-    Budget::CURRENCY_SYMBOLS.map { |cs| [ cs, cs ] }
+    Budget::CURRENCY_SYMBOLS.map { |cs| [cs, cs] }
   end
 
   def namespaced_budget_investment_path(investment, options = {})
@@ -54,7 +54,15 @@ module BudgetsHelper
   end
 
   def investment_tags_select_options(budget)
-    Budget::Investment.by_budget(budget).tags_on(:valuation).order(:name).select(:name).distinct
+    tags = Budget::Investment.by_budget(budget).tags_on(:valuation).order(:name).pluck(:name)
+    tags = tags.concat budget.budget_valuation_tags.split(",") if budget.budget_valuation_tags.present?
+    tags.uniq
+  end
+
+  def investment_milestone_tags_select_options(budget)
+    tags = Budget::Investment.by_budget(budget).tags_on(:milestone).order(:name).pluck(:name)
+    tags = tags.concat budget.budget_milestone_tags.split(",") if budget.budget_milestone_tags.present?
+    tags.uniq
   end
 
   def unfeasible_or_unselected_filter

@@ -57,7 +57,7 @@ describe "Valuator groups" do
   end
 
   scenario "Update" do
-    group = create(:valuator_group, name: "Health")
+    create(:valuator_group, name: "Health")
 
     visit admin_valuator_groups_path
     click_link "Edit"
@@ -70,7 +70,7 @@ describe "Valuator groups" do
   end
 
   scenario "Delete" do
-    group = create(:valuator_group)
+    create(:valuator_group)
 
     visit admin_valuator_groups_path
     click_link "Delete"
@@ -88,7 +88,7 @@ describe "Valuator groups" do
       visit edit_admin_valuator_path(valuator)
 
       select "Health", from: "valuator_valuator_group_id"
-      click_button "Update valuator"
+      click_button "Update Valuator"
 
       expect(page).to have_content "Valuator updated successfully"
       expect(page).to have_content "Health"
@@ -102,7 +102,7 @@ describe "Valuator groups" do
 
       visit edit_admin_valuator_path(valuator)
       select "Economy", from: "valuator_valuator_group_id"
-      click_button "Update valuator"
+      click_button "Update Valuator"
 
       expect(page).to have_content "Valuator updated successfully"
       expect(page).to have_content "Economy"
@@ -115,7 +115,7 @@ describe "Valuator groups" do
 
       visit edit_admin_valuator_path(valuator)
       select "", from: "valuator_valuator_group_id"
-      click_button "Update valuator"
+      click_button "Update Valuator"
 
       expect(page).to have_content "Valuator updated successfully"
       expect(page).not_to have_content "Health"

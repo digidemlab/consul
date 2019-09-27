@@ -7,14 +7,20 @@ describe "Admin debates" do
     admin = create(:administrator)
     login_as(admin.user)
 
-    expect{ visit admin_hidden_debates_path }.to raise_exception(FeatureFlags::FeatureDisabled)
-
-    Setting["process.debates"] = true
+    expect { visit admin_hidden_debates_path }.to raise_exception(FeatureFlags::FeatureDisabled)
   end
 
   before do
     admin = create(:administrator)
     login_as(admin.user)
+  end
+
+  scenario "Show debate" do
+    debate = create(:debate)
+    visit admin_debate_path(debate)
+
+    expect(page).to have_content(debate.title)
+    expect(page).to have_content(debate.description)
   end
 
   scenario "Restore" do

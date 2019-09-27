@@ -7,11 +7,6 @@ describe "Admin budgets" do
     login_as(admin.user)
   end
 
-  it_behaves_like "translatable",
-                  "budget",
-                  "edit_admin_budget_path",
-                  %w[name]
-
   context "Feature flag" do
 
     before do
@@ -19,7 +14,7 @@ describe "Admin budgets" do
     end
 
     scenario "Disabled with a feature flag" do
-      expect{ visit admin_budgets_path }.to raise_exception(FeatureFlags::FeatureDisabled)
+      expect { visit admin_budgets_path }.to raise_exception(FeatureFlags::FeatureDisabled)
     end
 
   end
@@ -93,7 +88,7 @@ describe "Admin budgets" do
     end
 
     scenario "Open filter is properly highlighted" do
-      filters_links = {"current" => "Open", "finished" => "Finished"}
+      filters_links = { "current" => "Open", "finished" => "Finished" }
 
       visit admin_budgets_path
 
@@ -153,7 +148,7 @@ describe "Admin budgets" do
   context "Destroy" do
 
     let!(:budget) { create(:budget) }
-    let(:heading) { create(:budget_heading, group: create(:budget_group, budget: budget)) }
+    let(:heading) { create(:budget_heading, budget: budget) }
 
     scenario "Destroy a budget without investments" do
       visit admin_budgets_path
@@ -227,7 +222,7 @@ describe "Admin budgets" do
 
       visit edit_admin_budget_path(budget)
 
-      select "Español", from: "translation_locale"
+      select "Español", from: :add_language
       fill_in "Name", with: "Spanish name"
       click_button "Update Budget"
 
@@ -236,7 +231,7 @@ describe "Admin budgets" do
 
       visit edit_admin_budget_path(budget)
 
-      click_link "English"
+      select "English", from: :select_language
       fill_in "Name", with: "New English Name"
       click_button "Update Budget"
 
@@ -269,9 +264,8 @@ describe "Admin budgets" do
   context "Calculate Budget's Winner Investments" do
 
     scenario "For a Budget in reviewing balloting", :js do
-      budget = create(:budget, phase: "reviewing_ballots")
-      group = create(:budget_group, budget: budget)
-      heading = create(:budget_heading, group: group, price: 4)
+      budget = create(:budget, :reviewing_ballots)
+      heading = create(:budget_heading, budget: budget, price: 4)
       unselected = create(:budget_investment, :unselected, heading: heading, price: 1,
                                                            ballot_lines_count: 3)
       winner = create(:budget_investment, :selected, heading: heading, price: 3,
@@ -285,7 +279,6 @@ describe "Admin budgets" do
       expect(page).to have_content winner.title
       expect(page).not_to have_content unselected.title
       expect(page).not_to have_content selected.title
-
 
       visit edit_admin_budget_path(budget)
       expect(page).to have_content "See results"
@@ -303,9 +296,7 @@ describe "Admin budgets" do
 
     scenario "Recalculate for a finished Budget" do
       budget = create(:budget, :finished)
-      group = create(:budget_group, budget: budget)
-      heading = create(:budget_heading, group: group)
-      create(:budget_investment, :winner, heading: heading)
+      create(:budget_investment, :winner, budget: budget)
 
       visit edit_admin_budget_path(budget)
 

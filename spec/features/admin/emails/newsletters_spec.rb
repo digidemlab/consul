@@ -3,9 +3,8 @@ require "rails_helper"
 describe "Admin newsletter emails" do
 
   before do
-    admin = create(:administrator)
-    login_as(admin.user)
     create(:budget)
+    login_as(create(:administrator).user)
   end
 
   context "Show" do
@@ -66,7 +65,7 @@ describe "Admin newsletter emails" do
 
     fill_in_newsletter_form(subject: "This is a subject",
                             segment_recipient: "Proposal authors",
-                            body: "This is a body" )
+                            body: "This is a body")
     click_button "Create Newsletter"
 
     expect(page).to have_content "Newsletter created successfully"
@@ -86,7 +85,7 @@ describe "Admin newsletter emails" do
 
     fill_in_newsletter_form(subject: "This is a subject",
                             segment_recipient: "Investment authors in the current budget",
-                            body: "This is a body" )
+                            body: "This is a body")
     click_button "Update Newsletter"
 
     expect(page).to have_content "Newsletter updated successfully"
@@ -130,7 +129,6 @@ describe "Admin newsletter emails" do
     scenario "Sends newsletter emails", :js do
       newsletter = create(:newsletter)
       visit admin_newsletter_path(newsletter)
-      total_users = newsletter.list_of_recipient_emails.count
 
       accept_confirm { click_link "Send" }
 

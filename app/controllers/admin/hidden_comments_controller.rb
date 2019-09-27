@@ -1,5 +1,5 @@
 class Admin::HiddenCommentsController < Admin::BaseController
-  has_filters %w{without_confirmed_hide all with_confirmed_hide}
+  has_filters %w[without_confirmed_hide all with_confirmed_hide]
 
   before_action :load_comment, only: [:confirm_hide, :restore]
 
@@ -14,7 +14,7 @@ class Admin::HiddenCommentsController < Admin::BaseController
   end
 
   def restore
-    @comment.restore
+    @comment.restore(recursive: true)
     @comment.ignore_flag
     Activity.log(current_user, :restore, @comment)
     redirect_to request.query_parameters.merge(action: :index)

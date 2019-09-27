@@ -104,6 +104,25 @@ en:
         edit_phase: Edit phase
         active: Active
         blank_dates: Dates are blank
+        administrators:
+          zero: "Select administrators"
+          one: "1 administrator selected"
+          other: "%{count} administrators selected"
+        valuators:
+          zero: "Select valuators"
+          one: "1 valuator selected"
+          other: "%{count} valuators selected"
+        trackers:
+          zero: "Select trackers"
+          one: "1 tracker selected"
+          other: "%{count} trackers selected"
+        empty_administrators: "There are no administrators"
+        empty_valuators: "There are no valuators"
+        empty_trackers: "There are no trackers"
+        name: "Name"
+        selected: "Selected"
+        cancel: "Cancel"
+        save: "Save"
       destroy:
         success_notice: Budget deleted successfully
         unable_notice: You cannot delete a budget that has associated investments
@@ -205,10 +224,10 @@ en:
         download_current_selection: "Download current selection"
         no_budget_investments: "There are no investment projects."
         title: Investment projects
+        columns: Columns
         assigned_admin: Assigned administrator
         no_admin_assigned: No admin assigned
         no_valuators_assigned: No valuators assigned
-        no_valuation_groups: No valuation groups assigned
         feasibility:
           feasible: "Feasible"
           unfeasible: "Unfeasible"
@@ -230,8 +249,10 @@ en:
           author_username: Author username
           incompatible: Incompatible
           price: Price
+          author: Author
         cannot_calculate_winners: The budget has to stay on phase "Balloting projects", "Reviewing Ballots" or "Finished budget" in order to calculate winners projects
         see_results: "See results"
+        milestone_tags_filter_all: "All milestone tags"
       show:
         assigned_admin: Assigned administrator
         assigned_valuators: Assigned valuators
@@ -246,7 +267,6 @@ en:
         dossier: Dossier
         edit_dossier: Edit dossier
         tags: Tags
-        user_tags: User tags
         undefined: Undefined
         compatibility:
           title: Compatibility
@@ -260,13 +280,9 @@ en:
           title: Winner
           "true": "Yes"
           "false": "No"
-        image: "Image"
-        see_image: "See image"
-        no_image: "Without image"
-        documents: "Documents"
-        see_documents: "See documents (%{count})"
-        no_documents: "Without documents"
         valuator_groups: "Valuator Groups"
+        preview: Investment preview
+        assigned_trackers: "Assigned trackers"
       edit:
         classification: Classification
         compatibility: Compatibility
@@ -281,37 +297,12 @@ en:
         tags_placeholder: "Write the tags you want separated by commas (,)"
         undefined: Undefined
         user_groups: "Groups"
+        assigned_trackers: "Trackers"
+        milestone_tags: Milestone tags
       search_unfeasible: Search unfeasible
     milestones:
       index:
-        table_id: "ID"
-        table_title: "Title"
-        table_description: "Description"
-        table_publication_date: "Publication date"
-        table_status: Status
-        table_actions: "Actions"
-        delete: "Delete milestone"
-        no_milestones: "Don't have defined milestones"
-        image: "Image"
-        show_image: "Show image"
-        documents: "Documents"
-        milestone: Milestone
-        new_milestone: Create new milestone
-      form:
-        admin_statuses: Manage statuses
-        no_statuses_defined: There are no defined statuses yet
-      new:
-        creating: Create milestone
-        date: Date
-        description: Description
-      edit:
-        title: Edit milestone
-      create:
-        notice: New milestone created successfully!
-      update:
-        notice: Milestone updated successfully
-      delete:
-        notice: Milestone successfully deleted
+        milestone_tags: Milestone Tags
     statuses:
       index:
         title: Milestone statuses
@@ -355,6 +346,16 @@ en:
         notice: "Progress bar updated successfully"
       delete:
         notice: "Progress bar deleted successfully"
+    comments:
+      index:
+        id: "ID"
+        content: "Content"
+        author: "Author"
+        commentable_type: "Type"
+        link: "Download comments"
+        title: Comments
+        no_comments: There is no comments.
+        table_link: "Link"
     hidden_comments:
       index:
         filter: Filter
@@ -430,6 +431,13 @@ en:
           request: Requested resource
         update:
           success: The task has been marked as solved.
+    debates:
+      index:
+        id: ID
+        author: Author
+        title: Debates
+        no_debates: There is no debates.
+        link: "Download debates"
     hidden_debates:
       index:
         filter: Filter
@@ -520,6 +528,7 @@ en:
           filters:
             active: Active
             all: All
+          link: "Download legislation process"
         new:
           back: Back
           title: Create new collaborative legislation process
@@ -720,9 +729,21 @@ en:
       title_booths: Voting booths
       legislation: Collaborative Legislation
       users: Users
+      trackers: "Trackers"
       dashboard: Proposals dashboard
       administrator_tasks: Resources requested
       dashboard_actions: Resources and actions
+      download_settings:
+        title: "Download settings"
+        debates: "Debates"
+        proposals: "Proposals"
+        legislation_processes: "Legislation process"
+        budget_investments: "Participatory budgeting"
+        comments: "Comments"
+        budget_investments_milestones: "Participatory budgeting (Milestones)"
+      debates: "Debates"
+      comments: "Comments"
+      local_census_records: Manage local census
     administrators:
       index:
         title: Administrators
@@ -907,6 +928,9 @@ en:
         valuator_groups: "Valuator Groups"
         group: "Group"
         no_group: "No group"
+        abilities: "Abilities"
+        can_comment: "Can comment"
+        can_edit_dossier: "Can edit dossier"
       valuator:
         add: Add to valuators
         delete: Delete
@@ -914,14 +938,15 @@ en:
         title: "Valuators: User search"
       form:
         edit_title: "Valuators: Edit valuator"
-        update: "Update valuator"
         updated: "Valuator updated successfully"
       show:
         description: "Description"
         email: "Email"
         group: "Group"
+        abilities: "Abilities"
         no_description: "Without description"
         no_group: "Without group"
+        no_abilities: "Without abilities"
     valuator_groups:
       index:
         title: "Valuator groups"
@@ -1003,11 +1028,6 @@ en:
     poll_booth_assignments:
       alert:
         shifts: "There are shifts associated to this booth. If you remove the booth assignment, the shifts will be also deleted. Continue?"
-      flash:
-        destroy: "Booth not assigned anymore"
-        create: "Booth assigned"
-        error_destroy: "An error ocurred when removing booth assignment"
-        error_create: "An error ocurred when assigning booth to the poll"
       show:
         location: "Location"
         officers: "Officers"
@@ -1238,6 +1258,7 @@ en:
         selected: Selected
         milestones: Milestones
         no_proposals: There are no proposals.
+        link: "Download proposals"
       show:
         create_question: Add this proposal to a poll to be voted
       form:
@@ -1266,7 +1287,8 @@ en:
       flash:
         updated: Value updated
       index:
-        title: Configuration settings
+        title: Settings
+        general: Configuration settings
         update_setting: Update
         participation_processes: "Participation processes"
         images_and_documents: "Images and documents"
@@ -1286,6 +1308,12 @@ en:
           how_to_enable: 'To show the map to users you must enable "Proposals and budget investments geolocation" on "Features" tab.'
         dashboard:
           title: Proposals dashboard
+        remote_census:
+          title: Remote Census configuration
+          how_to_enable: 'To configure remote census (SOAP) you must enable "Configure connection to remote census (SOAP)" on "Features" tab.'
+      remote_census_general_name: General Information
+      remote_census_request_name: Request Data
+      remote_census_response_name: Response Data
       setting: Feature
       setting_actions: Actions
       setting_name: Setting
@@ -1297,7 +1325,7 @@ en:
       false_value: "No"
       booths_search:
         button: Search
-        placeholder: Search booth by name
+        placeholder: Search booth by name or location
       poll_officers_search:
         button: Search
         placeholder: Search poll officers
@@ -1307,6 +1335,9 @@ en:
       proposal_search:
         button: Search
         placeholder: Search proposals by title, code, description or question
+      debate_search:
+        button: Search
+        placeholder: Search debates by title or description
       user_search:
         button: Search
         placeholder: Search user by name or email
@@ -1366,13 +1397,19 @@ en:
         new: New signature sheets
       new:
         title: New signature sheets
-        document_numbers_note: "Write the numbers separated by commas (,)"
+        document_numbers_note: "Write the numbers separated by semicolons (;)"
         submit: Create signature sheet
+        text_help:
+          required_fields_note: "To verify a user, your application needs: Document number"
+          date_of_birth_note: ", Day of birth (dd/mm/yyyy)"
+          postal_code_note: " and Postal Code"
+          required_fields_structure_note: "Required fields for each user must be separated by commas and each user must be separated by semicolons."
+          example_text: "Example: "
       show:
         created_at: Created
         author: Author
-        documents: Documents
-        document_count: "Number of documents:"
+        users: Users
+        signature_count: "Number of signatures:"
         verified:
           one: "There is %{count} valid signature"
           other: "There are %{count} valid signatures"
@@ -1417,6 +1454,7 @@ en:
         level_2_user: Level 2 users
         proposal_created: Citizen proposals
       budgets:
+        no_data_before_balloting_phase: "There isn't any data to show before the balloting phase."
         title: "Participatory Budgets - Participation stats"
         supporting_phase: Supporting phase
         balloting_phase: Final voting
@@ -1602,6 +1640,75 @@ en:
         submit_header: Save header
         card_title: Edit card
         submit_card: Save card
-    translations:
-        remove_language: Remove language
-        add_language: Add language
+    change_log:
+      title: "Change Log"
+      id: "ID"
+      field: "Field"
+      new_value: "New Value"
+      old_value: "Old Value"
+      edited_at: "Edited at"
+      edited_by: "Edited by"
+      actions: "Actions"
+      empty: "There are not changes logged"
+    trackers:
+      index:
+        title: Trackers
+        name: Name
+        email: Email
+        description: Description
+        no_description: No description
+        no_trackers: There are no trackers.
+      tracker:
+        add: "Add to trackers"
+      form:
+        update: Update Tracker
+        updated: "Tracker updated succesfully."
+        edit_title: "Trackers: Edit tracker"
+      show:
+        email: Email
+        description: Description
+        no_description: No description.
+      search:
+        title: Trackers
+    progress_bars:
+      index:
+        title: "Progress bars"
+    local_census_records:
+      index:
+        title: Manage local census
+        create: Create new local census record
+        no_local_census_records: There are no local census records.
+        document_type: Document type
+        document_number: Document number
+        date_of_birth: Date of birth
+        postal_code: Postal code
+        search:
+          placeholder: Search by document number
+          search: Search
+        import: Import CSV
+      form:
+        date_of_birth: Date of birth
+      new:
+        creating: Creating new local census record
+      create:
+        notice: New local census record created successfully!
+      edit:
+        editing: Editing local census record
+      update:
+        notice: Local census record updated successfully!
+      destroy:
+        notice: Local census record removed successfully!
+      imports:
+        new:
+          title: Local census records
+          subtitle: Import CSV file
+        create:
+          notice: Local census records import process executed successfully!
+        show:
+          title: Manage local census
+          subtitle: Import process results
+          import: Import again
+          errored: Errored rows
+          created: Created records
+        local_census_records:
+          no_records_found: No records found.

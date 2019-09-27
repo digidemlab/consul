@@ -2,10 +2,10 @@ require "rails_helper"
 
 describe Budget::Ballot::Line do
 
-  let(:budget){ create(:budget) }
-  let(:group){ create(:budget_group, budget: budget) }
-  let(:heading){ create(:budget_heading, group: group, price: 10000000) }
-  let(:investment){ create(:budget_investment, :selected, price: 5000000, heading: heading) }
+  let(:budget) { create(:budget) }
+  let(:group) { create(:budget_group, budget: budget) }
+  let(:heading) { create(:budget_heading, group: group, price: 10000000) }
+  let(:investment) { create(:budget_investment, :selected, price: 5000000, heading: heading) }
   let(:ballot) { create(:budget_ballot, budget: budget) }
   let(:ballot_line) { build(:budget_ballot_line, ballot: ballot, investment: investment) }
 
@@ -73,7 +73,7 @@ describe Budget::Ballot::Line do
         ballot_line2 = create(:budget_ballot_line, ballot: ballot2, investment: investment1)
         ballot_line3 = create(:budget_ballot_line, ballot: ballot3, investment: investment2)
 
-        ballot_lines_by_investment = described_class.by_investment(investment1.id)
+        ballot_lines_by_investment = Budget::Ballot::Line.by_investment(investment1.id)
 
         expect(ballot_lines_by_investment).to include ballot_line1
         expect(ballot_lines_by_investment).to include ballot_line2
