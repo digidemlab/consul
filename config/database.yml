@@ -17,10 +17,13 @@ test:
 # The staging, preproduction and production dbs are only needed
 # for running rake assets:precompile locally before deploying
 staging:
+  <<: *default
   url: <%= ENV['DATABASE_URL'] %>
 
 preproduction:
+  <<: *default
   url: <%= ENV['DATABASE_URL'] %>
 
 production:
+  <<: *default
   url: <%= ENV['DATABASE_URL'] %>
