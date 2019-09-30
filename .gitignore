@@ -38,3 +38,6 @@
 public/sitemap.xml
 public/system/
 /public/ckeditor_assets/
+
+# Figaro config
+/config/application.yml
