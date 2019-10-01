@@ -65,53 +65,62 @@ sv:
       title: sekretesspolicyn
     accessibility:
       title: Tillgänglighet
+      description: |-
+        Web accessibility refers to the possibility of access to the web and its contents by all people, regardless of the disabilities (physical, intellectual or technical) that may arise or from those that derive from the context of use (technological or environmental) .
+
+        When websites are designed with accessibility in mind, all users can access content in equal conditions, for example:
+      examples:
+        - Providing alternative text to the images, blind or visually impaired users can use special readers to access the information.
+        - When videos have subtitles, users with hearing difficulties can fully understand them.
+        - If the contents are written in a simple and illustrated language, users with learning problems are better able to understand them.
+        - If the user has mobility problems and it is difficult to use the mouse, the alternatives with the keyboard help in navigation.
       keyboard_shortcuts:
         navigation_table:
           page_header: Sida
           rows:
-            - 
+            -
               key_column: 0
               page_column: Hem
-            - 
+            -
               key_column: 1
               page_column: Debatter
-            - 
+            -
               key_column: 2
               page_column: Förslag
-            - 
+            -
               key_column: 3
               page_column: Röster
-            - 
+            -
               key_column: 4
               page_column: Medborgarbudgetar
-            - 
+            -
               key_column: 5
         browser_table:
           rows:
-            - 
+            -
               browser_column: IE
-            - 
+            -
               browser_column: Firefox
-            - 
+            -
               browser_column: Chrome
-            - 
+            -
               browser_column: Safari
-            - 
+            -
               browser_column: Opera
       textsize:
         title: Textstorlek
         browser_settings_table:
           rows:
-            - 
+            -
               browser_column: IE
               action_column: Visa > Textstorlek
-            - 
+            -
               browser_column: Firefox
               action_column: Visa > Storlek
-            - 
+            -
               browser_column: Chrome
-            - 
-            - 
+            -
+            -
               browser_column: Opera
     titles:
       help: "Vad är %{org}? - Medborgardeltagande"
