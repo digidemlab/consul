@@ -138,7 +138,7 @@ sv:
               description_column: Decreases text size
       compatibility:
         title: Compatibility with standards and visual design
-        description_html: 'All pages of this website comply with the <strong>Accessibility Guidelines</strong> or General Principles of Accessible Design established by the Working Group <abbr title="Web Accessibility Initiative" lang="en">WAI</abbr> belonging to W3C.'    titles:
+        description_html: 'All pages of this website comply with the <strong>Accessibility Guidelines</strong> or General Principles of Accessible Design established by the Working Group <abbr title="Web Accessibility Initiative" lang="en">WAI</abbr> belonging to W3C.'
     titles:
       help: "Vad är %{org}? - Medborgardeltagande"
     verify:
