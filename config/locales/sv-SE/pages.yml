@@ -2,6 +2,8 @@ sv:
   pages:
     conditions:
       title: användarvillkoren
+      subtitle: LEGAL NOTICE ON THE CONDITIONS OF USE, PRIVACY AND PROTECTION OF PERSONAL DATA OF THE OPEN GOVERNMENT PORTAL
+      description: Information page on the conditions of use, privacy and protection of personal data.
     help:
       title: "%{org} är en plattform för medborgardeltagande"
       guide: "Den här guiden förklarar de olika delarna av %{org} och hur de fungerar."
@@ -137,6 +139,7 @@ sv:
       compatibility:
         title: Compatibility with standards and visual design
         description_html: 'All pages of this website comply with the <strong>Accessibility Guidelines</strong> or General Principles of Accessible Design established by the Working Group <abbr title="Web Accessibility Initiative" lang="en">WAI</abbr> belonging to W3C.'    titles:
+    titles:
       help: "Vad är %{org}? - Medborgardeltagande"
     verify:
       code: Koden du fick i ett brev
