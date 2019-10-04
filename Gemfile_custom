@@ -7,4 +7,6 @@
 gem "rack-attack", "~> 5.4.2"
 gem "figaro"
 
+gem 'piwik_analytics', git: "https://github.com/halfdan/piwik-ruby-tracking.git"
+
 ruby "2.3.8"

@@ -1,0 +1,23 @@
+production:
+  piwik:
+    id_site: <%= ENV["MATOMO_SITE_ID"] %>
+    url: matomo.digidemlab.org
+    disabled: <%= ENV["MATOMO_SITE_ID"].blank? %>
+
+preproduction:
+  piwik:
+    id_site: <%= ENV["MATOMO_SITE_ID"] %>
+    url: matomo.digidemlab.org
+    disabled: <%= ENV["MATOMO_SITE_ID"].blank? %>
+
+staging:
+  piwik:
+    id_site: <%= ENV["MATOMO_SITE_ID"] %>
+    url: matomo.digidemlab.org
+    disabled: <%= ENV["MATOMO_SITE_ID"].blank? %>
+
+development:
+  piwik:
+    id_site: <%= ENV["MATOMO_SITE_ID"] %>
+    url: matomo.digidemlab.org
+    disabled: true
