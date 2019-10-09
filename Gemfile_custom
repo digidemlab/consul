@@ -9,4 +9,7 @@ gem "figaro"
 
 gem 'piwik_analytics', git: "https://github.com/halfdan/piwik-ruby-tracking.git"
 
+gem "sidekiq", "~> 5.2.5"
+gem "redis-rails", "~> 5.0.2"
+
 ruby "2.3.8"
