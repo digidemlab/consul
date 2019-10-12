@@ -12,4 +12,6 @@ gem 'piwik_analytics', git: "https://github.com/halfdan/piwik-ruby-tracking.git"
 gem "sidekiq", "~> 5.2.5"
 gem "redis-rails", "~> 5.0.2"
 
+gem "sentry-raven", "~> 2.11.3", require: "sentry-raven-without-integrations"
+
 ruby "2.3.8"

@@ -1,7 +1,7 @@
 if Rails.application.secrets.dig(:sentry, :enabled)
   require 'sentry-raven-without-integrations'
 
-  Raven.inject_without(:sidekiq)
+  Raven.inject_only(:sidekiq)
 
   Rails.application.config.rails_activesupport_breadcrumbs = true
 
