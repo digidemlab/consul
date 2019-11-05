@@ -106,6 +106,13 @@ sv:
           waiting_for: "Väntar på bekräftelse av:"
         new:
           cancel: Avbryt inloggning
+          demographics_separator: Hjälp oss att veta vem deltar (frivilligt)
+          demographics_gender:
+            title: Kön
+            female: Kvinna
+            male: Man
+            other: Annat
+          demographics_year: Födelseår
           email_label: E-post
           organization_signup: Representerar du en organisation eller grupp? %{signup_link}
           organization_signup_link: Registrera dig här

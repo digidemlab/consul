@@ -69,4 +69,13 @@ module UsersHelper
       t("account.show.public_interests_user_title_list")
     end
   end
+
+  def gender_select_options
+    [
+      ["", nil],
+      [t("devise_views.users.registrations.new.demographics_gender.female"), "female"],
+      [t("devise_views.users.registrations.new.demographics_gender.male"), "male"],
+      [t("devise_views.users.registrations.new.demographics_gender.other"), "other"]
+    ]
+  end
 end

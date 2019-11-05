@@ -35,6 +35,9 @@ sv:
       twitter_login: "Twitter-inloggning"
       facebook_login: "Facebook-inloggning"
       google_login: "Google-inloggning"
+      registration:
+        demographics: Demografisk under registrering
+        demographics_description: Tillåter användaren att skriva in sin födelseår och kön under registrering
       signature_sheets: "Namninsamlingar"
       spending_proposals: "Investeringsförslag"
       user:
