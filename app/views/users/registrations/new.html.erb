@@ -36,6 +36,25 @@
         <%= f.text_field :redeemable_code, placeholder: t("devise_views.users.registrations.new.redeemable_code") %>
       <% end %>
 
+      <% if feature?("registration.demographics") %>
+
+      <div class="small-12 column auth-divider">
+        <span><%= t("devise_views.users.registrations.new.demographics_separator") %></span>
+      </div>
+
+      <%= f.select :gender, gender_select_options,
+                   label: t("devise_views.users.registrations.new.demographics_gender.title")%>
+      <div class="date-of-birth">
+        <%= f.date_select :date_of_birth,
+                          prompt: true,
+                          discard_day: true,
+                          discard_month: true,
+                          start_year: 1900, end_year: 1.year.ago.year,
+                          label: t("devise_views.users.registrations.new.demographics_year") %>
+      </div>
+
+      <% end %>
+
       <%= f.check_box :terms_of_service,
         title: t("devise_views.users.registrations.new.terms_title"),
         label: t("devise_views.users.registrations.new.terms",
