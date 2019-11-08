@@ -1,7 +1,6 @@
 require "rails_helper"
 
 describe "Valuation budget investments" do
-
   let(:budget) { create(:budget, :valuating) }
   let(:valuator) do
     create(:valuator, user: create(:user, username: "Rachel", email: "rachel@valuators.org"))
@@ -12,7 +11,6 @@ describe "Valuation budget investments" do
   end
 
   context "Load" do
-
     before { budget.update(slug: "budget_slug") }
 
     scenario "finds investment using budget slug" do
@@ -32,7 +30,6 @@ describe "Valuation budget investments" do
         visit valuation_budget_budget_investments_path(0)
       end.to raise_error ActiveRecord::RecordNotFound
     end
-
   end
 
   scenario "Disabled with a feature flag" do
@@ -235,7 +232,7 @@ describe "Valuation budget investments" do
     end
 
     scenario "visible for assigned valuators" do
-      investment.update(visible_to_valuators: true)
+      investment.update!(visible_to_valuators: true)
       visit valuation_budget_budget_investments_path(budget)
 
       click_link investment.title
@@ -286,23 +283,6 @@ describe "Valuation budget investments" do
         visit valuation_budget_budget_investment_path(budget, investment)
       end.to raise_error "Not Found"
     end
-
-    scenario "preview is visible" do
-      logout
-      login_as create(:administrator).user
-
-      visit valuation_budget_budget_investment_path(budget, investment)
-
-      expect(page).to have_content("Investment preview")
-      expect(page).to have_content(investment.title)
-      expect(page).to have_content(investment.description)
-      expect(page).to have_content(investment.author.name)
-      expect(page).to have_content(investment.heading.name)
-      expect(page).to have_content("1234")
-      expect(page).to have_content("Unfeasible")
-      expect(page).to have_content("It is impossible")
-      expect(page).to have_content("Ana (ana@admins.org)")
-    end
   end
 
   describe "Valuate" do
@@ -312,7 +292,7 @@ describe "Valuation budget investments" do
     end
 
     scenario "Dossier empty by default" do
-      investment.update(visible_to_valuators: true)
+      investment.update!(visible_to_valuators: true)
 
       visit valuation_budget_budget_investments_path(budget)
       click_link investment.title
@@ -325,7 +305,7 @@ describe "Valuation budget investments" do
     end
 
     scenario "Edit dossier" do
-      investment.update(visible_to_valuators: true)
+      investment.update!(visible_to_valuators: true)
       visit valuation_budget_budget_investments_path(budget)
       within("#budget_investment_#{investment.id}") do
         click_link "Edit dossier"
@@ -427,7 +407,7 @@ describe "Valuation budget investments" do
     end
 
     scenario "Finish valuation" do
-      investment.update(visible_to_valuators: true)
+      investment.update!(visible_to_valuators: true)
 
       visit valuation_budget_budget_investment_path(budget, investment)
       click_link "Edit dossier"
@@ -486,7 +466,7 @@ describe "Valuation budget investments" do
     end
 
     scenario "Validates price formats" do
-      investment.update(visible_to_valuators: true)
+      investment.update!(visible_to_valuators: true)
 
       visit valuation_budget_budget_investments_path(budget)
 
@@ -503,7 +483,7 @@ describe "Valuation budget investments" do
     end
 
     scenario "not visible to valuators when budget is not valuating" do
-      budget.update(phase: "publishing_prices")
+      budget.update!(phase: "publishing_prices")
 
       investment = create(:budget_investment, budget: budget, valuators: [valuator])
 
@@ -514,7 +494,7 @@ describe "Valuation budget investments" do
     end
 
     scenario "visible to admins regardless of not being in valuating phase" do
-      budget.update(phase: "publishing_prices")
+      budget.update!(phase: "publishing_prices")
 
       user = create(:user)
       admin = create(:administrator, user: user)

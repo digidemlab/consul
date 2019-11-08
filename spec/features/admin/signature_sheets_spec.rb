@@ -1,7 +1,6 @@
 require "rails_helper"
 
 describe "Signature sheets" do
-
   before do
     admin = create(:administrator)
     login_as(admin.user)
@@ -55,7 +54,7 @@ describe "Signature sheets" do
     scenario "Budget Investment" do
       investment = create(:budget_investment)
       budget = investment.budget
-      budget.update(phase: "selecting")
+      budget.update!(phase: "selecting")
 
       visit new_admin_signature_sheet_path
 
@@ -73,11 +72,9 @@ describe "Signature sheets" do
 
       expect(page).to have_content "1 support"
     end
-
   end
 
   context "Create throught all required_fields_to_verify of custom census api" do
-
     before do
       Setting["feature.remote_census"] = true
       Setting["remote_census.request.date_of_birth"] = "some.value"
@@ -108,7 +105,7 @@ describe "Signature sheets" do
     scenario "Budget Investment" do
       investment = create(:budget_investment)
       budget = investment.budget
-      budget.update(phase: "selecting")
+      budget.update!(phase: "selecting")
 
       visit new_admin_signature_sheet_path
 
@@ -123,7 +120,6 @@ describe "Signature sheets" do
 
       expect(page).to have_content "1 support"
     end
-
   end
 
   scenario "Errors on create" do
@@ -162,5 +158,4 @@ describe "Signature sheets" do
       expect(page).to have_content 2
     end
   end
-
 end

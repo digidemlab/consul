@@ -141,9 +141,6 @@ en:
         description_finished: "Description when the budget is finished"
         phase: "Phase"
         currency_symbol: "Currency"
-        budget_milestone_tags: "Milestone tags"
-        budget_valuation_tags: "Valuation tags"
-        help_link: "Help link"
       budget/translation:
         name: "Name"
       budget/investment:
@@ -164,6 +161,8 @@ en:
         milestone_tag_list: "Milestone tags"
         price_explanation: "Price explanation"
         selected: "Mark as selected"
+        selected_true: "Selected"
+        selected_false: "Not selected"
         unfeasibility_explanation: "Feasibility explanation"
         valuation_finished: "Valuation finished"
         valuator_ids: "Groups"
@@ -333,11 +332,6 @@ en:
       topic:
         title: "Title"
         description: "Initial text"
-      votation_type:
-        enum_type: "Votation type"
-        max_groups_answers: "Maximum number of answers in the set"
-        max_votes: "Maximum number of votes"
-        prioritization_type: "Prioritization type"
       banner:
         background_color: Background color
         font_color: Font color
@@ -520,6 +514,10 @@ en:
               invalid_date_range: must be on or after the draft start date
             allegations_end_date:
               invalid_date_range: must be on or after the comments start date
+        local_census_record:
+          attributes:
+            document_type:
+              inclusion: is not included in the list, allowed values are 1 for DNI, 2 for passport and 3 for residence card.
         proposal:
           attributes:
             tag_list:

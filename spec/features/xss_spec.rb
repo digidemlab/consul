@@ -13,6 +13,18 @@ describe "Cross-Site Scripting protection", :js do
     expect(page.text).not_to be_empty
   end
 
+  scenario "edit banner" do
+    banner = create(:banner, title: attack_code)
+
+    login_as(create(:administrator).user)
+    visit edit_admin_banner_path(banner)
+
+    title_id = find_field("Title")[:id]
+    execute_script "document.getElementById('#{title_id}').dispatchEvent(new Event('change'))"
+
+    expect(page.text).not_to be_empty
+  end
+
   scenario "document title" do
     process = create(:legislation_process)
     create(:document, documentable: process, title: attack_code)
@@ -23,7 +35,7 @@ describe "Cross-Site Scripting protection", :js do
   end
 
   scenario "hacked translations" do
-    I18nContent.create(key: "admin.budget_investments.index.list.title", value: attack_code)
+    I18nContent.create!(key: "admin.budget_investments.index.list.title", value: attack_code)
 
     login_as(create(:administrator).user)
     visit admin_budget_budget_investments_path(create(:budget_investment).budget)
@@ -32,7 +44,7 @@ describe "Cross-Site Scripting protection", :js do
   end
 
   scenario "accept terms label" do
-    I18nContent.create(key: "form.accept_terms", value: attack_code)
+    I18nContent.create!(key: "form.accept_terms", value: attack_code)
 
     login_as(create(:user))
     visit new_debate_path
@@ -41,10 +53,20 @@ describe "Cross-Site Scripting protection", :js do
   end
 
   scenario "link to sign in" do
-    I18nContent.create(key: "budgets.investments.index.sidebar.not_logged_in", value: attack_code)
+    I18nContent.create!(key: "budgets.investments.index.sidebar.not_logged_in", value: attack_code)
     create(:budget, phase: "accepting")
 
     visit budgets_path
+
+    expect(page.text).not_to be_empty
+  end
+
+  scenario "languages in use" do
+    I18nContent.create!(key: "shared.translations.languages_in_use", value: attack_code)
+
+    login_as(create(:administrator).user)
+    visit edit_admin_budget_path(create(:budget))
+    click_link "Remove language"
 
     expect(page.text).not_to be_empty
   end
@@ -99,11 +121,45 @@ describe "Cross-Site Scripting protection", :js do
     expect(page.text).not_to be_empty
   end
 
+  scenario "proposal description" do
+    proposal = create(:proposal, description: attack_code)
+
+    visit proposal_path(proposal)
+
+    expect(page.text).not_to be_empty
+  end
+
+  scenario "investment description" do
+    investment = create(:budget_investment, description: attack_code)
+
+    visit budget_investment_path(investment.budget, investment)
+
+    expect(page.text).not_to be_empty
+  end
+
+  scenario "budget phase description" do
+    budget = create(:budget)
+    budget.current_phase.update!(description: attack_code)
+
+    visit budget_path(budget)
+
+    expect(page.text).not_to be_empty
+  end
+
   scenario "markdown conversion" do
     process = create(:legislation_process, description: attack_code)
 
     visit legislation_process_path(process)
 
     expect(page.text).not_to be_empty
+  end
+
+  scenario "legislation version body filters script tags but not header IDs" do
+    version = create(:legislation_draft_version, :published, body: "# Title 1\n#{attack_code}")
+
+    visit legislation_process_draft_version_path(version.process, version)
+
+    expect(page.text).not_to be_empty
+    expect(page).to have_css "h1#title-1", text: "Title 1"
   end
 end

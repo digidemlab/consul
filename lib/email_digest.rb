@@ -1,5 +1,4 @@
 class EmailDigest
-
   attr_accessor :user
 
   def initialize(user)
@@ -23,11 +22,10 @@ class EmailDigest
 
   def mark_as_emailed
     notifications.update_all(emailed_at: Time.current)
-    user.update(failed_email_digests_count: 0)
+    user.update!(failed_email_digests_count: 0)
   end
 
   def valid_email?
     user.email.present? && user.email.match(/\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i)
   end
-
 end

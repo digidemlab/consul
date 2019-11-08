@@ -1,7 +1,6 @@
 require "rails_helper"
 
 describe User do
-
   describe "#headings_voted_within_group" do
     it "returns the headings voted by a user" do
       budget = create(:budget)
@@ -148,7 +147,7 @@ describe User do
     end
 
     it "is true when the user is an admin" do
-      subject.save
+      subject.save!
       create(:administrator, user: subject)
       expect(subject.administrator?).to be true
     end
@@ -160,7 +159,7 @@ describe User do
     end
 
     it "is true when the user is a moderator" do
-      subject.save
+      subject.save!
       create(:moderator, user: subject)
       expect(subject.moderator?).to be true
     end
@@ -172,7 +171,7 @@ describe User do
     end
 
     it "is true when the user is a valuator" do
-      subject.save
+      subject.save!
       create(:valuator, user: subject)
       expect(subject.valuator?).to be true
     end
@@ -184,7 +183,7 @@ describe User do
     end
 
     it "is true when the user is a manager" do
-      subject.save
+      subject.save!
       create(:manager, user: subject)
       expect(subject.manager?).to be true
     end
@@ -196,7 +195,7 @@ describe User do
     end
 
     it "is true when the user is a poll officer" do
-      subject.save
+      subject.save!
       create(:poll_officer, user: subject)
       expect(subject.poll_officer?).to be true
     end
@@ -265,14 +264,14 @@ describe User do
 
     it "is true when the user is an official" do
       subject.official_level = 3
-      subject.save
+      subject.save!
       expect(subject.official?).to be true
     end
   end
 
   describe "add_official_position!" do
-    it "is false when level not valid" do
-      expect(subject.add_official_position!("Boss", 89)).to be false
+    it "raises an exception when level not valid" do
+      expect { subject.add_official_position!("Boss", 89) }.to raise_error ActiveRecord::RecordInvalid
     end
 
     it "updates official position fields" do
@@ -336,14 +335,12 @@ describe User do
       expect(user4.has_official_email?).to eq(false)
 
       # We reset the officials' domain setting
-      Setting.find_by(key: "email_domain_for_officials").update(value: "")
+      Setting.find_by(key: "email_domain_for_officials").update!(value: "")
     end
   end
 
   describe "official_position_badge" do
-
     describe "Users of level 1" do
-
       it "displays the badge if set in preferences" do
         user = create(:user, official_level: 1, official_position_badge: true)
 
@@ -355,11 +352,9 @@ describe User do
 
         expect(user.display_official_position_badge?).to eq false
       end
-
     end
 
     describe "Users higher than level 1" do
-
       it "displays the badge regardless of preferences" do
         user1 = create(:user, official_level: 2, official_position_badge: false)
         user2 = create(:user, official_level: 3, official_position_badge: false)
@@ -371,15 +366,11 @@ describe User do
         expect(user3.display_official_position_badge?).to eq true
         expect(user4.display_official_position_badge?).to eq true
       end
-
     end
-
   end
 
   describe "scopes" do
-
     describe "active" do
-
       it "returns users that have not been erased" do
         user1 = create(:user, erased_at: nil)
         user2 = create(:user, erased_at: nil)
@@ -398,11 +389,9 @@ describe User do
         expect(User.active).to match_array [user1, user2]
         expect(User.active).not_to include(user3)
       end
-
     end
 
     describe "erased" do
-
       it "returns users that have been erased" do
         user1 = create(:user, erased_at: Time.current)
         user2 = create(:user, erased_at: Time.current)
@@ -411,7 +400,6 @@ describe User do
         expect(User.erased).to match_array [user1, user2]
         expect(User.erased).not_to include(user3)
       end
-
     end
   end
 
@@ -473,7 +461,6 @@ describe User do
       user.valid?
       expect(user.document_number).to eq("12345678B")
     end
-
   end
 
   describe "#erase" do
@@ -528,7 +515,6 @@ describe User do
 
       expect(Identity.exists?(identity.id)).not_to be
     end
-
   end
 
   describe "#take_votes_from" do
@@ -658,7 +644,6 @@ describe User do
       expect(user_2.reload.former_users_data_log).to include("id: #{user_1.id}")
       expect(user_1.reload.document_number).to be_blank
     end
-
   end
 
   describe "email_required?" do
@@ -710,7 +695,6 @@ describe User do
 
       expect(user.interests).to eq ["Sport"]
     end
-
   end
 
   describe ".find_by_manager_login" do
@@ -725,5 +709,4 @@ describe User do
       expect(User.find_by_manager_login("admin_user_#{user.id}")).to eq user
     end
   end
-
 end

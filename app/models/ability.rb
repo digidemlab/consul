@@ -8,7 +8,6 @@ class Ability
 
     if user # logged-in users
       merge Abilities::Valuator.new(user) if user.valuator?
-      merge Abilities::Tracker.new(user) if user.tracker?
 
       if user.administrator?
         merge Abilities::Administrator.new(user)
@@ -23,5 +22,4 @@ class Ability
       merge Abilities::Everyone.new(user)
     end
   end
-
 end

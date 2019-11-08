@@ -1,7 +1,6 @@
 require "rails_helper"
 
 describe Budget::Result do
-
   describe "calculate_winners" do
     let(:budget) { create(:budget) }
     let(:heading) { create(:budget_heading, budget: budget, price: 1000) }
@@ -64,7 +63,7 @@ describe Budget::Result do
         create(:budget_investment, :winner, heading: heading, price: 200, ballot_lines_count: 600)
         create(:budget_investment, :winner, heading: heading, price: 100, ballot_lines_count: 500)
 
-        wrong_win.update(incompatible: true)
+        wrong_win.update!(incompatible: true)
 
         expect(heading.investments.winners.pluck(:ballot_lines_count)).to match_array([800, 700, 600])
       end
@@ -79,7 +78,7 @@ describe Budget::Result do
         create(:budget_investment, :winner, heading: heading, price: 200, ballot_lines_count: 600)
         create(:budget_investment, :winner, heading: heading, price: 100, ballot_lines_count: 500)
 
-        miss.update(incompatible: false)
+        miss.update!(incompatible: false)
 
         expect(heading.investments.winners.pluck(:ballot_lines_count)).to match_array([900, 800, 700])
       end

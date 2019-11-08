@@ -50,7 +50,7 @@ describe Budget::Investment do
     expect(investment.budget_id).to eq budget.id
     expect(investment.group_id).to eq group_1.id
 
-    investment.update(heading: heading_2)
+    investment.update!(heading: heading_2)
 
     expect(investment.budget_id).to eq budget.id
     expect(investment.group_id).to eq group_2.id
@@ -68,7 +68,7 @@ describe Budget::Investment do
 
     expect(investment.previous_heading_id).to eq nil
 
-    investment.update(heading: heading_2)
+    investment.update!(heading: heading_2)
 
     expect(investment.previous_heading_id).to eq heading_1.id
   end
@@ -220,7 +220,7 @@ describe Budget::Investment do
 
     it "returns true for selected investments which budget's phase is publishing_prices or later" do
       Budget::Phase::PUBLISHED_PRICES_PHASES.each do |phase|
-        budget.update(phase: phase)
+        budget.update!(phase: phase)
 
         expect(investment.should_show_price?).to eq(true)
       end
@@ -228,7 +228,7 @@ describe Budget::Investment do
 
     it "returns false in any other phase" do
       (Budget::Phase::PHASE_KINDS - Budget::Phase::PUBLISHED_PRICES_PHASES).each do |phase|
-        budget.update(phase: phase)
+        budget.update!(phase: phase)
 
         expect(investment.should_show_price?).to eq(false)
       end
@@ -255,7 +255,7 @@ describe Budget::Investment do
 
     it "returns true for selected with price_explanation & budget in publishing_prices or later" do
       Budget::Phase::PUBLISHED_PRICES_PHASES.each do |phase|
-        budget.update(phase: phase)
+        budget.update!(phase: phase)
 
         expect(investment.should_show_price_explanation?).to eq(true)
       end
@@ -263,7 +263,7 @@ describe Budget::Investment do
 
     it "returns false in any other phase" do
       (Budget::Phase::PHASE_KINDS - Budget::Phase::PUBLISHED_PRICES_PHASES).each do |phase|
-        budget.update(phase: phase)
+        budget.update!(phase: phase)
 
         expect(investment.should_show_price_explanation?).to eq(false)
       end
@@ -290,34 +290,34 @@ describe Budget::Investment do
 
     it "returns true for unfeasible investments with unfeasibility explanation and valuation finished" do
       Budget::Phase::PUBLISHED_PRICES_PHASES.each do |phase|
-        budget.update(phase: phase)
+        budget.update!(phase: phase)
 
         expect(investment.should_show_unfeasibility_explanation?).to eq(true)
       end
     end
 
     it "returns false in valuation has not finished" do
-      investment.update(valuation_finished: false)
+      investment.update!(valuation_finished: false)
       Budget::Phase::PUBLISHED_PRICES_PHASES.each do |phase|
-        budget.update(phase: phase)
+        budget.update!(phase: phase)
 
         expect(investment.should_show_unfeasibility_explanation?).to eq(false)
       end
     end
 
     it "returns false if not unfeasible" do
-      investment.update(feasibility: "undecided")
+      investment.update!(feasibility: "undecided")
       Budget::Phase::PUBLISHED_PRICES_PHASES.each do |phase|
-        budget.update(phase: phase)
+        budget.update!(phase: phase)
 
         expect(investment.should_show_unfeasibility_explanation?).to eq(false)
       end
     end
 
     it "returns false if unfeasibility explanation blank" do
-      investment.update(unfeasibility_explanation: "")
+      investment.unfeasibility_explanation = ""
       Budget::Phase::PUBLISHED_PRICES_PHASES.each do |phase|
-        budget.update(phase: phase)
+        budget.update!(phase: phase)
 
         expect(investment.should_show_unfeasibility_explanation?).to eq(false)
       end
@@ -325,7 +325,6 @@ describe Budget::Investment do
   end
 
   describe "#by_budget" do
-
     it "returns investments scoped by budget" do
       budget1 = create(:budget)
       budget2 = create(:budget)
@@ -410,7 +409,6 @@ describe Budget::Investment do
   end
 
   describe "scoped_filter" do
-
     let!(:budget)     { create(:budget, slug: "budget_slug") }
     let!(:heading)    { create(:budget_heading, budget: budget) }
     let!(:investment) { create(:budget_investment, :feasible, heading: heading) }
@@ -429,7 +427,6 @@ describe Budget::Investment do
       result = Budget::Investment.scoped_filter({ budget_id: "wrong_budget" }, nil)
       expect(result).to be_empty
     end
-
   end
 
   describe "scopes" do
@@ -648,32 +645,33 @@ describe Budget::Investment do
     end
 
     describe "search_by_title_or_id" do
-      before { create(:budget_investment) }
+      it "does not return investments by description" do
+        create(:budget_investment, title: "Something", description: "Awesome")
 
-      let!(:investment) do
-        I18n.with_locale(:es) do
-          create(:budget_investment,
-            title_es: "Título del proyecto de inversión",
-            description_es: "Descripción del proyecto de inversión")
-        end
+        expect(Budget::Investment.search_by_title_or_id("Awesome")).to be_empty
       end
 
-      let(:all_investments) { Budget::Investment.all }
+      it "returns investment by given id" do
+        investment = create(:budget_investment)
 
-      it "return investment by given id" do
-        expect(Budget::Investment.search_by_title_or_id(investment.id.to_s, all_investments)).
-          to eq([investment])
+        expect(Budget::Investment.search_by_title_or_id(investment.id.to_s)).to eq([investment])
       end
 
-      it "return investments by given title" do
-        expect(Budget::Investment.search_by_title_or_id("Título del proyecto de inversión", all_investments)).
-          to eq([investment])
+      it "returns investments by given title" do
+        investment = create(:budget_investment, title: "Investment title")
+
+        expect(Budget::Investment.search_by_title_or_id("Investment title")).to eq([investment])
+      end
+
+      it "finds investments with numbers in their title" do
+        investment = create(:budget_investment, title: "99 red balloons")
+
+        expect(Budget::Investment.search_by_title_or_id("99")).to eq([investment])
       end
     end
   end
 
   describe "apply_filters_and_search" do
-
     let(:budget) { create(:budget) }
 
     it "returns feasible investments" do
@@ -701,7 +699,7 @@ describe Budget::Investment do
     end
 
     it "returns selected investments" do
-      budget.update(phase: "balloting")
+      budget.update!(phase: "balloting")
 
       investment1 = create(:budget_investment, :feasible, :selected,   budget: budget)
       investment2 = create(:budget_investment, :feasible, :selected,   budget: budget)
@@ -715,7 +713,7 @@ describe Budget::Investment do
     end
 
     it "returns unselected investments" do
-      budget.update(phase: "balloting")
+      budget.update!(phase: "balloting")
 
       investment1 = create(:budget_investment, :feasible, :unselected, budget: budget)
       investment2 = create(:budget_investment, :feasible, :unselected, budget: budget)
@@ -784,7 +782,6 @@ describe Budget::Investment do
         results = Budget::Investment.search("Danny")
         expect(results).to eq([budget_investment])
       end
-
     end
 
     context "tags" do
@@ -806,7 +803,6 @@ describe Budget::Investment do
         expect(investment.valuation_tag_list).to match_array(%w[Code Test Refactor])
       end
     end
-
   end
 
   describe "Permissions" do
@@ -853,7 +849,7 @@ describe Budget::Investment do
       end
 
       it "accepts votes in multiple headings of the same group" do
-        group.update(max_votable_headings: 2)
+        group.update!(max_votable_headings: 2)
         carabanchel = create(:budget_heading, group: group)
         salamanca   = create(:budget_heading, group: group)
 
@@ -865,7 +861,7 @@ describe Budget::Investment do
       end
 
       it "accepts votes in any heading previously voted in" do
-        group.update(max_votable_headings: 2)
+        group.update!(max_votable_headings: 2)
 
         carabanchel = create(:budget_heading, group: group)
         salamanca   = create(:budget_heading, group: group)
@@ -914,7 +910,6 @@ describe Budget::Investment do
       end
 
       describe "#can_vote_in_another_heading?" do
-
         let(:districts)   { create(:budget_group, budget: budget) }
         let(:carabanchel) { create(:budget_heading, group: districts) }
         let(:salamanca)   { create(:budget_heading, group: districts) }
@@ -925,7 +920,7 @@ describe Budget::Investment do
         let(:latina_investment)      { create(:budget_investment, heading: latina) }
 
         it "returns true if the user has voted in less headings than the maximum" do
-          districts.update(max_votable_headings: 2)
+          districts.update!(max_votable_headings: 2)
 
           create(:vote, votable: carabanchel_investment, voter: user)
 
@@ -933,7 +928,7 @@ describe Budget::Investment do
         end
 
         it "returns false if the user has already voted in the maximum number of headings" do
-          districts.update(max_votable_headings: 2)
+          districts.update!(max_votable_headings: 2)
 
           create(:vote, votable: carabanchel_investment, voter: user)
           create(:vote, votable: salamanca_investment, voter: user)
@@ -945,7 +940,6 @@ describe Budget::Investment do
   end
 
   describe "#voted_in?" do
-
     let(:user) { create(:user) }
     let(:investment) { create(:budget_investment) }
 
@@ -958,12 +952,10 @@ describe Budget::Investment do
     it "returns false if the user has not voted in this heading" do
       expect(investment.voted_in?(investment.heading, user)).to eq(false)
     end
-
   end
 
   describe "Order" do
     describe "#sort_by_confidence_score" do
-
       it "orders by confidence_score" do
         least_voted = create(:budget_investment, cached_votes_up: 1)
         most_voted = create(:budget_investment, cached_votes_up: 10)
@@ -995,9 +987,9 @@ describe Budget::Investment do
 
     it "does not get updated if the user is erased" do
       user.erase
-      user.update(document_number: nil)
+      user.update!(document_number: nil)
       expect(user.document_number).to be_blank
-      investment.touch
+      investment.valid?
       expect(investment.responsible_name).to eq("123456")
     end
   end
@@ -1026,7 +1018,6 @@ describe Budget::Investment do
   end
 
   describe "Final Voting" do
-
     describe "Permissions" do
       let(:budget)      { create(:budget) }
       let(:heading)     { create(:budget_heading, budget: budget) }
@@ -1093,22 +1084,17 @@ describe Budget::Investment do
 
           expect(inv2.reason_for_not_being_ballotable_by(user, ballot)).to eq(:not_enough_money)
         end
-
       end
-
     end
-
   end
 
   describe "Reclassification" do
-
     let(:budget)   { create(:budget, :balloting)   }
     let(:group)    { create(:budget_group, budget: budget) }
     let(:heading1) { create(:budget_heading, group: group) }
     let(:heading2) { create(:budget_heading, group: group) }
 
     describe "heading_changed?" do
-
       it "returns true if budget is in balloting phase and heading has changed" do
         investment = create(:budget_investment, heading: heading1)
         investment.heading = heading2
@@ -1125,7 +1111,7 @@ describe Budget::Investment do
 
       it "returns false if budget is not balloting phase" do
         Budget::Phase::PHASE_KINDS.reject { |phase| phase == "balloting" }.each do |phase|
-          budget.update(phase: phase)
+          budget.update!(phase: phase)
           investment = create(:budget_investment, budget: budget)
 
           investment.heading = heading2
@@ -1133,11 +1119,9 @@ describe Budget::Investment do
           expect(investment.heading_changed?).to eq(false)
         end
       end
-
     end
 
     describe "log_heading_change" do
-
       it "stores the previous heading before being reclassified" do
         investment = create(:budget_investment, heading: heading1)
 
@@ -1145,17 +1129,15 @@ describe Budget::Investment do
         expect(investment.previous_heading_id).to eq(nil)
 
         investment.heading = heading2
-        investment.save
+        investment.save!
 
         investment.reload
         expect(investment.heading_id).to eq(heading2.id)
         expect(investment.previous_heading_id).to eq(heading1.id)
       end
-
     end
 
     describe "store_reclassified_votes" do
-
       it "stores the votes for a reclassified investment" do
         investment = create(:budget_investment, :selected, heading: heading1)
 
@@ -1176,7 +1158,6 @@ describe Budget::Investment do
     end
 
     describe "remove_reclassified_votes" do
-
       it "removes votes from invesment" do
         investment = create(:budget_investment, :selected, heading: heading1)
 
@@ -1190,11 +1171,9 @@ describe Budget::Investment do
         investment.reload
         expect(investment.ballot_lines_count).to eq(0)
       end
-
     end
 
     describe "check_for_reclassification" do
-
       it "stores reclassfied votes and removes actual votes if an investment has been reclassified" do
         investment = create(:budget_investment, :selected, heading: heading1)
 
@@ -1203,7 +1182,7 @@ describe Budget::Investment do
         expect(investment.ballot_lines_count).to eq(3)
 
         investment.heading = heading2
-        investment.save
+        investment.save!
         investment.reload
 
         expect(investment.ballot_lines_count).to eq(0)
@@ -1217,19 +1196,17 @@ describe Budget::Investment do
 
         expect(investment.ballot_lines_count).to eq(3)
 
-        investment.save
+        investment.save!
         investment.reload
 
         expect(investment.ballot_lines_count).to eq(3)
         expect(Budget::ReclassifiedVote.count).to eq(0)
       end
-
     end
-
   end
 
   describe "scoped_filter" do
-    let(:budget)   { create(:budget, :balloting)   }
+    let(:budget)     { create(:budget, :balloting) }
     let(:investment) { create(:budget_investment, budget: budget) }
 
     describe "with without_admin filter" do
@@ -1328,7 +1305,6 @@ describe Budget::Investment do
       investment.valuators << valuator
       investment.administrator = administrator
       expect(investment.admin_and_valuator_users_associated).to eq([valuator, administrator])
-
     end
   end
 

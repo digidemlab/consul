@@ -195,7 +195,7 @@ describe "Proposal's dashboard" do
   end
 
   scenario "Dashboard progress show available resources for published proposal" do
-    proposal.update(published_at: Date.current)
+    proposal.update!(published_at: Date.current)
     available = create(:dashboard_action, :resource, :active)
 
     requested = create(:dashboard_action, :resource, :admin_request, :active)
@@ -487,7 +487,6 @@ describe "Proposal's dashboard" do
   end
 
   describe "detect_new_actions_after_last_login" do
-
     before do
       proposal.author.update(last_sign_in_at: Date.yesterday)
     end
@@ -506,7 +505,7 @@ describe "Proposal's dashboard" do
     scenario "Not display tag 'new' on resouce when there is not new resources since last login" do
       resource = create(:dashboard_action, :resource, :active, day_offset: 0,
                                                                published_proposal: false)
-      proposal.author.update(last_sign_in_at: Date.current)
+      proposal.author.update!(last_sign_in_at: Date.current)
 
       visit progress_proposal_dashboard_path(proposal)
 
@@ -529,7 +528,7 @@ describe "Proposal's dashboard" do
     scenario "Not display tag 'new' on proposed_action when there is not new since last login" do
       proposed_action = create(:dashboard_action, :proposed_action, :active, day_offset: 0,
                                                                      published_proposal: false)
-      proposal.author.update(last_sign_in_at: Date.current)
+      proposal.author.update!(last_sign_in_at: Date.current)
 
       visit progress_proposal_dashboard_path(proposal)
 
@@ -550,7 +549,7 @@ describe "Proposal's dashboard" do
 
     scenario "Not display tag 'new' on sidebar when there is not a new resouce since last login" do
       create(:dashboard_action, :resource, :active, day_offset: 0, published_proposal: false)
-      proposal.author.update(last_sign_in_at: Date.current)
+      proposal.author.update!(last_sign_in_at: Date.current)
 
       visit progress_proposal_dashboard_path(proposal)
 
@@ -558,6 +557,5 @@ describe "Proposal's dashboard" do
         expect(page).not_to have_content("New")
       end
     end
-
   end
 end

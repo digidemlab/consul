@@ -2,7 +2,6 @@ require "rails_helper"
 require "sessions_helper"
 
 describe "Legislation Proposals" do
-
   let(:user)     { create(:user) }
   let(:process)  { create(:legislation_process) }
   let(:proposal) { create(:legislation_proposal) }
@@ -134,7 +133,7 @@ describe "Legislation Proposals" do
   end
 
   def legislation_proposals_order
-    all("[id^='legislation_proposal_']").collect { |e| e[:id] }
+    all("[id^='legislation_proposal_']").map { |e| e[:id] }
   end
 
   scenario "Create a legislation proposal with an image", :js do

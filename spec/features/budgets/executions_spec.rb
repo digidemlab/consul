@@ -1,7 +1,6 @@
 require "rails_helper"
 
 describe "Executions" do
-
   let(:budget)  { create(:budget, :finished) }
   let(:group)   { create(:budget_group, budget: budget) }
   let(:heading) { create(:budget_heading, group: group) }
@@ -12,7 +11,7 @@ describe "Executions" do
   let!(:investment3) { create(:budget_investment, :incompatible, heading: heading) }
 
   scenario "finds budget by id or slug" do
-    budget.update(slug: "budget_slug")
+    budget.update!(slug: "budget_slug")
 
     visit budget_executions_path("budget_slug")
     within(".budgets-stats") { expect(page).to have_content budget.name }
@@ -77,7 +76,6 @@ describe "Executions" do
   end
 
   context "Images" do
-
     scenario "renders milestone image if available" do
       milestone1 = create(:milestone, :with_image, milestoneable: investment1)
 
@@ -129,11 +127,9 @@ describe "Executions" do
       expect(page).to have_content(investment1.title)
       expect(page).to have_css("img[alt='Second image']")
     end
-
   end
 
   context "Filters" do
-
     let!(:status1) { create(:milestone_status, name: "Studying the project") }
     let!(:status2) { create(:milestone_status, name: "Bidding") }
 
@@ -230,11 +226,11 @@ describe "Executions" do
       create(:milestone, milestoneable: investment2, status: status2)
       create(:milestone, milestoneable: investment3, status: status2)
       investment1.milestone_tag_list.add("tag1", "tag2")
-      investment1.save
+      investment1.save!
       investment2.milestone_tag_list.add("tag2")
-      investment2.save
+      investment2.save!
       investment3.milestone_tag_list.add("tag2")
-      investment3.save
+      investment3.save!
 
       visit budget_path(budget)
 
@@ -269,7 +265,6 @@ describe "Executions" do
       expect(page).not_to have_content(investment1.title)
       expect(page).to have_content(investment2.title)
     end
-
   end
 
   context "Heading Order" do
@@ -288,7 +283,6 @@ describe "Executions" do
   end
 
   context "No milestones" do
-
     scenario "Milestone not yet published" do
       status = create(:milestone_status)
       create(:milestone, milestoneable: investment1, status: status, publication_date: Date.tomorrow)
@@ -297,6 +291,5 @@ describe "Executions" do
 
       expect(page).to have_content("No winner investments in this state")
     end
-
   end
 end

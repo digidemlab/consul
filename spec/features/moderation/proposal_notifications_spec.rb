@@ -1,7 +1,6 @@
 require "rails_helper"
 
 describe "Moderate proposal notifications" do
-
   scenario "Hide", :js do
     citizen   = create(:user)
     proposal  = create(:proposal)
@@ -40,7 +39,6 @@ describe "Moderate proposal notifications" do
   end
 
   describe "/moderation/ screen" do
-
     before do
       moderator = create(:moderator)
       login_as(moderator.user)
@@ -70,7 +68,7 @@ describe "Moderate proposal notifications" do
 
         scenario "Block the author" do
           author = create(:user)
-          proposal_notification.update(author: author)
+          proposal_notification.update!(author: author)
           click_on "Block authors"
           expect(page).not_to have_css("#proposal_notification_#{proposal_notification.id}")
           expect(proposal_notification.reload).to be_hidden

@@ -1,14 +1,12 @@
 require "rails_helper"
 
 describe "Admin booths assignments" do
-
   before do
     admin = create(:administrator)
     login_as(admin.user)
   end
 
   describe "Admin Booth Assignment management" do
-
     let!(:poll) { create(:poll) }
     let!(:booth) { create(:poll_booth) }
 
@@ -147,7 +145,6 @@ describe "Admin booths assignments" do
 
         expect(page).not_to have_link "Unassign booth"
       end
-
     end
   end
 
@@ -197,13 +194,13 @@ describe "Admin booths assignments" do
       end
 
       within("#recounts_list") do
-        within("#recounting_#{poll.starts_at.to_date.strftime('%Y%m%d')}") do
+        within("#recounting_#{poll.starts_at.to_date.strftime("%Y%m%d")}") do
           expect(page).to have_content 1
         end
-        within("#recounting_#{(poll.ends_at.to_date - 5.days).strftime('%Y%m%d')}") do
+        within("#recounting_#{(poll.ends_at.to_date - 5.days).strftime("%Y%m%d")}") do
           expect(page).to have_content "-"
         end
-        within("#recounting_#{poll.ends_at.to_date.strftime('%Y%m%d')}") do
+        within("#recounting_#{poll.ends_at.to_date.strftime("%Y%m%d")}") do
           expect(page).to have_content 1
         end
       end
@@ -325,6 +322,5 @@ describe "Admin booths assignments" do
 
       expect(page).to have_content "There are no results"
     end
-
   end
 end

@@ -143,9 +143,6 @@ es:
         description_finished: "Descripción cuando el presupuesto ha finalizado / Resultados"
         phase: "Fase"
         currency_symbol: "Divisa"
-        budget_milestone_tags: "Etiquetas de seguimiento"
-        budget_valuation_tags: "Etiquetas de evaluación"
-        help_link: "Enlace de ayuda"
       budget/translation:
         name: "Nombre"
       budget/investment:
@@ -166,6 +163,8 @@ es:
         milestone_tag_list: "Etiquetas de Seguimiento"
         price_explanation: "Informe de coste <small>(opcional, dato público)</small>"
         selected: "Marcar como seleccionado"
+        selected_true: "Seleccionado"
+        selected_false: "No seleccionado"
         unfeasibility_explanation: "Informe de inviabilidad <small>(en caso de que lo sea, dato público)</small>"
         valuation_finished: "Informe finalizado"
         valuator_ids: "Grupos"
@@ -335,11 +334,6 @@ es:
       topic:
         title: "Título"
         description: "Texto inicial"
-      votation_type:
-        enum_type: "Tipo de votación"
-        max_groups_answers: "Número máximo de respuestas en el conjunto"
-        max_votes: "Número máximo de votos"
-        prioritization_type: "Tipo de priorizacion"
       banner:
         background_color: Color del fondo
         font_color: Color del texto
@@ -522,6 +516,10 @@ es:
               invalid_date_range: tiene que ser igual o posterior a la fecha de inicio del borrador
             allegations_end_date:
               invalid_date_range: tiene que ser igual o posterior a la fecha de inicio de los comentarios
+        local_census_record:
+          attributes:
+            document_type:
+              inclusion: no está incluido en la lista, los valores permitidos son 1 para DNI, 2 para pasaporte y 3 para tarjeta de residencia.
         proposal:
           attributes:
             tag_list:

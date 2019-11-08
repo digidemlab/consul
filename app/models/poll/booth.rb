@@ -1,6 +1,6 @@
 class Poll
   class Booth < ApplicationRecord
-    has_many :booth_assignments, class_name: "Poll::BoothAssignment"
+    has_many :booth_assignments
     has_many :polls, through: :booth_assignments
     has_many :shifts
 
@@ -23,7 +23,7 @@ class Poll
     end
 
     def assignment_on_poll(poll)
-      booth_assignments.where(poll: poll).first
+      booth_assignments.find_by(poll: poll)
     end
   end
 end

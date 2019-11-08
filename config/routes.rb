@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-
   mount Ckeditor::Engine => "/ckeditor"
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
 
@@ -25,7 +24,6 @@ Rails.application.routes.draw do
   draw :tag
   draw :user
   draw :valuation
-  draw :tracking
   draw :verification
 
   root "welcome#index"

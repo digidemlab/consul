@@ -55,6 +55,7 @@
 //= require checkbox_toggle
 //= require markdown-it
 //= require markdown_editor
+//= require html_editor
 //= require cocoon
 //= require answers
 //= require questions
@@ -79,14 +80,13 @@
 //= require investment_report_alert
 //= require send_newsletter_alert
 //= require managers
+//= require i18n
 //= require globalize
 //= require send_admin_notification_alert
-//= require modal_download
 //= require settings
 //= require cookies
 //= require columns_selector
 //= require budget_edit_associations
-//= require votations
 
 var initialize_modules = function() {
   "use strict";
@@ -114,6 +114,7 @@ var initialize_modules = function() {
   App.SocialShare.initialize();
   App.CheckboxToggle.initialize();
   App.MarkdownEditor.initialize();
+  App.HTMLEditor.initialize();
   App.LegislationAdmin.initialize();
   App.LegislationAllegations.initialize();
   App.Legislation.initialize();
@@ -135,15 +136,11 @@ var initialize_modules = function() {
   App.Managers.initialize();
   App.Globalize.initialize();
   App.SendAdminNotificationAlert.initialize();
-  App.ModalDownload.initialize();
   App.Settings.initialize();
   if ($("#js-columns-selector").length) {
     App.ColumnsSelector.initialize();
   }
   App.BudgetEditAssociations.initialize();
-  if ($("#votation_type_enum_type").length) {
-    App.Votations.initialize();
-  }
 };
 
 $(function() {

@@ -1,16 +1,15 @@
 class Poll::PartialResult < ApplicationRecord
+  VALID_ORIGINS = %w[web booth].freeze
 
-  VALID_ORIGINS = %w[web booth]
-
-  belongs_to :question, -> { with_hidden }
-  belongs_to :author, ->   { with_hidden }, class_name: "User", foreign_key: "author_id"
+  belongs_to :question, -> { with_hidden }, inverse_of: :partial_results
+  belongs_to :author, ->   { with_hidden }, class_name: "User", inverse_of: :poll_partial_results
   belongs_to :booth_assignment
   belongs_to :officer_assignment
 
   validates :question, presence: true
   validates :author, presence: true
   validates :answer, presence: true
-  validates :answer, inclusion: { in: -> (a) { a.question.possible_answers }},
+  validates :answer, inclusion: { in: ->(a) { a.question.possible_answers }},
                      unless: ->(a) { a.question.blank? }
   validates :origin, inclusion: { in: VALID_ORIGINS }
 

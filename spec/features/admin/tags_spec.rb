@@ -1,7 +1,6 @@
 require "rails_helper"
 
 describe "Admin tags" do
-
   before do
     create(:tag, :category, name: "Existence")
     login_as(create(:administrator).user)
@@ -89,7 +88,7 @@ describe "Admin tags" do
       expect(Tag.category.where(name: "wow_category")).to exist
     end
   end
-
+  
   scenario "Upgrade tag to category" do
     not_category_tag = create(:tag, name: "Soon a category")
 
@@ -102,5 +101,4 @@ describe "Admin tags" do
 
     expect(page).to have_content "Soon a category"
   end
-
 end

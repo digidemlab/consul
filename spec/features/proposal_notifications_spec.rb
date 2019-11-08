@@ -1,7 +1,6 @@
 require "rails_helper"
 
 describe "Proposal Notifications" do
-
   scenario "Send a notification" do
     author = create(:user, :with_proposal)
 
@@ -156,7 +155,6 @@ describe "Proposal Notifications" do
   end
 
   context "Permissions" do
-
     scenario "Link to send the message" do
       author = create(:user)
       proposal = create(:proposal, author: author)
@@ -188,11 +186,9 @@ describe "Proposal Notifications" do
       expect(page).to have_current_path(root_path)
       expect(page).to have_content("You do not have permission to carry out the action")
     end
-
   end
 
   context "In-app notifications from the proposal's author" do
-
     scenario "Voters should receive a notification", :js do
       author = create(:user)
       proposal = create(:proposal, author: author)
@@ -342,7 +338,6 @@ describe "Proposal Notifications" do
     end
 
     context "Group notifications" do
-
       before do
         Setting[:proposal_notification_minimum_interval_in_days] = 0
       end
@@ -375,7 +370,6 @@ describe "Proposal Notifications" do
         expect(page).to have_content "There is one new notification on #{proposal.title}", count: 3
       end
     end
-
   end
 
   scenario "Error messages" do
@@ -391,7 +385,6 @@ describe "Proposal Notifications" do
   end
 
   context "Limits" do
-
     scenario "Cannot send more than one notification within established interval" do
       author = create(:user)
       proposal = create(:proposal, author: author)
@@ -427,19 +420,15 @@ describe "Proposal Notifications" do
 
       expect(page).to have_content "Your message has been sent correctly."
 
-      travel 3.days + 1.second
+      travel(3.days + 1.second) do
+        visit new_proposal_notification_path(proposal_id: proposal.id)
+        fill_in "Title", with: "Thank you again for supporting my proposal"
+        fill_in "Message", with: "Please share it again with others so we can make it happen!"
+        click_button "Send message"
 
-      visit new_proposal_notification_path(proposal_id: proposal.id)
-      fill_in "Title", with: "Thank you again for supporting my proposal"
-      fill_in "Message", with: "Please share it again with others so we can make it happen!"
-      click_button "Send message"
-
-      expect(page).to have_content "Your message has been sent correctly."
-      expect(page).not_to have_content "You have to wait a minimum of 3 days between notifications"
-
-      travel_back
+        expect(page).to have_content "Your message has been sent correctly."
+        expect(page).not_to have_content "You have to wait a minimum of 3 days between notifications"
+      end
     end
-
   end
-
 end

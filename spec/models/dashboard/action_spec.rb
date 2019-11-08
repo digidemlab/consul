@@ -240,48 +240,44 @@ describe Dashboard::Action do
   end
 
   context "#detect_new_actions_since" do
-
     describe "No detect new actions" do
-
       let!(:action)   { create(:dashboard_action, :proposed_action, :active, day_offset: 1) }
       let!(:resource) { create(:dashboard_action, :resource, :active, day_offset: 1) }
 
       it "when there are not news actions actived for published proposals" do
         proposal = create(:proposal)
-        action.update(published_proposal: true)
-        resource.update(published_proposal: true)
+        action.update!(published_proposal: true)
+        resource.update!(published_proposal: true)
 
         expect(Dashboard::Action.detect_new_actions_since(Date.yesterday, proposal)).to eq []
       end
 
       it "when there are news actions actived for draft_proposal but proposal is published" do
         proposal = create(:proposal)
-        action.update(published_proposal: false, day_offset: 0)
-        resource.update(published_proposal: false, day_offset: 0)
+        action.update!(published_proposal: false, day_offset: 0)
+        resource.update!(published_proposal: false, day_offset: 0)
 
         expect(Dashboard::Action.detect_new_actions_since(Date.yesterday, proposal)).to eq []
       end
 
       it "when there are not news actions actived for draft proposals" do
         proposal = create(:proposal, :draft)
-        action.update(published_proposal: false)
-        resource.update(published_proposal: false)
+        action.update!(published_proposal: false)
+        resource.update!(published_proposal: false)
 
         expect(Dashboard::Action.detect_new_actions_since(Date.yesterday, proposal)).to eq []
       end
 
       it "when there are news actions actived for published_proposal but proposal is draft" do
         proposal = create(:proposal, :draft)
-        action.update(published_proposal: true, day_offset: 0)
-        resource.update(published_proposal: true, day_offset: 0)
+        action.update!(published_proposal: true, day_offset: 0)
+        resource.update!(published_proposal: true, day_offset: 0)
 
         expect(Dashboard::Action.detect_new_actions_since(Date.yesterday, proposal)).to eq []
       end
-
     end
 
     describe "Detect new actions when there are news actions actived" do
-
       context "for published proposals" do
         let!(:proposal) { create(:proposal) }
 
@@ -301,9 +297,9 @@ describe Dashboard::Action do
         end
 
         it "when proposal has received a new vote today" do
-          proposal.update(created_at: Date.yesterday, published_at: Date.yesterday)
-          action.update(required_supports: 1)
-          resource.update(required_supports: 0)
+          proposal.update!(created_at: Date.yesterday, published_at: Date.yesterday)
+          action.update!(required_supports: 1)
+          resource.update!(required_supports: 0)
           create(:vote, voter: proposal.author, votable: proposal)
 
           expect(Dashboard::Action.detect_new_actions_since(Date.yesterday,
@@ -311,7 +307,6 @@ describe Dashboard::Action do
           expect(Dashboard::Action.detect_new_actions_since(Date.yesterday,
                                                           proposal)).not_to include(resource.id)
         end
-
       end
 
       context "for draft proposals" do
@@ -333,9 +328,9 @@ describe Dashboard::Action do
         end
 
         it "when proposal has received a new vote today" do
-          proposal.update(created_at: Date.yesterday)
-          action.update(required_supports: 1)
-          resource.update(required_supports: 2)
+          proposal.update!(created_at: Date.yesterday)
+          action.update!(required_supports: 1)
+          resource.update!(required_supports: 2)
           create(:vote, voter: proposal.author, votable: proposal)
 
           expect(Dashboard::Action.detect_new_actions_since(Date.yesterday,
@@ -343,7 +338,6 @@ describe Dashboard::Action do
           expect(Dashboard::Action.detect_new_actions_since(Date.yesterday,
                                                           proposal)).not_to include(resource.id)
         end
-
       end
     end
   end

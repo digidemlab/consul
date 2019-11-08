@@ -31,7 +31,6 @@ describe "Admin settings" do
   end
 
   describe "Update map" do
-
     scenario "Should not be able when map feature deactivated" do
       Setting["feature.map"] = false
       admin = create(:administrator).user
@@ -97,13 +96,11 @@ describe "Admin settings" do
       expect(find("#latitude", visible: false).value).not_to eq "51.48"
       expect(page).to have_content "Map configuration updated succesfully"
     end
-
   end
 
   describe "Update content types" do
-
     scenario "stores the correct mime types" do
-      setting = Setting.create(key: "upload.images.content_types", value: "image/png")
+      setting = Setting.create!(key: "upload.images.content_types", value: "image/png")
       admin = create(:administrator).user
       login_as(admin)
       visit admin_settings_path
@@ -131,11 +128,9 @@ describe "Admin settings" do
         expect(find("#jpg")).not_to be_checked
       end
     end
-
   end
 
   describe "Update Remote Census Configuration" do
-
     before do
       Setting["feature.remote_census"] = true
     end
@@ -165,13 +160,10 @@ describe "Admin settings" do
                                        '"Configure connection to remote census (SOAP)" ' \
                                        'on "Features" tab.'
     end
-
   end
 
   describe "Should redirect to same tab after update setting" do
-
     context "remote census" do
-
       before do
         Setting["feature.remote_census"] = true
       end
@@ -194,7 +186,7 @@ describe "Admin settings" do
     end
 
     scenario "On #tab-configuration", :js do
-      configuration_setting = Setting.create(key: "whatever")
+      configuration_setting = Setting.create!(key: "whatever")
       admin = create(:administrator).user
       login_as(admin)
       visit admin_settings_path
@@ -210,13 +202,12 @@ describe "Admin settings" do
     end
 
     context "map configuration" do
-
       before do
         Setting["feature.map"] = true
       end
 
       scenario "On #tab-map-configuration", :js do
-        map_setting = Setting.create(key: "map.whatever")
+        map_setting = Setting.create!(key: "map.whatever")
         admin = create(:administrator).user
         login_as(admin)
         visit admin_settings_path
@@ -233,7 +224,7 @@ describe "Admin settings" do
     end
 
     scenario "On #tab-proposals", :js do
-      proposal_dashboard_setting = Setting.create(key: "proposals.whatever")
+      proposal_dashboard_setting = Setting.create!(key: "proposals.whatever")
       admin = create(:administrator).user
       login_as(admin)
       visit admin_settings_path
@@ -249,7 +240,7 @@ describe "Admin settings" do
     end
 
     scenario "On #tab-participation-processes", :js do
-      process_setting = Setting.create(key: "process.whatever")
+      process_setting = Setting.create!(key: "process.whatever")
       admin = create(:administrator).user
       login_as(admin)
       visit admin_settings_path
@@ -264,7 +255,7 @@ describe "Admin settings" do
     end
 
     scenario "On #tab-feature-flags", :js do
-      feature_setting = Setting.create(key: "feature.whatever")
+      feature_setting = Setting.create!(key: "feature.whatever")
       admin = create(:administrator).user
       login_as(admin)
       visit admin_settings_path
@@ -280,7 +271,6 @@ describe "Admin settings" do
   end
 
   describe "Skip verification" do
-
     scenario "deactivate skip verification", :js do
       Setting["feature.user.skip_verification"] = "true"
       setting = Setting.where(key: "feature.user.skip_verification").first
@@ -310,7 +300,5 @@ describe "Admin settings" do
 
       Setting["feature.user.skip_verification"] = nil
     end
-
   end
-
 end

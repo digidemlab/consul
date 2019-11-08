@@ -1,7 +1,6 @@
 require "rails_helper"
 
 describe "Admin shifts" do
-
   before do
     admin = create(:administrator)
     login_as(admin.user)
@@ -244,7 +243,7 @@ describe "Admin shifts" do
     officer = create(:poll_officer)
 
     create(:poll_shift, officer: officer, booth: booth)
-    officer.destroy
+    officer.destroy!
 
     visit new_admin_booth_shift_path(booth)
 
@@ -260,5 +259,4 @@ describe "Admin shifts" do
 
     expect(page).to have_content "This booth has no shifts"
   end
-
 end

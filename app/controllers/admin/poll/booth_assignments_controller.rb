@@ -1,5 +1,4 @@
 class Admin::Poll::BoothAssignmentsController < Admin::Poll::BaseController
-
   before_action :load_poll, except: [:create, :destroy]
 
   def index
@@ -29,7 +28,7 @@ class Admin::Poll::BoothAssignmentsController < Admin::Poll::BaseController
     @booth_assignment = ::Poll::BoothAssignment.new(poll: @poll,
                                                     booth: @booth)
 
-    @booth_assignment.save
+    @booth_assignment.save!
 
     respond_to do |format|
       format.js { render layout: false }
@@ -41,7 +40,7 @@ class Admin::Poll::BoothAssignmentsController < Admin::Poll::BaseController
     @booth = Poll::Booth.find(booth_assignment_params[:booth_id])
     @booth_assignment = ::Poll::BoothAssignment.find(params[:id])
 
-    @booth_assignment.destroy
+    @booth_assignment.destroy!
 
     respond_to do |format|
       format.js { render layout: false }
@@ -74,5 +73,4 @@ class Admin::Poll::BoothAssignmentsController < Admin::Poll::BaseController
     def load_search
       @search = search_params[:search]
     end
-
 end

@@ -1,9 +1,7 @@
 require "rails_helper"
 
 describe Legislation::AnswersController do
-
   describe "POST create" do
-
     let(:legal_process) do
       create(:legislation_process, debate_start_date: Date.current - 3.days,
              debate_end_date: Date.current + 2.days)
@@ -43,7 +41,7 @@ describe Legislation::AnswersController do
 
     it "does not create an answer if the process debate phase is not open" do
       sign_in user
-      legal_process.update_attribute(:debate_end_date, Date.current - 1.day)
+      legal_process.update!(debate_end_date: Date.current - 1.day)
 
       expect do
         post :create, xhr: true,

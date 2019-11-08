@@ -1,14 +1,13 @@
 require "rails_helper"
 
 describe Tag do
-
   it "decreases tag_count when a debate is hidden" do
     debate = create(:debate)
     tag = create(:tag, taggables: [debate])
 
     expect(tag.taggings_count).to eq(1)
 
-    debate.update(hidden_at: Time.current)
+    debate.update!(hidden_at: Time.current)
 
     tag.reload
     expect(tag.taggings_count).to eq(0)
@@ -20,7 +19,7 @@ describe Tag do
 
     expect(tag.taggings_count).to eq(1)
 
-    proposal.update(hidden_at: Time.current)
+    proposal.update!(hidden_at: Time.current)
 
     tag.reload
     expect(tag.taggings_count).to eq(0)

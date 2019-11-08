@@ -85,9 +85,7 @@ module Abilities
       end
 
       if user.level_two_or_three_verified?
-        can :vote, Proposal do |proposal|
-          proposal.published?
-        end
+        can :vote, Proposal, &:published?
         can :vote_featured, Proposal
 
         can :vote, Legislation::Proposal
@@ -107,16 +105,11 @@ module Abilities
         can :create, DirectMessage
         can :show, DirectMessage, sender_id: user.id
 
-        can [:load_answers], Poll::Question
-        can [:answer], Poll do |poll|
+        can :answer, Poll do |poll|
           poll.answerable_by?(user)
         end
-        can [:answer, :prioritized_answers], Poll::Question do |question|
+        can :answer, Poll::Question do |question|
           question.answerable_by?(user)
-        end
-
-        can [:create, :delete], Poll::Answer do |answer|
-          answer.question.answerable_by?(user)
         end
       end
 

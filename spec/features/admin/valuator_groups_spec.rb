@@ -1,7 +1,6 @@
 require "rails_helper"
 
 describe "Valuator groups" do
-
   let(:admin) { create(:administrator).user }
 
   before do
@@ -96,7 +95,7 @@ describe "Valuator groups" do
     end
 
     scenario "Update a valuator's group" do
-      valuator.update(valuator_group: create(:valuator_group, name: "Economy"))
+      valuator.update!(valuator_group: create(:valuator_group, name: "Economy"))
       create(:valuator_group, name: "Health")
 
       visit edit_admin_valuator_path(valuator)
@@ -108,7 +107,7 @@ describe "Valuator groups" do
     end
 
     scenario "Remove a valuator from a group" do
-      valuator.update(valuator_group: create(:valuator_group, name: "Health"))
+      valuator.update!(valuator_group: create(:valuator_group, name: "Health"))
 
       visit edit_admin_valuator_path(valuator)
       select "", from: "valuator_valuator_group_id"
@@ -117,7 +116,5 @@ describe "Valuator groups" do
       expect(page).to have_content "Valuator updated successfully"
       expect(page).not_to have_content "Health"
     end
-
   end
-
 end

@@ -1,11 +1,9 @@
 require "rails_helper"
 
 describe Notification do
-
   let(:notification) { build(:notification) }
 
   context "validations" do
-
     it "is valid" do
       expect(notification).to be_valid
     end
@@ -14,11 +12,9 @@ describe Notification do
       notification.user = nil
       expect(notification).not_to be_valid
     end
-
   end
 
   context "scopes" do
-
     describe "#read" do
       it "returns only read notifications" do
         read_notification1 = create(:notification, :read)
@@ -56,7 +52,6 @@ describe Notification do
         Notification.for_render
       end
     end
-
   end
 
   describe "#mark_as_read" do
@@ -147,7 +142,7 @@ describe Notification do
       comment = create(:comment)
 
       first_notification = Notification.add(user, comment)
-      first_notification.update(read_at: Time.current)
+      first_notification.update!(read_at: Time.current)
 
       second_notification = Notification.add(user, comment)
 
@@ -172,7 +167,5 @@ describe Notification do
 
       expect(notification.notifiable_action).to eq "replies_to"
     end
-
   end
-
 end

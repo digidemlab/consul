@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe "Admin edit translatable records" do
   before do
-    translatable.update(attributes)
+    translatable.update!(attributes)
     login_as(create(:administrator).user)
   end
 
@@ -55,15 +55,15 @@ describe "Admin edit translatable records" do
 
         visit path
 
-        within_frame(0) { expect(page).to have_content "Content in English" }
+        expect(page).to have_ckeditor "Content", with: "Content in English"
 
         select "Español", from: :select_language
 
-        within_frame(0) { expect(page).to have_content "Contenido en español" }
+        expect(page).to have_ckeditor "Content", with: "Contenido en español"
 
         select "Français", from: :select_language
 
-        within_frame(0) { expect(page).to have_content "Contenu en Français" }
+        expect(page).to have_ckeditor "Content", with: "Contenu en Français"
       end
     end
 
@@ -155,7 +155,7 @@ describe "Admin edit translatable records" do
 
         select "Français", from: :select_language
 
-        within_frame(0) { expect(page.text).to be_empty }
+        expect(page). to have_ckeditor "Description", with: ""
       end
     end
 
@@ -237,7 +237,7 @@ describe "Admin edit translatable records" do
         select("Español", from: "locale-switcher")
 
         expect(page).to have_field "Respuesta", with: "Respuesta corregida"
-        within_frame(0) { expect(page).to have_content "Descripción corregida" }
+        expect(page).to have_ckeditor "Descripción", with: "Descripción corregida"
       end
     end
 
@@ -311,7 +311,7 @@ describe "Admin edit translatable records" do
 
     before do
       translatable.translations.destroy_all
-      translatable.translations.create(locale: :fr, title: "Titre en Français")
+      translatable.translations.create!(locale: :fr, title: "Titre en Français")
     end
 
     scenario "Does not add a translation for the current locale" do
@@ -356,7 +356,7 @@ describe "Admin edit translatable records" do
     let(:translatable) { create(:milestone) }
 
     scenario "Shows an error message" do
-      visit edit_tracking_budget_budget_investment_milestone_path(*resource_hierarchy_for(translatable))
+      visit edit_admin_budget_budget_investment_milestone_path(*resource_hierarchy_for(translatable))
 
       click_link "Remove language"
       click_link "Remove language"
@@ -398,7 +398,7 @@ describe "Admin edit translatable records" do
       let(:translatable) { create(:admin_notification, segment_recipient: "all_users") }
 
       scenario "Shows first available fallback" do
-        translatable.update({ title_fr: "Titre en Français", body_fr: "Texte en Français" })
+        translatable.update!({ title_fr: "Titre en Français", body_fr: "Texte en Français" })
 
         visit edit_admin_admin_notification_path(translatable)
 
@@ -417,7 +417,7 @@ describe "Admin edit translatable records" do
       let(:translatable) { create(:budget).phases.last }
 
       scenario "Shows first available fallback" do
-        translatable.update({ description_fr: "Phase en Français", summary_fr: "Phase résumé" })
+        translatable.update!({ description_fr: "Phase en Français", summary_fr: "Phase résumé" })
 
         visit edit_admin_budget_budget_phase_path(translatable.budget, translatable)
 
@@ -438,7 +438,7 @@ describe "Admin edit translatable records" do
       let(:translatable) { create(:active_poll) }
 
       scenario "Shows first available fallback" do
-        translatable.update({ description_fr: "Sondage en Français" })
+        translatable.update!({ description_fr: "Sondage en Français" })
 
         visit edit_admin_active_polls_path(translatable)
 

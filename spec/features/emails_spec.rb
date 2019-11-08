@@ -1,13 +1,11 @@
 require "rails_helper"
 
 describe "Emails" do
-
   before do
     reset_mailer
   end
 
   context "On Staging Environment" do
-
     scenario "emails are delivered to configured recipient" do
       interceptor = RecipientInterceptor.new("recipient@consul.dev", subject_prefix: "[staging]")
       Mail.register_interceptor(interceptor)
@@ -21,7 +19,6 @@ describe "Emails" do
 
       Mail.unregister_interceptor(interceptor)
     end
-
   end
 
   scenario "Signup Email" do
@@ -63,7 +60,7 @@ describe "Emails" do
     end
 
     scenario "Do not send email about proposal comment unless set in preferences" do
-      user.update(email_on_comment: false)
+      user.update!(email_on_comment: false)
       comment_on(proposal)
       expect { open_last_email }.to raise_error("No email has been sent!")
     end
@@ -90,7 +87,7 @@ describe "Emails" do
     end
 
     scenario "Do not send email about debate comment unless set in preferences" do
-      user.update(email_on_comment: false)
+      user.update!(email_on_comment: false)
       comment_on(debate)
       expect { open_last_email }.to raise_error("No email has been sent!")
     end
@@ -117,7 +114,7 @@ describe "Emails" do
     end
 
     scenario "Do not send email about budget investment comment unless set in preferences" do
-      user.update(email_on_comment: false)
+      user.update!(email_on_comment: false)
       comment_on(investment)
       expect { open_last_email }.to raise_error("No email has been sent!")
     end
@@ -145,7 +142,7 @@ describe "Emails" do
     end
 
     scenario "Do not send email about topic comment unless set in preferences" do
-      user.update(email_on_comment: false)
+      user.update!(email_on_comment: false)
       comment_on(topic)
       expect { open_last_email }.to raise_error("No email has been sent!")
     end
@@ -172,7 +169,7 @@ describe "Emails" do
     end
 
     scenario "Do not send email about poll question comment unless set in preferences" do
-      user.update(email_on_comment: false)
+      user.update!(email_on_comment: false)
       comment_on(poll)
       expect { open_last_email }.to raise_error("No email has been sent!")
     end
@@ -199,7 +196,7 @@ describe "Emails" do
     end
 
     scenario "Do not send email about comment reply unless set in preferences", :js do
-      user.update(email_on_comment_reply: false)
+      user.update!(email_on_comment_reply: false)
       reply_to(user)
       expect { open_last_email }.to raise_error("No email has been sent!")
     end
@@ -219,7 +216,6 @@ describe "Emails" do
   end
 
   context "Direct Message" do
-
     scenario "Receiver email" do
       sender   = create(:user, :level_two)
       receiver = create(:user, :level_two)
@@ -250,11 +246,9 @@ describe "Emails" do
     end
 
     pending "In the copy sent to the sender, display the receiver's name"
-
   end
 
   context "Proposal notification digest" do
-
     scenario "notifications for proposals that I have supported" do
       user = create(:user, email_digest: true)
 
@@ -318,11 +312,9 @@ describe "Emails" do
 
     xscenario "Delete all Notifications included in the digest after email sent" do
     end
-
   end
 
   context "User invites" do
-
     scenario "Send an invitation" do
       login_as_manager
       visit new_management_user_invite_path
@@ -340,7 +332,6 @@ describe "Emails" do
       expect(email).to have_subject("Invitation to CONSUL")
       expect(email).to have_body_text(/#{new_user_registration_path}/)
     end
-
   end
 
   context "Budgets" do
@@ -372,7 +363,7 @@ describe "Emails" do
     end
 
     scenario "Unfeasible investment" do
-      budget.update(phase: "valuating")
+      budget.update!(phase: "valuating")
       valuator = create(:valuator)
       investment = create(:budget_investment, author: author, budget: budget, valuators: [valuator])
 
@@ -436,11 +427,9 @@ describe "Emails" do
       expect(email).to have_subject("Your investment project '#{investment.code}' has not been selected")
       expect(email).to deliver_to(investment.author.email)
     end
-
   end
 
   context "Polls" do
-
     scenario "Send email on poll comment reply", :js do
       user1 = create(:user, email_on_comment_reply: true)
       user2 = create(:user)
@@ -469,11 +458,9 @@ describe "Emails" do
       expect(email).to have_body_text("To stop receiving these emails change your settings in")
       expect(email).to have_body_text(account_path)
     end
-
   end
 
   context "Newsletter" do
-
     scenario "Send newsletter email to selected users" do
       user_with_newsletter_in_segment_1 = create(:user, :with_proposal, newsletter: true)
       user_with_newsletter_in_segment_2 = create(:user, :with_proposal, newsletter: true)
@@ -501,7 +488,6 @@ describe "Emails" do
       expect(email).to deliver_from("no-reply@consul.dev")
       expect(email.body.encoded).to include("This is a different body")
     end
-
   end
 
   context "Users without email" do
@@ -511,12 +497,11 @@ describe "Emails" do
 
       user_commenting = create(:user)
       comment = create(:comment, commentable: proposal, user: user_commenting)
-      user.update(email: nil)
+      user.update!(email: nil)
 
       Mailer.comment(comment).deliver_now
 
       expect { open_last_email }.to raise_error "No email has been sent!"
     end
-
   end
 end

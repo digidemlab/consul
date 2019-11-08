@@ -98,10 +98,10 @@ FactoryBot.define do
     unfeasibility_explanation { "" }
     skip_map             { "1" }
     terms_of_service     { "1" }
-    incompatible          { false }
+    incompatible         { false }
 
     trait :with_confidence_score do
-      before(:save) { |i| i.calculate_confidence_score }
+      before(:save, &:calculate_confidence_score)
     end
 
     trait :feasible do

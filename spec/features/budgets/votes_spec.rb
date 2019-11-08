@@ -1,7 +1,6 @@
 require "rails_helper"
 
 describe "Votes" do
-
   describe "Investments" do
     let(:manuela) { create(:user, verified_at: Time.current) }
     let(:budget)  { create(:budget, :selecting) }
@@ -11,7 +10,6 @@ describe "Votes" do
     before { login_as(manuela) }
 
     describe "Index" do
-
       scenario "Index shows user votes on proposals" do
         investment1 = create(:budget_investment, heading: heading, voters: [manuela])
         investment2 = create(:budget_investment, heading: heading)
@@ -85,7 +83,7 @@ describe "Votes" do
     end
 
     scenario "Disable voting on investments", :js do
-      budget.update(phase: "reviewing")
+      budget.update!(phase: "reviewing")
       investment = create(:budget_investment, heading: heading)
 
       manuela = create(:user, verified_at: Time.current)
@@ -105,7 +103,6 @@ describe "Votes" do
     end
 
     context "Voting in multiple headings of a single group" do
-
       let(:new_york) { heading }
       let(:san_francisco) { create(:budget_heading, group: group) }
       let(:third_heading) { create(:budget_heading, group: group) }
@@ -195,7 +192,6 @@ describe "Votes" do
 
         expect(page.driver.send(:find_modal).text).to match "You can only support investments in 2 districts."
       end
-
     end
   end
 end

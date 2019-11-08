@@ -16,11 +16,12 @@ class Admin::TagsController < Admin::BaseController
     else
       Tag.category.create(tag_params)
     end
+
     redirect_to admin_tags_path
   end
 
   def destroy
-    @tag.destroy
+    @tag.destroy!
     redirect_to admin_tags_path
   end
 
@@ -33,5 +34,4 @@ class Admin::TagsController < Admin::BaseController
     def find_tag
       @tag = Tag.category.find(params[:id])
     end
-
 end

@@ -33,13 +33,12 @@ describe ReplyEmail do
   end
 
   describe "#can_be_sent?" do
-
     it "returns true if comment and recipient exist" do
       expect(reply_email.can_be_sent?).to be true
     end
 
     it "returns false if the comment doesn't exist" do
-      reply.update(commentable: nil)
+      reply.commentable = nil
 
       expect(reply_email.can_be_sent?).to be false
     end
@@ -49,7 +48,5 @@ describe ReplyEmail do
 
       expect(reply_email.can_be_sent?).to be false
     end
-
   end
-
 end

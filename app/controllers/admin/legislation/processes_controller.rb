@@ -1,7 +1,6 @@
 class Admin::Legislation::ProcessesController < Admin::Legislation::BaseController
   include Translatable
   include ImageAttributes
-  include DownloadSettingsHelper
 
   has_filters %w[active all], only: :index
 
@@ -10,15 +9,6 @@ class Admin::Legislation::ProcessesController < Admin::Legislation::BaseControll
   def index
     @processes = ::Legislation::Process.send(@current_filter).order(start_date: :desc)
                  .page(params[:page])
-    respond_to do |format|
-      format.html
-      format.csv do
-        send_data to_csv(process_for_download, Legislation::Process),
-                  type: "text/csv",
-                  disposition: "attachment",
-                  filename: "legislation_processes.csv"
-      end
-    end
   end
 
   def create
@@ -46,16 +36,12 @@ class Admin::Legislation::ProcessesController < Admin::Legislation::BaseControll
   end
 
   def destroy
-    @process.destroy
+    @process.destroy!
     notice = t("admin.legislation.processes.destroy.notice")
     redirect_to admin_legislation_processes_path, notice: notice
   end
 
   private
-
-    def process_for_download
-      ::Legislation::Process.send(@current_filter).order(start_date: :desc)
-    end
 
     def process_params
       params.require(:legislation_process).permit(allowed_params)
@@ -93,7 +79,7 @@ class Admin::Legislation::ProcessesController < Admin::Legislation::BaseControll
 
     def set_tag_list
       @process.set_tag_list_on(:customs, process_params[:custom_list])
-      @process.save
+      @process.save!
     end
 
     def resource

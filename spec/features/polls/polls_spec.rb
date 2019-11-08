@@ -1,13 +1,11 @@
 require "rails_helper"
 
 describe "Polls" do
-
   context "Concerns" do
     it_behaves_like "notifiable in-app", :poll
   end
 
   context "#index" do
-
     scenario "Shows description for open polls" do
       visit polls_path
       expect(page).not_to have_content "Description for open polls"
@@ -201,7 +199,7 @@ describe "Polls" do
       visit polls_path
       expect(page).not_to have_selector(".already-answer")
 
-      poll.update(geozone_restricted: true)
+      poll.update!(geozone_restricted: true)
       poll.geozones << geozone
 
       create(:poll_question, :yes_no, poll: poll)
@@ -235,7 +233,7 @@ describe "Polls" do
     end
 
     scenario "Level 2 users in a poll with questions for a geozone which is not theirs" do
-      poll.update(geozone_restricted: true)
+      poll.update!(geozone_restricted: true)
       poll.geozones << create(:geozone)
 
       question = create(:poll_question, :yes_no, poll: poll)
@@ -253,7 +251,7 @@ describe "Polls" do
     end
 
     scenario "Level 2 users reading a same-geozone poll" do
-      poll.update(geozone_restricted: true)
+      poll.update!(geozone_restricted: true)
       poll.geozones << geozone
 
       question = create(:poll_question, :yes_no, poll: poll)
@@ -294,7 +292,7 @@ describe "Polls" do
     end
 
     scenario "Level 2 users answering", :js do
-      poll.update(geozone_restricted: true)
+      poll.update!(geozone_restricted: true)
       poll.geozones << geozone
 
       question = create(:poll_question, :yes_no, poll: poll)
@@ -312,7 +310,7 @@ describe "Polls" do
     end
 
     scenario "Level 2 users changing answer", :js do
-      poll.update(geozone_restricted: true)
+      poll.update!(geozone_restricted: true)
       poll.geozones << geozone
 
       question = create(:poll_question, :yes_no, poll: poll)
@@ -335,7 +333,7 @@ describe "Polls" do
     end
 
     scenario "Level 2 votes, signs out, signs in, votes again", :js do
-      poll.update(geozone_restricted: true)
+      poll.update!(geozone_restricted: true)
       poll.geozones << geozone
 
       question = create(:poll_question, :yes_no, poll: poll)
@@ -374,7 +372,6 @@ describe "Polls" do
   end
 
   context "Booth & Website", :with_frozen_time do
-
     let(:poll) { create(:poll, summary: "Summary", description: "Description") }
     let(:booth) { create(:poll_booth) }
     let(:officer) { create(:poll_officer) }
@@ -407,7 +404,6 @@ describe "Polls" do
         expect(page).not_to have_link("No")
       end
     end
-
   end
 
   context "Results and stats" do
@@ -497,6 +493,5 @@ describe "Polls" do
 
       expect(page).to have_link "Information"
     end
-
   end
 end

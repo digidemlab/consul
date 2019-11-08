@@ -1,12 +1,10 @@
 require "rails_helper"
 
 describe Officing::Residence do
-
   let!(:geozone)  { create(:geozone, census_code: "01") }
   let(:residence) { build(:officing_residence, document_number: "12345678Z") }
 
   describe "validations" do
-
     it "is valid" do
       expect(residence).to be_valid
     end
@@ -125,7 +123,6 @@ describe Officing::Residence do
           year_of_birth: Time.current.year
         )
       end
-
     end
 
     describe "allowed age" do
@@ -141,7 +138,6 @@ describe Officing::Residence do
         expect(residence.errors[:year_of_birth]).to be_empty
       end
     end
-
   end
 
   describe "new" do
@@ -157,9 +153,8 @@ describe Officing::Residence do
   end
 
   describe "save" do
-
     it "stores document number, document type, geozone, date of birth and gender" do
-      residence.save
+      residence.save!
       user = residence.user
 
       expect(user.document_number).to eq("12345678Z")
@@ -183,7 +178,7 @@ describe Officing::Residence do
                         document_number: "12345678Z",
                         document_type: "1")
 
-      residence.save
+      residence.save!
       user = residence.user
 
       expect(user.document_number).to eq("12345678Z")
@@ -201,7 +196,7 @@ describe Officing::Residence do
       residence = build(:officing_residence, document_number: "12345678Z", year_of_birth: 1980)
       expect(residence).to be_valid
       expect(user.reload).to be_unverified
-      residence.save
+      residence.save!
       expect(user.reload).to be_level_three_verified
     end
 
@@ -220,6 +215,5 @@ describe Officing::Residence do
         year_of_birth:   Time.current.year
       )
     end
-
   end
 end

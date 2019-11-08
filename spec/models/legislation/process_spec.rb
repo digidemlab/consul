@@ -157,17 +157,16 @@ describe Legislation::Process do
       expect(processes_not_in_draft).not_to include(process_with_draft_enabled)
       expect(processes_not_in_draft).not_to include(process_with_draft_only_today)
     end
-
   end
 
   describe "#status" do
     it "detects planned phase" do
-      process.update_attributes(start_date: Date.current + 2.days)
+      process.update!(start_date: Date.current + 2.days)
       expect(process.status).to eq(:planned)
     end
 
     it "detects closed phase" do
-      process.update_attributes(end_date: Date.current - 2.days)
+      process.update!(end_date: Date.current - 2.days)
       expect(process.status).to eq(:closed)
     end
 
@@ -216,14 +215,11 @@ describe Legislation::Process do
     end
 
     context "with milestone_tags" do
-
       let(:process) { create(:legislation_process, :with_milestone_tags) }
 
       it "has milestone_tags" do
         expect(process.milestone_tag_list.count).to eq(1)
       end
     end
-
   end
-
 end
