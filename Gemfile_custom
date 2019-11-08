@@ -10,6 +10,8 @@ group :staging, :production do
   gem "heroku-deflater", "~> 0.6.3"
 end
 
+gem 'piwik_analytics', git: "https://github.com/halfdan/piwik-ruby-tracking.git"
+
 gem "rack-attack", "~> 5.4.2"
 
 ruby "2.4.9"

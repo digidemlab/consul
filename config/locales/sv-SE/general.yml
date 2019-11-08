@@ -212,17 +212,17 @@ sv:
           other: "Stöd"
     footer:
       accessibility: Tillgänglighet
-      conditions: användarvillkoren
+      conditions: Användarvillkoren
       consul: CONSUL
-      consul_url: https://github.com/consul/consul
-      contact_us: För teknisk support gå till
-      copyright: CONSUL, %{year}
-      description: Den här webbplatsen använder %{consul} som är %{open_source}.
+      consul_url: http://consulproject.org/en/
+      contact_us: Digidem Lab
+      copyright: Göteborgs stad & Digidem Lab, %{year}
+      description: Den här webbplatsen använder %{consul} som är %{open_source}. Vill du använda CONSUL i din stad? Kontakta
       open_source: en plattform med öppen källkod
-      open_source_url: http://www.gnu.org/licenses/agpl-3.0.html
+      open_source_url: https://github.com/digidemlab/consul
       participation_text: Skapa den stad du vill ha.
       participation_title: Deltagande
-      privacy: sekretesspolicyn
+      privacy: Sekretesspolicyn
     header:
       administration_menu: Admin
       administration: Administration

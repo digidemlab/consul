@@ -584,7 +584,7 @@ ActiveRecord::Schema.define(version: 20191107193003) do
     t.string   "title"
     t.string   "attachment_file_name"
     t.string   "attachment_content_type"
-    t.integer  "attachment_file_size"
+    t.bigint   "attachment_file_size"
     t.datetime "attachment_updated_at"
     t.integer  "user_id"
     t.string   "documentable_type"
@@ -680,7 +680,7 @@ ActiveRecord::Schema.define(version: 20191107193003) do
     t.datetime "updated_at",                         null: false
     t.string   "attachment_file_name"
     t.string   "attachment_content_type"
-    t.integer  "attachment_file_size"
+    t.bigint   "attachment_file_size"
     t.datetime "attachment_updated_at"
     t.integer  "user_id"
     t.index ["imageable_type", "imageable_id"], name: "index_images_on_imageable_type_and_imageable_id", using: :btree
@@ -1404,7 +1404,7 @@ ActiveRecord::Schema.define(version: 20191107193003) do
     t.string   "name",               null: false
     t.string   "image_file_name"
     t.string   "image_content_type"
-    t.integer  "image_file_size"
+    t.bigint   "image_file_size"
     t.datetime "image_updated_at"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
