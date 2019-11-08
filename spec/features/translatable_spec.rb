@@ -90,7 +90,7 @@ describe "Public area translatable records" do
       click_button "Start a debate"
 
       expect(page).to have_css "#error_explanation"
-      expect(page).to have_field "Debate title", with: "", class: "error"
+      expect(page).to have_field "Debate title", with: "", class: "is-invalid-input"
     end
 
     scenario "Shows errors when submiting without any active translations" do
@@ -124,7 +124,7 @@ describe "Public area translatable records" do
     end
 
     scenario "Select a locale and add it to the form" do
-      visit new_budget_investment_path(create(:budget_investment))
+      visit new_budget_investment_path(create(:budget))
 
       select "Français", from: :add_language
 
@@ -132,7 +132,7 @@ describe "Public area translatable records" do
     end
 
     scenario "Remove a translation" do
-      visit new_budget_investment_path(create(:budget_investment))
+      visit new_budget_investment_path(create(:budget))
 
       expect(find("#select_language").value).to eq "en"
       click_link "Remove language"
@@ -212,7 +212,7 @@ describe "Public area translatable records" do
           select "Español", from: "locale-switcher"
 
           expect(page).to have_field "Título del debate", with: "Título corregido"
-          within_frame(0) { expect(page).to have_content "Texto corregido" }
+          expect(page).to have_ckeditor "Texto inicial del debate", with: "Texto corregido"
         end
       end
 
@@ -232,7 +232,7 @@ describe "Public area translatable records" do
 
           select "Español", from: :select_language
 
-          expect(page).to have_field "Proposal title", with: "", class: "error"
+          expect(page).to have_field "Proposal title", with: "", class: "is-invalid-input"
         end
       end
     end

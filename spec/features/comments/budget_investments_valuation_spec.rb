@@ -5,10 +5,9 @@ describe "Internal valuation comments on Budget::Investments" do
   let(:valuator_user) { create(:valuator).user }
   let(:admin_user) { create(:administrator).user }
   let(:budget) { create(:budget, :valuating) }
-  let(:investment) { create(:budget_investment, budget: budget) }
+  let(:investment) { create(:budget_investment, budget: budget, valuators: [valuator_user.valuator]) }
 
   before do
-    investment.valuators << valuator_user.valuator
     login_as(valuator_user)
   end
 
@@ -222,7 +221,6 @@ describe "Internal valuation comments on Budget::Investments" do
         click_button "Publish reply"
         expect(page).to have_content "Can't be blank"
       end
-
     end
 
     scenario "Multiple nested replies", :js do
@@ -316,5 +314,4 @@ describe "Internal valuation comments on Budget::Investments" do
     expect(ActionMailer::Base.deliveries.first.to).to eq([valuator_user.email])
     expect(ActionMailer::Base.deliveries.first.subject).to eq("New evaluation comment")
   end
-
 end

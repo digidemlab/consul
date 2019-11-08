@@ -1,12 +1,12 @@
 class ManagerAuthenticator
-
   def initialize(data = {})
     @manager = { login: data[:login], user_key: data[:clave_usuario], date: data[:fecha_conexion] }.with_indifferent_access
   end
 
   def auth
-    return false unless [@manager[:login], @manager[:user_key], @manager[:date]].all? { |manager| manager.present? }
+    return false unless [@manager[:login], @manager[:user_key], @manager[:date]].all?(&:present?)
     return @manager if manager_exists? && application_authorized?
+
     false
   end
 

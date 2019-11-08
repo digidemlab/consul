@@ -1,5 +1,4 @@
 class Budget < ApplicationRecord
-
   include Measurable
   include Sluggable
   include StatsVersionable
@@ -33,16 +32,12 @@ class Budget < ApplicationRecord
   has_many :headings, through: :groups
   has_many :lines, through: :ballots, class_name: "Budget::Ballot::Line"
   has_many :phases, class_name: "Budget::Phase"
-  has_many :budget_trackers
-  has_many :trackers, through: :budget_trackers
   has_many :budget_administrators
   has_many :administrators, through: :budget_administrators
   has_many :budget_valuators
   has_many :valuators, through: :budget_valuators
 
   has_one :poll
-
-  before_validation :sanitize_descriptions
 
   after_create :generate_phases
 
@@ -57,6 +52,7 @@ class Budget < ApplicationRecord
   scope :reviewing_ballots, -> { where(phase: "reviewing_ballots") }
   scope :finished, -> { where(phase: "finished") }
 
+  class << self; undef :open; end
   scope :open, -> { where.not(phase: "finished") }
 
   def self.current
@@ -79,7 +75,7 @@ class Budget < ApplicationRecord
     if phases.exists? && phases.send(phase).description.present?
       phases.send(phase).description
     else
-      send("description_#{phase}")&.html_safe
+      send("description_#{phase}")
     end
   end
 
@@ -199,19 +195,11 @@ class Budget < ApplicationRecord
     investments.winners.any?
   end
 
-  def milestone_tags
+  def investments_milestone_tags
     investments.winners.map(&:milestone_tag_list).flatten.uniq.sort
   end
 
   private
-
-    def sanitize_descriptions
-      s = WYSIWYGSanitizer.new
-      Budget::Phase::PHASE_KINDS.each do |phase|
-        sanitized = s.sanitize(send("description_#{phase}"))
-        send("description_#{phase}=", sanitized)
-      end
-    end
 
     def generate_phases
       Budget::Phase::PHASE_KINDS.each do |phase|
@@ -228,5 +216,4 @@ class Budget < ApplicationRecord
     def generate_slug?
       slug.nil? || drafting?
     end
-
 end

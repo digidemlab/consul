@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   include HasOrders
   include AccessDeniedHandler
 
-
+  default_form_builder ConsulFormBuilder
   protect_from_forgery with: :exception
 
   before_action :authenticate_http_basic, if: :http_basic_auth_site?
@@ -15,7 +15,6 @@ class ApplicationController < ActionController::Base
   before_action :set_locale
   before_action :track_email_campaign
   before_action :set_return_url
-  before_action :set_current_user
   before_action :set_raven_context
 
   check_authorization unless: :devise_controller?
@@ -121,10 +120,6 @@ class ApplicationController < ActionController::Base
 
     def current_budget
       Budget.current
-    end
-
-    def set_current_user
-      User.current_user = current_user
     end
 
     def set_raven_context

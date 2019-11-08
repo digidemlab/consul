@@ -27,7 +27,6 @@ class Valuation::BudgetInvestmentsController < Valuation::BaseController
 
   def valuate
     if valid_price_params? && @investment.update(valuation_params)
-
       if @investment.unfeasible_email_pending?
         @investment.send_unfeasible_email
       end
@@ -84,7 +83,7 @@ class Valuation::BudgetInvestmentsController < Valuation::BaseController
                               }
                             ]
 
-      investment_headings.inject(all_headings_filter) do |filters, heading|
+      investment_headings.reduce(all_headings_filter) do |filters, heading|
         filters << {
                      name: heading.name,
                      id: heading.id,
@@ -114,6 +113,7 @@ class Valuation::BudgetInvestmentsController < Valuation::BaseController
       return if current_user.administrator? ||
                 Budget::ValuatorAssignment.exists?(investment_id: params[:id],
                                                    valuator_id: current_user.valuator.id)
+
       raise ActionController::RoutingError.new("Not Found")
     end
 
@@ -128,5 +128,4 @@ class Valuation::BudgetInvestmentsController < Valuation::BaseController
 
       @investment.errors.empty?
     end
-
 end

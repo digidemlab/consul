@@ -1,7 +1,6 @@
 require "rails_helper"
 
 describe "Admin budget groups" do
-
   let(:budget) { create(:budget, :drafting) }
 
   before do
@@ -10,7 +9,6 @@ describe "Admin budget groups" do
   end
 
   context "Feature flag" do
-
     before do
       Setting["process.budgets"] = nil
     end
@@ -20,11 +18,9 @@ describe "Admin budget groups" do
         visit admin_budget_groups_path(budget)
       end.to raise_exception(FeatureFlags::FeatureDisabled)
     end
-
   end
 
   context "Load" do
-
     let!(:budget) { create(:budget, slug: "budget_slug") }
     let!(:group)  { create(:budget_group, slug: "group_slug", budget: budget) }
 
@@ -57,11 +53,9 @@ describe "Admin budget groups" do
         visit edit_admin_budget_group_path(budget, 0)
       end.to raise_error ActiveRecord::RecordNotFound
     end
-
   end
 
   context "Index" do
-
     scenario "Displaying no groups for budget" do
       visit admin_budget_groups_path(budget)
 
@@ -122,11 +116,9 @@ describe "Admin budget groups" do
       expect(page).to have_content "You cannot delete a Group that has associated headings"
       expect(page).to have_selector "#budget_group_#{group.id}"
     end
-
   end
 
   context "New" do
-
     scenario "Create group" do
       visit admin_budget_groups_path(budget)
       click_link "Create new group"
@@ -154,14 +146,12 @@ describe "Admin budget groups" do
       click_button "Create new group"
 
       expect(page).not_to have_content "Group created successfully!"
-      expect(page).to have_css("label.error", text: "Group name")
+      expect(page).to have_css(".is-invalid-label", text: "Group name")
       expect(page).to have_content "can't be blank"
     end
-
   end
 
   context "Edit" do
-
     scenario "Show group information" do
       group = create(:budget_group, budget: budget, max_votable_headings: 2)
       2.times { create(:budget_heading, group: group) }
@@ -196,7 +186,6 @@ describe "Admin budget groups" do
       expect(group.reload.slug).not_to eq old_slug
       expect(group.slug).to eq "new-english-name"
     end
-
   end
 
   context "Update" do
@@ -229,9 +218,8 @@ describe "Admin budget groups" do
       click_button "Save group"
 
       expect(page).not_to have_content "Group updated successfully"
-      expect(page).to have_css("label.error", text: "Group name")
-      expect(page).to have_css("small.error", text: "has already been taken")
+      expect(page).to have_css(".is-invalid-label", text: "Group name")
+      expect(page).to have_css("small.form-error", text: "has already been taken")
     end
-
   end
 end

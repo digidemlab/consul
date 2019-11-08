@@ -69,7 +69,6 @@ sv:
       title: Tillgänglighet
       description: |-
         Web accessibility refers to the possibility of access to the web and its contents by all people, regardless of the disabilities (physical, intellectual or technical) that may arise or from those that derive from the context of use (technological or environmental) .
-
         When websites are designed with accessibility in mind, all users can access content in equal conditions, for example:
       examples:
         - Providing alternative text to the images, blind or visually impaired users can use special readers to access the information.
@@ -82,7 +81,7 @@ sv:
           description: To be able to navigate through this website in an accessible way, a group of quick access keys has been programmed that gather the main sections of general interest in which the site is organized.
           caption: Keyboard shortcuts for the navigation menu
           key_header: Key
-          page_header: Page
+          page_header: Sida
           rows:
             - key_column: 0
               page_column: Home

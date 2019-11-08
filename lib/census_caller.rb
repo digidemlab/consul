@@ -1,5 +1,4 @@
 class CensusCaller
-
   def call(document_type, document_number, date_of_birth, postal_code)
     if ENV["NO_CENSUS"].present? && ENV["NO_CENSUS"] == true
       response = NoBorderApi.new.call(document_type, document_number) unless response.valid?

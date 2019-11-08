@@ -5,15 +5,13 @@ class RelatedContentsController < ApplicationController
 
   def create
     if relationable_object && related_object
-
       if relationable_object.url != related_object.url
-        RelatedContent.create(parent_relationable: @relationable, child_relationable: @related, author: current_user)
+        RelatedContent.create!(parent_relationable: @relationable, child_relationable: @related, author: current_user)
 
         flash[:success] = t("related_content.success")
       else
         flash[:error] = t("related_content.error_itself")
       end
-
     else
       flash[:error] = t("related_content.error", url: Setting["url"])
     end

@@ -1,5 +1,4 @@
 class Admin::MilestoneStatusesController < Admin::BaseController
-
   before_action :load_status, only: [:edit, :update, :destroy]
 
   def index
@@ -34,7 +33,7 @@ class Admin::MilestoneStatusesController < Admin::BaseController
   end
 
   def destroy
-    @status.destroy
+    @status.destroy!
     redirect_to admin_milestone_statuses_path,
                 notice: t("admin.statuses.delete.notice")
   end

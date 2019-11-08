@@ -4,17 +4,24 @@ class Admin::TagsController < Admin::BaseController
   respond_to :html, :js
 
   def index
-    @tags = ActsAsTaggableOn::Tag.category.page(params[:page])
-    @tag  = ActsAsTaggableOn::Tag.category.new
+    @tags = Tag.category.page(params[:page])
+    @tag  = Tag.category.new
   end
 
   def create
-    ActsAsTaggableOn::Tag.category.create(tag_params)
+    @existing_tag = Tag.where(name: tag_params.first).first
+    if @existing_tag
+      @existing_tag.kind = "category"
+      @existing_tag.save
+    else
+      Tag.category.create(tag_params)
+    end
+
     redirect_to admin_tags_path
   end
 
   def destroy
-    @tag.destroy
+    @tag.destroy!
     redirect_to admin_tags_path
   end
 
@@ -25,7 +32,6 @@ class Admin::TagsController < Admin::BaseController
     end
 
     def find_tag
-      @tag = ActsAsTaggableOn::Tag.category.find(params[:id])
+      @tag = Tag.category.find(params[:id])
     end
-
 end

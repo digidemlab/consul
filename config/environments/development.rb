@@ -1,6 +1,10 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
+  # The seeds are adding content in Spanish so Spanish is needed in dev env.
+  config.i18n.default_locale = :sv
+  config.i18n.available_locales = %w[en es sv]
+
   # In the development environment your application's code is reloaded on
   # every request. This slows down response time but is perfect for development
   # since you don't have to restart the web server when you make code changes.

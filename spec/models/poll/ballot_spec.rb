@@ -1,7 +1,6 @@
 require "rails_helper"
 
 describe Poll::Ballot do
-
   let(:budget) { create(:budget) }
   let(:group) { create(:budget_group, budget: budget) }
   let(:heading) { create(:budget_heading, group: group, price: 10000000) }
@@ -12,13 +11,12 @@ describe Poll::Ballot do
   before { create(:budget_ballot, budget: budget, physical: true, poll_ballot: poll_ballot) }
 
   describe "#verify" do
-
     it "adds ballot lines until there are sufficiente funds" do
       investment2 = create(:budget_investment, :selected, price: 2000000, heading: heading)
       investment3 = create(:budget_investment, :selected, price: 2000000, heading: heading)
       investment4 = create(:budget_investment, :selected, price: 2000000, heading: heading)
 
-      poll_ballot.update(data: [investment.id, investment2.id, investment3.id, investment4.id].join(","))
+      poll_ballot.update!(data: [investment.id, investment2.id, investment3.id, investment4.id].join(","))
       poll_ballot.verify
 
       expect(poll_ballot.ballot.lines.pluck(:investment_id)).to match_array [investment.id, investment2.id, investment3.id]
@@ -31,7 +29,7 @@ describe Poll::Ballot do
       investment3 = create(:budget_investment, :selected, price: 2000000, heading: heading)
       investment4 = create(:budget_investment, :selected, price: 2000000, heading: other_heading)
 
-      poll_ballot.update(data: [investment.id, investment2.id, investment3.id, investment4.id].join(","))
+      poll_ballot.update!(data: [investment.id, investment2.id, investment3.id, investment4.id].join(","))
       poll_ballot.verify
 
       expect(poll_ballot.ballot.lines.pluck(:investment_id)).to match_array [investment.id, investment2.id, investment3.id]
@@ -42,24 +40,22 @@ describe Poll::Ballot do
       investment3 = create(:budget_investment, :selected, price: 2000000, heading: heading)
       investment4 = create(:budget_investment, price: 2000000, heading: heading)
 
-      poll_ballot.update(data: [investment.id, investment2.id, investment3.id, investment4.id].join(","))
+      poll_ballot.update!(data: [investment.id, investment2.id, investment3.id, investment4.id].join(","))
       poll_ballot.verify
 
       expect(poll_ballot.ballot.lines.pluck(:investment_id)).to match_array [investment.id, investment2.id, investment3.id]
     end
-
   end
 
   describe "#add_investment" do
-
     describe "Money" do
       it "is not valid if insufficient funds" do
-        investment.update(price: heading.price + 1)
+        investment.update!(price: heading.price + 1)
         expect(poll_ballot.add_investment(investment.id)).to be(false)
       end
 
       it "is valid if sufficient funds" do
-        investment.update(price: heading.price - 1)
+        investment.update!(price: heading.price - 1)
         expect(poll_ballot.add_investment(investment.id)).to be(true)
       end
     end
@@ -85,12 +81,12 @@ describe Poll::Ballot do
 
     describe "Selectibility" do
       it "is not valid if investment is unselected" do
-        investment.update(selected: false)
+        investment.update!(selected: false)
         expect(poll_ballot.add_investment(investment.id)).to be(false)
       end
 
       it "is valid if investment is selected" do
-        investment.update(selected: true, price: 20000)
+        investment.update!(selected: true, price: 20000)
         expect(poll_ballot.add_investment(investment.id)).to be(true)
       end
     end
@@ -98,7 +94,7 @@ describe Poll::Ballot do
     describe "Budget" do
       it "is not valid if investment belongs to a different budget" do
         other_budget = create(:budget)
-        investment.update(budget: other_budget)
+        investment.update!(budget: other_budget)
         expect(poll_ballot.add_investment(investment.id)).to be(nil)
       end
 
@@ -129,5 +125,4 @@ describe Poll::Ballot do
       expect(poll_ballot.find_investment("00#{investment.id}")).to eq(investment)
     end
   end
-
 end

@@ -1,14 +1,12 @@
 require "rails_helper"
 
 describe "Admin booths assignments" do
-
   before do
     admin = create(:administrator)
     login_as(admin.user)
   end
 
   describe "Admin Booth Assignment management" do
-
     let!(:poll) { create(:poll) }
     let!(:booth) { create(:poll_booth) }
 
@@ -147,7 +145,6 @@ describe "Admin booths assignments" do
 
         expect(page).not_to have_link "Unassign booth"
       end
-
     end
   end
 
@@ -157,9 +154,7 @@ describe "Admin booths assignments" do
       booth = create(:poll_booth)
       officer_assignment = create(:poll_officer_assignment, poll: poll, booth: booth)
       officer = officer_assignment.officer
-
-      officer_assignment_2 = create(:poll_officer_assignment, poll: poll)
-      officer_2 = officer_assignment_2.officer
+      officer_2 = create(:poll_officer, polls: [poll])
 
       visit admin_poll_path(poll)
       click_link "Booths (2)"
@@ -177,14 +172,15 @@ describe "Admin booths assignments" do
       poll = create(:poll, starts_at: 2.weeks.ago, ends_at: 1.week.ago)
       booth = create(:poll_booth)
       booth_assignment = create(:poll_booth_assignment, poll: poll, booth: booth)
-      officer_assignment_1 = create(:poll_officer_assignment, booth_assignment: booth_assignment, date: poll.starts_at)
-      officer_assignment_2 = create(:poll_officer_assignment, booth_assignment: booth_assignment, date: poll.ends_at)
-      final_officer_assignment = create(:poll_officer_assignment, :final, booth_assignment: booth_assignment, date: poll.ends_at)
+
+      create(:poll_officer_assignment, booth_assignment: booth_assignment, date: poll.starts_at)
+      create(:poll_officer_assignment, booth_assignment: booth_assignment, date: poll.ends_at)
+      create(:poll_officer_assignment, :final, booth_assignment: booth_assignment, date: poll.ends_at)
 
       create(:poll_voter, poll: poll, booth_assignment: booth_assignment, created_at: poll.starts_at.to_date)
       create(:poll_voter, poll: poll, booth_assignment: booth_assignment, created_at: poll.ends_at.to_date)
 
-      booth_assignment_2 = create(:poll_booth_assignment, poll: poll)
+      create(:poll_booth_assignment, poll: poll)
 
       visit admin_poll_path(poll)
       click_link "Booths (2)"
@@ -198,13 +194,13 @@ describe "Admin booths assignments" do
       end
 
       within("#recounts_list") do
-        within("#recounting_#{poll.starts_at.to_date.strftime('%Y%m%d')}") do
+        within("#recounting_#{poll.starts_at.to_date.strftime("%Y%m%d")}") do
           expect(page).to have_content 1
         end
-        within("#recounting_#{(poll.ends_at.to_date - 5.days).strftime('%Y%m%d')}") do
+        within("#recounting_#{(poll.ends_at.to_date - 5.days).strftime("%Y%m%d")}") do
           expect(page).to have_content "-"
         end
-        within("#recounting_#{poll.ends_at.to_date.strftime('%Y%m%d')}") do
+        within("#recounting_#{poll.ends_at.to_date.strftime("%Y%m%d")}") do
           expect(page).to have_content 1
         end
       end
@@ -326,6 +322,5 @@ describe "Admin booths assignments" do
 
       expect(page).to have_content "There are no results"
     end
-
   end
 end

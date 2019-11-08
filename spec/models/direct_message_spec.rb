@@ -1,7 +1,6 @@
 require "rails_helper"
 
 describe DirectMessage do
-
   let(:direct_message) { build(:direct_message) }
 
   it "is valid" do
@@ -36,9 +35,7 @@ describe DirectMessage do
 
       it "is not valid if above maximum" do
         sender = create(:user)
-        direct_message1 = create(:direct_message, sender: sender)
-        direct_message2 = create(:direct_message, sender: sender)
-        direct_message3 = create(:direct_message, sender: sender)
+        3.times { create(:direct_message, sender: sender) }
 
         direct_message4 = build(:direct_message, sender: sender)
         expect(direct_message4).not_to be_valid
@@ -46,11 +43,10 @@ describe DirectMessage do
 
       it "is valid if below maximum" do
         sender = create(:user)
-        direct_message1 = create(:direct_message, sender: sender)
-        direct_message2 = create(:direct_message, sender: sender)
+        2.times { create(:direct_message, sender: sender) }
 
-        direct_message3 = build(:direct_message)
-        expect(direct_message).to be_valid
+        direct_message3 = build(:direct_message, sender: sender)
+        expect(direct_message3).to be_valid
       end
 
       it "is valid if no direct_messages sent" do
@@ -74,7 +70,6 @@ describe DirectMessage do
   end
 
   describe "scopes" do
-
     describe "today", :with_non_utc_time_zone do
       it "returns direct messages created today" do
         create(:direct_message, created_at: Date.current.beginning_of_day)
@@ -91,7 +86,5 @@ describe DirectMessage do
         expect(DirectMessage.today.count).to eq 0
       end
     end
-
   end
-
 end

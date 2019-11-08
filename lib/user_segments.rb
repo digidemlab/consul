@@ -7,10 +7,10 @@ class UserSegments
                 feasible_and_undecided_investment_authors
                 selected_investment_authors
                 winner_investment_authors
-                not_supported_on_current_budget]
+                not_supported_on_current_budget].freeze
 
   def self.all_users
-    User.active
+    User.active.where.not(confirmed_at: nil)
   end
 
   def self.administrators

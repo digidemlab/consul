@@ -16,6 +16,12 @@ staging:
     url: matomo.digidemlab.org
     disabled: <%= ENV["MATOMO_SITE_ID"].blank? %>
 
+test:
+  piwik:
+    id_site: <%= ENV["MATOMO_SITE_ID"] %>
+    url: matomo.digidemlab.org
+    disabled: true
+
 development:
   piwik:
     id_site: <%= ENV["MATOMO_SITE_ID"] %>

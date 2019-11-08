@@ -25,10 +25,7 @@ module Consul
     ]
     config.i18n.available_locales = available_locales
     config.i18n.fallbacks = {
-      'sv'    => 'en',
-      'de'    => 'en',
-      'es'    => 'en',
-      'fr'    => 'en',
+      'sv'    => 'en'
     }
 
     config.i18n.load_path += Dir[Rails.root.join("config", "locales", "**[^custom]*", "*.{rb,yml}")]

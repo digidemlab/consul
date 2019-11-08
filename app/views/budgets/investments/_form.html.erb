@@ -1,4 +1,4 @@
-<%= translatable_form_for(@investment, url: form_url, method: :post, html: { multipart: true }) do |f| %>
+<%= translatable_form_for(@investment, url: form_url, html: { multipart: true }) do |f| %>
 
   <%= render "shared/errors", resource: @investment %>
 
@@ -22,10 +22,10 @@
       </div>
       <div class="js-suggest" data-locale="<%= translations_form.locale %>"></div>
 
-      <div class="ckeditor small-12 column">
-        <%= translations_form.cktext_area :description,
+      <div class="small-12 column">
+        <%= translations_form.text_area :description,
               maxlength: Budget::Investment.description_max_length,
-              ckeditor: { language: I18n.locale } %>
+              class: "html-area" %>
       </div>
     <% end %>
 
@@ -59,8 +59,7 @@
     <% end %>
 
     <div class="small-12 column">
-      <%= f.label :location, t("budgets.investments.form.location") %>
-      <%= f.text_field :location, label: false %>
+      <%= f.text_field :location %>
     </div>
 
     <div class="small-12 column">
@@ -90,14 +89,12 @@
     <% unless current_user.manager? %>
 
       <div class="small-12 column">
-        <%= f.label :terms_of_service do %>
-          <%= f.check_box :terms_of_service, title: t("form.accept_terms_title"), label: false %>
-          <span class="checkbox">
-            <%= t("form.accept_terms",
-                policy: link_to(t("form.policy"), "/privacy", target: "blank"),
-                conditions: link_to(t("form.conditions"), "/conditions", target: "blank")).html_safe %>
-          </span>
-        <% end %>
+        <%= f.check_box :terms_of_service,
+          title: t("form.accept_terms_title"),
+          label: t("form.accept_terms",
+                   policy: link_to(t("form.policy"), "/privacy", target: "blank"),
+                   conditions: link_to(t("form.conditions"), "/conditions", target: "blank")
+                  ) %>
       </div>
 
     <% end %>
