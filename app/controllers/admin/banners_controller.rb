@@ -31,7 +31,7 @@ class Admin::BannersController < Admin::BaseController
   end
 
   def destroy
-    @banner.destroy
+    @banner.destroy!
     redirect_to admin_banners_path
   end
 
@@ -62,7 +62,6 @@ class Admin::BannersController < Admin::BaseController
     end
 
     def resource
-      @banner = Banner.find(params[:id]) unless @banner
-      @banner
+      @banner ||= Banner.find(params[:id])
     end
 end

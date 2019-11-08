@@ -17,7 +17,7 @@ class DirectUploadsController < ApplicationController
 
       render json: { cached_attachment: @direct_upload.relation.cached_attachment,
                      filename: @direct_upload.relation.attachment.original_filename,
-                     destroy_link: render_destroy_upload_link(@direct_upload).html_safe,
+                     destroy_link: render_destroy_upload_link(@direct_upload),
                      attachment_url: @direct_upload.relation.attachment.url }
     else
       @direct_upload.destroy_attachment
@@ -44,5 +44,4 @@ class DirectUploadsController < ApplicationController
             .permit(:resource, :resource_type, :resource_id, :resource_relation,
                     :attachment, :cached_attachment, attachment_attributes: [])
     end
-
 end

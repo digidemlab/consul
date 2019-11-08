@@ -1,6 +1,5 @@
 module Budgets
   class InvestmentsController < ApplicationController
-
     include FeatureFlags
     include CommentableActions
     include FlagActions
@@ -17,11 +16,10 @@ module Budgets
     load_and_authorize_resource :investment, through: :budget, class: "Budget::Investment",
                                 except: :json_data
 
-    before_action -> { flash.now[:notice] = flash[:notice].html_safe if flash[:html_safe] && flash[:notice] }
     before_action :load_ballot, only: [:index, :show]
     before_action :load_heading, only: [:index, :show]
     before_action :set_random_seed, only: :index
-    before_action :load_categories, only: [:index, :new, :create]
+    before_action :load_categories, only: [:index, :new, :create, :edit, :update]
     before_action :set_default_budget_filter, only: :index
     before_action :set_view, only: :index
     before_action :load_content_blocks, only: :index
@@ -77,8 +75,17 @@ module Budgets
       end
     end
 
+    def update
+      if @investment.update(investment_params)
+        redirect_to budget_investment_path(@budget, @investment),
+                    notice: t("flash.actions.update.budget_investment")
+      else
+        render "edit"
+      end
+    end
+
     def destroy
-      @investment.destroy
+      @investment.destroy!
       redirect_to user_path(current_user, filter: "budget_investments"), notice: t("flash.actions.destroy.budget_investment")
     end
 
@@ -135,7 +142,7 @@ module Budgets
 
       def load_ballot
         query = Budget::Ballot.where(user: current_user, budget: @budget)
-        @ballot = @budget.balloting? ? query.first_or_create : query.first_or_initialize
+        @ballot = @budget.balloting? ? query.first_or_create! : query.first_or_initialize
       end
 
       def load_heading
@@ -147,7 +154,7 @@ module Budgets
       end
 
       def load_categories
-        @categories = ActsAsTaggableOn::Tag.category.order(:name)
+        @categories = Tag.category.order(:name)
       end
 
       def load_content_blocks
@@ -179,7 +186,5 @@ module Budgets
       def load_map
         @map_location = MapLocation.load_from_heading(@heading)
       end
-
   end
-
 end

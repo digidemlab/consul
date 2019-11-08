@@ -39,7 +39,7 @@ describe Newsletter do
 
   describe "#valid_segment_recipient?" do
     it "is false when segment_recipient value is invalid" do
-      newsletter.update(segment_recipient: "invalid_segment_name")
+      newsletter.segment_recipient = "invalid_segment_name"
       error = "The user recipients segment is invalid"
 
       expect(newsletter).not_to be_valid
@@ -48,12 +48,12 @@ describe Newsletter do
   end
 
   describe "#list_of_recipient_emails" do
-
     before do
       create(:user, newsletter: true, email: "newsletter_user@consul.dev")
+      create(:user, newsletter: true, email: "newsletter_unconfirmed_user@consul.dev", confirmed_at: nil)
       create(:user, newsletter: false, email: "no_news_user@consul.dev")
       create(:user, email: "erased_user@consul.dev").erase
-      newsletter.update(segment_recipient: "all_users")
+      newsletter.update!(segment_recipient: "all_users")
     end
 
     it "returns list of recipients excluding users with disabled newsletter" do
@@ -100,6 +100,7 @@ describe Newsletter do
       newsletter.deliver
 
       now = newsletter.first_batch_run_at
+
       first_batch_run_at  = now.change(usec: 0)
       second_batch_run_at = (now + 1.second).change(usec: 0)
       third_batch_run_at  = (now + 2.seconds).change(usec: 0)
@@ -137,6 +138,5 @@ describe Newsletter do
       expect(Activity.first.action).to eq("email")
       expect(Activity.first.actionable).to eq(newsletter)
     end
-
   end
 end

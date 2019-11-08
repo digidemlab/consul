@@ -3,6 +3,7 @@ require "manager_authenticator"
 class Management::SessionsController < ActionController::Base
   include GlobalizeFallbacks
   include AccessDeniedHandler
+  default_form_builder ConsulFormBuilder
 
   def create
     destroy_session
@@ -42,5 +43,4 @@ class Management::SessionsController < ActionController::Base
       manager = ManagerAuthenticator.new(params).auth
       session[:manager] = manager if manager.present?
     end
-
 end

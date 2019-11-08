@@ -42,6 +42,14 @@ FactoryBot.define do
     trait :with_image do
       after(:create) { |poll| create(:image, imageable: poll) }
     end
+
+    transient { officers { [] } }
+
+    after(:create) do |poll, evaluator|
+      evaluator.officers.each do |officer|
+        create(:poll_officer_assignment, poll: poll, officer: officer)
+      end
+    end
   end
 
   factory :poll_question, class: "Poll::Question" do
@@ -55,82 +63,25 @@ FactoryBot.define do
         create(:poll_question_answer, question: question, title: "No")
       end
     end
-
-    factory :poll_question_unique do
-      after(:create) do |question|
-        create(:votation_type_unique, questionable: question)
-        question.reload
-      end
-    end
-
-    factory :poll_question_multiple do
-      after(:create) do |question|
-        create(:votation_type_multiple, questionable: question)
-        question.reload
-      end
-    end
-
-    factory :poll_question_prioritized do
-      after(:create) do |question|
-        create(:votation_type_prioritized, questionable: question)
-        question.reload
-      end
-    end
-
-    factory :poll_question_positive_open do
-      after(:create) do |question|
-        create(:votation_type_positive_open, questionable: question)
-        question.reload
-      end
-    end
-
-    factory :poll_question_positive_negative_open do
-      after(:create) do |question|
-        create(:votation_type_positive_negative_open, questionable: question)
-        question.reload
-      end
-    end
-
-    factory :poll_question_answer_couples_open do
-      after(:create) do |question|
-        create(:votation_type_answer_couples_open, questionable: question)
-        question.reload
-      end
-    end
-
-    factory :poll_question_answer_couples_closed do
-      after(:create) do |question|
-        create(:votation_type_answer_couples_closed, questionable: question)
-        question.reload
-      end
-    end
-
-    factory :poll_question_answer_set_open do
-      after(:create) do |question|
-        create(:votation_type_answer_set_open, questionable: question)
-        question.reload
-      end
-    end
-
-    factory :poll_question_answer_set_closed do
-      after(:create) do |question|
-        create(:votation_type_answer_set_closed, questionable: question)
-        question.reload
-      end
-    end
   end
 
   factory :poll_question_answer, class: "Poll::Question::Answer" do
-    association :question, factory: :poll_question
     sequence(:title) { |n| "Answer title #{n}" }
     sequence(:description) { |n| "Answer description #{n}" }
     sequence(:given_order) { |n| n }
+
+    transient { poll { association(:poll) } }
+
+    question { association(:poll_question, poll: poll) }
   end
 
   factory :poll_answer_video, class: "Poll::Question::Answer::Video" do
-    association :answer, factory: :poll_question_answer
     title { "Sample video title" }
     url { "https://youtu.be/nhuNb0XtRhQ" }
+
+    transient { poll { association(:poll) } }
+
+    answer { association(:poll_question_answer, poll: poll) }
   end
 
   factory :poll_booth, class: "Poll::Booth" do
@@ -188,8 +139,10 @@ FactoryBot.define do
     trait :from_booth do
       origin { "booth" }
 
+      transient { booth { association(:poll_booth) } }
+
       booth_assignment do
-        association :poll_booth_assignment, poll: poll
+        association :poll_booth_assignment, poll: poll, booth: booth
       end
 
       officer_assignment do
@@ -262,12 +215,5 @@ FactoryBot.define do
   end
 
   factory :active_poll do
-  end
-
-  factory :poll_pair_answer, class: "Poll::PairAnswer" do
-    question { create :poll_question }
-    author { create :user }
-    answer_left { create(:poll_question_answer, question: question) }
-    answer_right { create(:poll_question_answer, question: question) }
   end
 end

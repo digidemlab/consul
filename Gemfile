@@ -5,22 +5,21 @@ gem "rails", "5.0.7.2"
 gem "acts-as-taggable-on", "~> 5.0.0"
 gem "acts_as_votable", "~> 0.11.1"
 gem "ahoy_matey", "~> 1.6.0"
-gem "ancestry", "~> 3.0.2"
+gem "ancestry", "~> 3.0.7"
+gem "audited", "~> 4.9.0"
 gem "autoprefixer-rails", "~> 8.2.0"
-gem "axlsx", "~> 3.0.0.pre"
-gem "axlsx_rails", "~> 0.5.2"
 gem "browser", "~> 2.5.3"
 gem "cancancan", "~> 2.3.0"
-gem "ckeditor", "~> 4.2.3"
+gem "ckeditor", "~> 4.3.0"
 gem "cocoon", "~> 1.2.9"
 gem "daemons", "~> 1.2.4"
 gem "dalli", "~> 2.7.6"
 gem "delayed_job_active_record", "~> 4.1.3"
-gem "devise", "~> 4.6.0"
+gem "devise", "~> 4.7.1"
 gem "devise-async", "~> 1.0.0"
 gem "devise_security_extension", git: "https://github.com/phatworx/devise_security_extension.git" #, "~> 0.10"
 gem "foundation-rails", "~> 6.4.3.0"
-gem "foundation_rails_helper", "~> 2.0.0"
+gem "foundation_rails_helper", "~> 3.0.0"
 gem "globalize", "~> 5.2.0"
 gem "globalize-accessors", "~> 0.2.1"
 gem "graphiql-rails", "~> 1.4.1"
@@ -41,13 +40,13 @@ gem "paperclip", "~> 6.1.0"
 gem "paranoia", "~> 2.4.2"
 gem "pg", "~> 0.21.0"
 gem "pg_search", "~> 2.0.1"
-gem "puma", "~> 4.1.1"
+gem "puma", "~> 4.2.1"
 gem "recipient_interceptor", "~> 0.2.0"
 gem "redcarpet", "~> 3.4.0"
 gem "responders", "~> 2.4.0"
 gem "rinku", "~> 2.0.2", require: "rails_rinku"
 gem "rollbar", "~> 2.18.0"
-gem "sass-rails", "~> 5.0", ">= 5.0.4"
+gem "sassc-rails", "~> 2.1.2"
 gem "savon", "~> 2.12.0"
 gem "sitemap_generator", "~> 6.0.1"
 gem "social-share-button", "~> 1.1"
@@ -56,7 +55,6 @@ gem "translator-text", "~> 0.1.0"
 gem "turbolinks", "~> 2.5.3"
 gem "turnout", "~> 2.4.0"
 gem "uglifier", "~> 4.1.2"
-gem "unicorn", "~> 5.4.1"
 gem "whenever", "~> 0.10.0", require: false
 gem "wicked_pdf", "~> 1.1.0"
 gem "wkhtmltopdf-binary", "~> 0.12.4"
@@ -94,9 +92,12 @@ group :development do
   gem "capistrano-bundler", "~> 1.2", require: false
   gem "capistrano-rails", "~> 1.4.0", require: false
   gem "capistrano3-delayed-job", "~> 1.7.3"
+  gem "capistrano3-puma", "~> 4.0.0"
   gem "erb_lint", require: false
   gem "mdl", "~> 0.5.0", require: false
-  gem "rubocop", "~> 0.60.0", require: false
+  gem "rubocop", "~> 0.75.0", require: false
+  gem "rubocop-performance", "~> 1.4.1", require: false
+  gem "rubocop-rails", "~> 2.3.2", require: false
   gem "rubocop-rspec", "~> 1.35.0", require: false
   gem "rvm1-capistrano3", "~> 1.4.0", require: false
   gem "scss_lint", "~> 0.55.0", require: false

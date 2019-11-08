@@ -1,8 +1,6 @@
-# coding: utf-8
 require "rails_helper"
 
 describe "Proposals" do
-
   it_behaves_like "milestoneable",
                   :proposal,
                   "proposal_path"
@@ -13,7 +11,7 @@ describe "Proposals" do
   end
 
   context "Concerns" do
-    it_behaves_like "notifiable in-app", Proposal
+    it_behaves_like "notifiable in-app", :proposal
     it_behaves_like "relationable", Proposal
     it_behaves_like "remotely_translatable",
                     :proposal,
@@ -26,7 +24,6 @@ describe "Proposals" do
   end
 
   context "Index" do
-
     before do
       Setting["feature.featured_proposals"] = true
       Setting["featured_proposals_number"] = 3
@@ -103,7 +100,7 @@ describe "Proposals" do
 
       within("ul.pagination") do
         expect(page).to have_content("1")
-        expect(page).to have_link("2", href: "http://www.example.com/proposals?page=2")
+        expect(page).to have_link("2", href: "/proposals?page=2")
         expect(page).not_to have_content("3")
         click_link "Next", exact: false
       end
@@ -226,7 +223,6 @@ describe "Proposals" do
   end
 
   context "Embedded video" do
-
     scenario "Show YouTube video" do
       proposal = create(:proposal, video_url: "http://www.youtube.com/watch?v=a7UFm6ErMPU")
       visit proposal_path(proposal)
@@ -463,7 +459,6 @@ describe "Proposals" do
   end
 
   context "Geozones" do
-
     scenario "Default whole city" do
       author = create(:user)
       login_as(author)
@@ -507,7 +502,6 @@ describe "Proposals" do
         expect(page).to have_content "California"
       end
     end
-
   end
 
   context "Retired proposals" do
@@ -637,9 +631,8 @@ describe "Proposals" do
   end
 
   scenario "Update should not be posible if proposal is not editable" do
-    proposal = create(:proposal)
-    Setting["max_votes_for_proposal_edit"] = 10
-    11.times { create(:vote, votable: proposal) }
+    Setting["max_votes_for_proposal_edit"] = 3
+    proposal = create(:proposal, voters: Array.new(4) { create(:user) })
 
     expect(proposal).not_to be_editable
 
@@ -684,7 +677,6 @@ describe "Proposals" do
   end
 
   describe "Proposal index order filters" do
-
     scenario "Default order is hot_score", :js do
       best_proposal = create(:proposal, title: "Best proposal")
       best_proposal.update_column(:hot_score, 10)
@@ -739,7 +731,6 @@ describe "Proposals" do
     end
 
     context "Recommendations" do
-
       let!(:best_proposal)   { create(:proposal, title: "Best",   cached_votes_up: 10, tag_list: "Sport") }
       let!(:medium_proposal) { create(:proposal, title: "Medium", cached_votes_up: 5,  tag_list: "Sport") }
       let!(:worst_proposal)  { create(:proposal, title: "Worst",  cached_votes_up: 1,  tag_list: "Sport") }
@@ -750,9 +741,8 @@ describe "Proposals" do
       end
 
       scenario "are shown on index header when account setting is enabled" do
-        user     = create(:user)
         proposal = create(:proposal, tag_list: "Sport")
-        create(:follow, followable: proposal, user: user)
+        user     = create(:user, followables: [proposal])
 
         login_as(user)
         visit proposals_path
@@ -765,9 +755,8 @@ describe "Proposals" do
       end
 
       scenario "should display text when there are no results" do
-        user     = create(:user)
         proposal = create(:proposal, tag_list: "Distinct_to_sport")
-        create(:follow, followable: proposal, user: user)
+        user     = create(:user, followables: [proposal])
 
         login_as(user)
         visit proposals_path
@@ -789,9 +778,8 @@ describe "Proposals" do
       end
 
       scenario "can be sorted when there's a logged user" do
-        user     = create(:user)
         proposal = create(:proposal, tag_list: "Sport")
-        create(:follow, followable: proposal, user: user)
+        user     = create(:user, followables: [proposal])
 
         login_as(user)
         visit proposals_path
@@ -810,9 +798,8 @@ describe "Proposals" do
       end
 
       scenario "are not shown if account setting is disabled" do
-        user     = create(:user, recommended_proposals: false)
         proposal = create(:proposal, tag_list: "Sport")
-        create(:follow, followable: proposal, user: user)
+        user     = create(:user, recommended_proposals: false, followables: [proposal])
 
         login_as(user)
         visit proposals_path
@@ -822,9 +809,8 @@ describe "Proposals" do
       end
 
       scenario "are automatically disabled when dismissed from index", :js do
-        user     = create(:user)
         proposal = create(:proposal, tag_list: "Sport")
-        create(:follow, followable: proposal, user: user)
+        user     = create(:user, followables: [proposal])
 
         login_as(user)
         visit proposals_path
@@ -853,7 +839,6 @@ describe "Proposals" do
   end
 
   describe "Archived proposals" do
-
     scenario "show on proposals list" do
       archived_proposals = create_archived_proposals
 
@@ -950,7 +935,6 @@ describe "Proposals" do
         expect(all(".proposal")[2].text).to match "Least voted"
       end
     end
-
   end
 
   context "Selected Proposals" do
@@ -997,10 +981,10 @@ describe "Proposals" do
     end
 
     scenario "do not show recommented proposal in selected proposals list" do
-      create(:proposal, title: "Recommended", cached_votes_up: 10, tag_list: "Economy")
-
       user = create(:user)
-      create(:follow, followable: create(:proposal, tag_list: "Economy"), user: user)
+
+      create(:proposal, tag_list: "Economy", followers: [user])
+      create(:proposal, title: "Recommended", tag_list: "Economy")
 
       login_as(user)
       visit proposals_path
@@ -1044,9 +1028,7 @@ describe "Proposals" do
   end
 
   context "Search" do
-
     context "Basic search" do
-
       scenario "Search by text" do
         proposal1 = create(:proposal, title: "Get Schwifty")
         proposal2 = create(:proposal, title: "Schwifty Hello")
@@ -1097,11 +1079,9 @@ describe "Proposals" do
 
         expect(page).to have_selector("input[name='search'][value='Schwifty']")
       end
-
     end
 
     context "Advanced search" do
-
       scenario "Search by text", :js do
         proposal1 = create(:proposal, title: "Get Schwifty")
         proposal2 = create(:proposal, title: "Schwifty Hello")
@@ -1116,7 +1096,6 @@ describe "Proposals" do
         expect(page).to have_content("There are 2 citizen proposals")
 
         within("#proposals") do
-
           expect(page).to have_content(proposal1.title)
           expect(page).to have_content(proposal2.title)
           expect(page).not_to have_content(proposal3.title)
@@ -1124,7 +1103,6 @@ describe "Proposals" do
       end
 
       context "Search by author type" do
-
         scenario "Public employee", :js do
           ana = create :user, official_level: 1
           john = create :user, official_level: 2
@@ -1239,13 +1217,10 @@ describe "Proposals" do
             expect(page).not_to have_content(proposal3.title)
           end
         end
-
       end
 
       context "Search by date" do
-
         context "Predefined date ranges" do
-
           scenario "Last day", :js do
             proposal1 = create(:proposal, created_at: 1.minute.ago)
             proposal2 = create(:proposal, created_at: 1.hour.ago)
@@ -1325,7 +1300,6 @@ describe "Proposals" do
               expect(page).not_to have_content(proposal3.title)
             end
           end
-
         end
 
         scenario "Search by custom date range", :js do
@@ -1376,9 +1350,9 @@ describe "Proposals" do
           ana  = create :user, official_level: 1
           john = create :user, official_level: 1
 
-          proposal1 = create(:proposal, title: "Get Schwifty",   author: ana,  created_at: 1.minute.ago)
-          proposal2 = create(:proposal, title: "Hello Schwifty", author: john, created_at: 2.days.ago)
-          proposal3 = create(:proposal, title: "Save the forest")
+          create(:proposal, title: "Get Schwifty",   author: ana,  created_at: 1.minute.ago)
+          create(:proposal, title: "Hello Schwifty", author: john, created_at: 2.days.ago)
+          create(:proposal, title: "Save the forest")
 
           visit proposals_path
 
@@ -1392,7 +1366,7 @@ describe "Proposals" do
           expect(page).to have_content("There is 1 citizen proposal")
 
           within("#proposals") do
-            expect(page).to have_content(proposal1.title)
+            expect(page).to have_content "Get Schwifty"
           end
         end
 
@@ -1432,7 +1406,6 @@ describe "Proposals" do
             expect(page).to have_selector("input[name='advanced_search[date_max]'][value*='#{1.day.ago.strftime("%d/%m/%Y")}']")
           end
         end
-
       end
     end
 
@@ -1481,12 +1454,11 @@ describe "Proposals" do
     scenario "Reorder by recommendations results maintaing search" do
       user = create(:user, recommended_proposals: true)
 
-      proposal1 = create(:proposal, title: "Show you got",      cached_votes_up: 10,  tag_list: "Sport")
-      proposal2 = create(:proposal, title: "Show what you got", cached_votes_up: 1,   tag_list: "Sport")
-      proposal3 = create(:proposal, title: "Do not display with same tag", cached_votes_up: 100, tag_list: "Sport")
-      proposal4 = create(:proposal, title: "Do not display",    cached_votes_up: 1)
-      proposal5 = create(:proposal, tag_list: "Sport")
-      create(:follow, followable: proposal5, user: user)
+      create(:proposal, title: "Show you got",      cached_votes_up: 10,  tag_list: "Sport")
+      create(:proposal, title: "Show what you got", cached_votes_up: 1,   tag_list: "Sport")
+      create(:proposal, title: "Do not display with same tag", cached_votes_up: 100, tag_list: "Sport")
+      create(:proposal, title: "Do not display",    cached_votes_up: 1)
+      create(:proposal, tag_list: "Sport", followers: [user])
 
       login_as(user)
       visit proposals_path
@@ -1505,19 +1477,18 @@ describe "Proposals" do
 
     scenario "After a search do not show featured proposals" do
       Setting["feature.featured_proposals"] = true
-      featured_proposals = create_featured_proposals
-      proposal = create(:proposal, title: "Abcdefghi")
+      create_featured_proposals
+      create(:proposal, title: "Abcdefghi")
 
       visit proposals_path
       within(".expanded #search_form") do
-        fill_in "search", with: proposal.title
+        fill_in "search", with: "Abcdefghi"
         click_button "Search"
       end
 
       expect(page).not_to have_selector("#proposals .proposal-featured")
       expect(page).not_to have_selector("#featured-proposals")
     end
-
   end
 
   scenario "Conflictive" do
@@ -1661,16 +1632,14 @@ describe "Proposals" do
   end
 
   context "Filter" do
-
     context "By geozone" do
+      let(:california) { Geozone.create(name: "California") }
+      let(:new_york)   { Geozone.create(name: "New York") }
 
       before do
-        @california = Geozone.create(name: "California")
-        @new_york   = Geozone.create(name: "New York")
-
-        @proposal1 = create(:proposal, geozone: @california)
-        @proposal2 = create(:proposal, geozone: @california)
-        @proposal3 = create(:proposal, geozone: @new_york)
+        create(:proposal, geozone: california, title: "Bigger sequoias")
+        create(:proposal, geozone: california, title: "Green beach")
+        create(:proposal, geozone: new_york, title: "Sully monument")
       end
 
       scenario "From map" do
@@ -1684,9 +1653,9 @@ describe "Proposals" do
 
         within("#proposals") do
           expect(page).to have_css(".proposal", count: 2)
-          expect(page).to have_content(@proposal1.title)
-          expect(page).to have_content(@proposal2.title)
-          expect(page).not_to have_content(@proposal3.title)
+          expect(page).to have_content("Bigger sequoias")
+          expect(page).to have_content("Green beach")
+          expect(page).not_to have_content("Sully monument")
         end
       end
 
@@ -1699,27 +1668,29 @@ describe "Proposals" do
         end
         within("#proposals") do
           expect(page).to have_css(".proposal", count: 2)
-          expect(page).to have_content(@proposal1.title)
-          expect(page).to have_content(@proposal2.title)
-          expect(page).not_to have_content(@proposal3.title)
+          expect(page).to have_content("Bigger sequoias")
+          expect(page).to have_content("Green beach")
+          expect(page).not_to have_content("Sully monument")
         end
       end
 
       scenario "From proposal" do
-        visit proposal_path(@proposal1)
+        proposal = create(:proposal, geozone: california, title: "Surf college")
+
+        visit proposal_path(proposal)
 
         within("#geozone") do
           click_link "California"
         end
 
         within("#proposals") do
-          expect(page).to have_css(".proposal", count: 2)
-          expect(page).to have_content(@proposal1.title)
-          expect(page).to have_content(@proposal2.title)
-          expect(page).not_to have_content(@proposal3.title)
+          expect(page).to have_css(".proposal", count: 3)
+          expect(page).to have_content("Surf college")
+          expect(page).to have_content("Bigger sequoias")
+          expect(page).to have_content("Green beach")
+          expect(page).not_to have_content("Sully monument")
         end
       end
-
     end
   end
 
@@ -1759,7 +1730,6 @@ describe "Proposals" do
   end
 
   context "Summary" do
-
     scenario "Displays proposals grouped by category" do
       create(:tag, :category, name: "Culture")
       create(:tag, :category, name: "Social Services")
@@ -1844,13 +1814,10 @@ describe "Proposals" do
         expect(page).not_to have_content(proposal3.title)
       end
     end
-
   end
-
 end
 
 describe "Successful proposals" do
-
   scenario "Successful proposals do not show support buttons in index" do
     successful_proposals = create_successful_proposals
 
@@ -1906,7 +1873,6 @@ describe "Successful proposals" do
   end
 
   context "Skip user verification" do
-
     before do
       Setting["feature.user.skip_verification"] = "true"
     end

@@ -11,7 +11,7 @@ shared_examples "nested documentable" do |login_as_name, documentable_factory_na
   else
     let!(:documentable)           { create(documentable_factory_name, author: user) }
   end
-  let!(:user_to_login)          { send(login_as_name) }
+  let!(:user_to_login) { send(login_as_name) }
 
   before do
     create(:administrator, user: administrator)
@@ -22,7 +22,6 @@ shared_examples "nested documentable" do |login_as_name, documentable_factory_na
   end
 
   describe "at #{path}" do
-
     scenario "Should show new document link when max documents allowed limit is not reached" do
       login_as user_to_login
       visit send(path, arguments)
@@ -251,7 +250,6 @@ shared_examples "nested documentable" do |login_as_name, documentable_factory_na
     end
 
     if path.include? "edit"
-
       scenario "Should show persisted documents and remove nested_field" do
         create(:document, documentable: documentable)
         login_as user_to_login
@@ -289,7 +287,6 @@ shared_examples "nested documentable" do |login_as_name, documentable_factory_na
 
         expect(page).not_to have_css ".document"
       end
-
     end
 
     describe "When allow attached documents setting is disabled" do
@@ -304,16 +301,14 @@ shared_examples "nested documentable" do |login_as_name, documentable_factory_na
         expect(page).not_to have_content("Add new document")
       end
     end
-
   end
-
 end
 
 def documentable_redirected_to_resource_show_or_navigate_to
   find("a", text: "Not now, go to my proposal")
   click_on "Not now, go to my proposal"
 rescue
-  return
+  nil
 end
 
 def documentable_attach_new_file(path, success = true)
@@ -321,14 +316,7 @@ def documentable_attach_new_file(path, success = true)
 
   document = all("#new_document").last
   document_input = document.find("input[type=file]", visible: false)
-  page.execute_script("$('##{document_input[:id]}').css('display','block')")
-  attach_file(document_input[:id], path, visible: true)
-  page.execute_script("$('##{document_input[:id]}').css('display','none')")
-  # Poltergeist is not removing this attribute after file upload at
-  # https://github.com/teampoltergeist/poltergeist/blob/master/lib/capybara/poltergeist/client/browser.coffee#L187
-  # making https://github.com/teampoltergeist/poltergeist/blob/master/lib/capybara/poltergeist/client/browser.coffee#L186
-  # always choose the previous used input.
-  page.execute_script("$('##{document_input[:id]}').removeAttr('_poltergeist_selected')")
+  attach_file(document_input[:id], path, make_visible: true)
 
   within document do
     if success

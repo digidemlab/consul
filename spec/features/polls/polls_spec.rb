@@ -1,13 +1,11 @@
 require "rails_helper"
 
 describe "Polls" do
-
   context "Concerns" do
-    it_behaves_like "notifiable in-app", Poll
+    it_behaves_like "notifiable in-app", :poll
   end
 
   context "#index" do
-
     scenario "Shows description for open polls" do
       visit polls_path
       expect(page).not_to have_content "Description for open polls"
@@ -84,18 +82,25 @@ describe "Polls" do
 
       expect(page).to have_css(".unverified", count: 3)
       expect(page).to have_content("You must verify your account to participate")
+    end
 
-      poll_district = create(:poll, geozone_restricted: true)
-      verified = create(:user, :level_two)
-      login_as(verified)
+    scenario "Geozone poll" do
+      create(:poll, geozone_restricted: true)
 
+      login_as(create(:user, :level_two))
       visit polls_path
 
       expect(page).to have_css(".cant-answer", count: 1)
       expect(page).to have_content("This poll is not available on your geozone")
+    end
 
+    scenario "Already participated in a poll", :js do
       poll_with_question = create(:poll)
       question = create(:poll_question, :yes_no, poll: poll_with_question)
+
+      login_as(create(:user, :level_two))
+      visit polls_path
+
       vote_for_poll_via_web(poll_with_question, question, "Yes")
 
       visit polls_path
@@ -136,13 +141,11 @@ describe "Polls" do
     end
 
     scenario "Show answers with videos" do
-      question = create(:poll_question, poll: poll)
-      answer = create(:poll_question_answer, question: question, title: "Chewbacca")
-      video = create(:poll_answer_video, answer: answer, title: "Awesome project video", url: "https://www.youtube.com/watch?v=123")
+      create(:poll_answer_video, poll: poll, title: "Awesome video", url: "youtube.com/watch?v=123")
 
       visit poll_path(poll)
 
-      expect(page).to have_link("Awesome project video", href: "https://www.youtube.com/watch?v=123")
+      expect(page).to have_link("Awesome video", href: "youtube.com/watch?v=123")
     end
 
     scenario "Lists questions from proposals as well as regular ones" do
@@ -187,7 +190,7 @@ describe "Polls" do
 
       visit poll_path(poll)
 
-      expect(page).to have_content("You must Sign in or Sign up to participate")
+      expect(page).to have_content("You must sign in or sign up to participate")
       expect(page).to have_link("Yes", href: new_user_session_path)
       expect(page).to have_link("No", href: new_user_session_path)
     end
@@ -196,7 +199,7 @@ describe "Polls" do
       visit polls_path
       expect(page).not_to have_selector(".already-answer")
 
-      poll.update(geozone_restricted: true)
+      poll.update!(geozone_restricted: true)
       poll.geozones << geozone
 
       create(:poll_question, :yes_no, poll: poll)
@@ -230,7 +233,7 @@ describe "Polls" do
     end
 
     scenario "Level 2 users in a poll with questions for a geozone which is not theirs" do
-      poll.update(geozone_restricted: true)
+      poll.update!(geozone_restricted: true)
       poll.geozones << create(:geozone)
 
       question = create(:poll_question, :yes_no, poll: poll)
@@ -248,7 +251,7 @@ describe "Polls" do
     end
 
     scenario "Level 2 users reading a same-geozone poll" do
-      poll.update(geozone_restricted: true)
+      poll.update!(geozone_restricted: true)
       poll.geozones << geozone
 
       question = create(:poll_question, :yes_no, poll: poll)
@@ -289,7 +292,7 @@ describe "Polls" do
     end
 
     scenario "Level 2 users answering", :js do
-      poll.update(geozone_restricted: true)
+      poll.update!(geozone_restricted: true)
       poll.geozones << geozone
 
       question = create(:poll_question, :yes_no, poll: poll)
@@ -307,7 +310,7 @@ describe "Polls" do
     end
 
     scenario "Level 2 users changing answer", :js do
-      poll.update(geozone_restricted: true)
+      poll.update!(geozone_restricted: true)
       poll.geozones << geozone
 
       question = create(:poll_question, :yes_no, poll: poll)
@@ -330,7 +333,7 @@ describe "Polls" do
     end
 
     scenario "Level 2 votes, signs out, signs in, votes again", :js do
-      poll.update(geozone_restricted: true)
+      poll.update!(geozone_restricted: true)
       poll.geozones << geozone
 
       question = create(:poll_question, :yes_no, poll: poll)
@@ -369,7 +372,6 @@ describe "Polls" do
   end
 
   context "Booth & Website", :with_frozen_time do
-
     let(:poll) { create(:poll, summary: "Summary", description: "Description") }
     let(:booth) { create(:poll_booth) }
     let(:officer) { create(:poll_officer) }
@@ -402,7 +404,6 @@ describe "Polls" do
         expect(page).not_to have_link("No")
       end
     end
-
   end
 
   context "Results and stats" do
@@ -492,6 +493,5 @@ describe "Polls" do
 
       expect(page).to have_link "Information"
     end
-
   end
 end

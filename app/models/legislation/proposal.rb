@@ -19,10 +19,10 @@ class Legislation::Proposal < ApplicationRecord
   acts_as_votable
   acts_as_paranoid column: :hidden_at
 
-  belongs_to :process, class_name: "Legislation::Process", foreign_key: "legislation_process_id"
-  belongs_to :author, -> { with_hidden }, class_name: "User", foreign_key: "author_id"
+  belongs_to :process, foreign_key: "legislation_process_id", inverse_of: :proposals
+  belongs_to :author, -> { with_hidden }, class_name: "User", inverse_of: :legislation_proposals
   belongs_to :geozone
-  has_many :comments, as: :commentable
+  has_many :comments, as: :commentable, inverse_of: :commentable
 
   validates :title, presence: true
   validates :summary, presence: true
@@ -108,7 +108,7 @@ class Legislation::Proposal < ApplicationRecord
   end
 
   def votable_by?(user)
-    user && user.level_two_or_three_verified?
+    user&.level_two_or_three_verified?
   end
 
   def register_vote(user, vote_value)
@@ -142,7 +142,7 @@ class Legislation::Proposal < ApplicationRecord
   protected
 
     def set_responsible_name
-      if author && author.document_number?
+      if author&.document_number?
         self.responsible_name = author.document_number
       end
     end

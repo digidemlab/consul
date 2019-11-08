@@ -1,13 +1,11 @@
 require "rails_helper"
 
 describe "Budgets" do
-
   let(:budget)             { create(:budget) }
   let(:level_two_user)     { create(:user, :level_two) }
   let(:allowed_phase_list) { ["balloting", "reviewing_ballots", "finished"] }
 
   context "Load" do
-
     before { budget.update(slug: "budget_slug") }
 
     scenario "finds budget by slug" do
@@ -27,18 +25,16 @@ describe "Budgets" do
         visit budget_path(0)
       end.to raise_error ActiveRecord::RecordNotFound
     end
-
   end
 
   context "Index" do
-
     scenario "Show normal index with links" do
       group1 = create(:budget_group, budget: budget)
       group2 = create(:budget_group, budget: budget)
       heading1 = create(:budget_heading, group: group1)
       heading2 = create(:budget_heading, group: group2)
 
-      budget.update_attributes(phase: "informing")
+      budget.update!(phase: "informing")
 
       visit budgets_path
 
@@ -51,7 +47,7 @@ describe "Budgets" do
         expect(page).to have_link("See all phases")
       end
 
-      budget.update_attributes(phase: "publishing_prices")
+      budget.update!(phase: "publishing_prices")
       visit budgets_path
 
       within("#budget_heading") do
@@ -114,7 +110,7 @@ describe "Budgets" do
     end
 
     scenario "Show informing index without links" do
-      budget.update_attributes(phase: "informing")
+      budget.update!(phase: "informing")
       heading = create(:budget_heading, budget: budget)
 
       visit budgets_path
@@ -132,7 +128,7 @@ describe "Budgets" do
     end
 
     scenario "Show finished index without heading links" do
-      budget.update_attributes(phase: "finished")
+      budget.update!(phase: "finished")
       heading = create(:budget_heading, budget: budget)
 
       visit budgets_path
@@ -159,7 +155,7 @@ describe "Budgets" do
       create(:budget_heading, budget: budget)
 
       allowed_phase_list.each do |phase|
-        budget.update(phase: phase)
+        budget.update!(phase: phase)
 
         visit budgets_path
 
@@ -178,7 +174,7 @@ describe "Budgets" do
                                allowed_phase_list
 
       not_allowed_phase_list.each do |phase|
-        budget.update(phase: phase)
+        budget.update!(phase: phase)
 
         visit budgets_path
 
@@ -197,7 +193,7 @@ describe "Budgets" do
     end
 
     scenario "Accepting" do
-      budget.update(phase: "accepting")
+      budget.update!(phase: "accepting")
       login_as(create(:user, :level_two))
 
       visit budgets_path
@@ -207,42 +203,41 @@ describe "Budgets" do
   end
 
   scenario "Index shows only published phases" do
-
-    budget.update(phase: :finished)
+    budget.update!(phase: :finished)
     phases = budget.phases
-    phases.drafting.update(starts_at: "30-12-2017", ends_at: "31-12-2017", enabled: true,
+    phases.drafting.update!(starts_at: "30-12-2017", ends_at: "31-12-2017", enabled: true,
                            description: "Description of drafting phase",
                            summary: "<p>This is the summary for drafting phase</p>")
 
-    phases.accepting.update(starts_at: "01-01-2018", ends_at: "10-01-2018", enabled: true,
+    phases.accepting.update!(starts_at: "01-01-2018", ends_at: "10-01-2018", enabled: true,
                             description: "Description of accepting phase",
                             summary: "This is the summary for accepting phase")
 
-    phases.reviewing.update(starts_at: "11-01-2018", ends_at: "20-01-2018", enabled: false,
+    phases.reviewing.update!(starts_at: "11-01-2018", ends_at: "20-01-2018", enabled: false,
                             description: "Description of reviewing phase",
                             summary: "This is the summary for reviewing phase")
 
-    phases.selecting.update(starts_at: "21-01-2018", ends_at: "01-02-2018", enabled: true,
+    phases.selecting.update!(starts_at: "21-01-2018", ends_at: "01-02-2018", enabled: true,
                             description: "Description of selecting phase",
                             summary: "This is the summary for selecting phase")
 
-    phases.valuating.update(starts_at: "10-02-2018", ends_at: "20-02-2018", enabled: false,
+    phases.valuating.update!(starts_at: "10-02-2018", ends_at: "20-02-2018", enabled: false,
                             description: "Description of valuating phase",
                             summary: "This is the summary for valuating phase")
 
-    phases.publishing_prices.update(starts_at: "21-02-2018", ends_at: "01-03-2018", enabled: false,
+    phases.publishing_prices.update!(starts_at: "21-02-2018", ends_at: "01-03-2018", enabled: false,
                                     description: "Description of publishing prices phase",
                                     summary: "This is the summary for publishing_prices phase")
 
-    phases.balloting.update(starts_at: "02-03-2018", ends_at: "10-03-2018", enabled: true,
+    phases.balloting.update!(starts_at: "02-03-2018", ends_at: "10-03-2018", enabled: true,
                             description: "Description of balloting phase",
                             summary: "This is the summary for balloting phase")
 
-    phases.reviewing_ballots.update(starts_at: "11-03-2018", ends_at: "20-03-2018", enabled: false,
+    phases.reviewing_ballots.update!(starts_at: "11-03-2018", ends_at: "20-03-2018", enabled: false,
                                     description: "Description of reviewing ballots phase",
                                     summary: "This is the summary for reviewing_ballots phase")
 
-    phases.finished.update(starts_at: "21-03-2018", ends_at: "30-03-2018", enabled: true,
+    phases.finished.update!(starts_at: "21-03-2018", ends_at: "30-03-2018", enabled: true,
                            description: "Description of finished phase",
                            summary: "This is the summary for finished phase")
 
@@ -295,7 +290,7 @@ describe "Budgets" do
     end
 
     scenario "Display all investment's map location if there are no selected", :js do
-      budget.update(phase: :publishing_prices)
+      budget.update!(phase: :publishing_prices)
 
       investment1 = create(:budget_investment, heading: heading)
       investment2 = create(:budget_investment, heading: heading)
@@ -315,7 +310,7 @@ describe "Budgets" do
     end
 
     scenario "Display only selected investment's map location from publishing prices phase", :js do
-      budget.update(phase: :publishing_prices)
+      budget.update!(phase: :publishing_prices)
 
       investment1 = create(:budget_investment, :selected, heading: heading)
       investment2 = create(:budget_investment, :selected, heading: heading)
@@ -365,7 +360,6 @@ describe "Budgets" do
   end
 
   context "Show" do
-
     scenario "List all groups" do
       create(:budget_group, budget: budget)
       create(:budget_group, budget: budget)
@@ -389,7 +383,7 @@ describe "Budgets" do
       expect(page).not_to have_link "See unfeasible investments"
       expect(page).not_to have_link "See investments not selected for balloting phase"
 
-      budget.update(phase: :publishing_prices)
+      budget.update!(phase: :publishing_prices)
 
       visit budget_path(budget)
 
@@ -401,7 +395,7 @@ describe "Budgets" do
       expect(page).not_to have_link "See unfeasible investments"
       expect(page).not_to have_link "See investments not selected for balloting phase"
 
-      budget.update(phase: :balloting)
+      budget.update!(phase: :balloting)
 
       visit budget_path(budget)
 
@@ -413,7 +407,7 @@ describe "Budgets" do
       expect(page).to have_link "See unfeasible investments"
       expect(page).to have_link "See investments not selected for balloting phase"
 
-      budget.update(phase: :finished)
+      budget.update!(phase: :finished)
 
       visit budget_path(budget)
 
@@ -477,16 +471,14 @@ describe "Budgets" do
       visit budget_path(budget)
       expect(page).not_to have_link "See results"
     end
-
   end
 
   context "In Drafting phase" do
-
     let(:admin) { create(:administrator).user }
 
     before do
       logout
-      budget.update(phase: "drafting")
+      budget.update!(phase: "drafting")
       create(:budget)
     end
 
@@ -516,23 +508,19 @@ describe "Budgets" do
         expect(page.status_code).to eq(200)
       end
     end
-
   end
 
   context "Accepting" do
-
     before do
       budget.update(phase: "accepting")
     end
 
     context "Permissions" do
-
       scenario "Verified user" do
         login_as(level_two_user)
 
         visit budget_path(budget)
         expect(page).to have_link "Create a budget investment"
-
       end
 
       scenario "Unverified user" do
@@ -549,7 +537,6 @@ describe "Budgets" do
 
         expect(page).to have_content "To create a new budget investment you must sign in or sign up"
       end
-
     end
   end
 end

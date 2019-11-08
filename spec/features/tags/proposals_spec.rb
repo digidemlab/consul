@@ -1,7 +1,6 @@
 require "rails_helper"
 
 describe "Tags" do
-
   scenario "Index" do
     earth = create(:proposal, tag_list: "Medio Ambiente")
     money = create(:proposal, tag_list: "Economía")
@@ -184,41 +183,38 @@ describe "Tags" do
   end
 
   context "Filter" do
-
     scenario "From index" do
-      proposal1 = create(:proposal, tag_list: "Education")
-      proposal2 = create(:proposal, tag_list: "Health")
+      create(:proposal, tag_list: "Health", title: "More green spaces")
+      create(:proposal, tag_list: "Education", title: "Online teachers")
 
       visit proposals_path
 
-      within "#proposal_#{proposal1.id}" do
+      within ".proposal", text: "Online teachers" do
         click_link "Education"
       end
 
       within("#proposals") do
         expect(page).to have_css(".proposal", count: 1)
-        expect(page).to have_content(proposal1.title)
+        expect(page).to have_content "Online teachers"
       end
     end
 
     scenario "From show" do
-      proposal1 = create(:proposal, tag_list: "Education")
-      proposal2 = create(:proposal, tag_list: "Health")
+      proposal = create(:proposal, tag_list: "Education")
+      create(:proposal, tag_list: "Health")
 
-      visit proposal_path(proposal1)
+      visit proposal_path(proposal)
 
       click_link "Education"
 
       within("#proposals") do
         expect(page).to have_css(".proposal", count: 1)
-        expect(page).to have_content(proposal1.title)
+        expect(page).to have_content(proposal.title)
       end
     end
-
   end
 
   context "Tag cloud" do
-
     scenario "Display user tags" do
       create(:proposal, tag_list: "Medio Ambiente")
       create(:proposal, tag_list: "Economía")
@@ -247,11 +243,9 @@ describe "Tags" do
       expect(page).to have_content proposal2.title
       expect(page).not_to have_content proposal3.title
     end
-
   end
 
   context "Categories" do
-
     scenario "Display category tags" do
       create(:tag, :category, name: "Medio Ambiente")
       create(:tag, :category, name: "Economía")

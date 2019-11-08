@@ -1,9 +1,7 @@
 require "rails_helper"
 
 describe "Home" do
-
   context "For not logged users" do
-
     scenario "Welcome message" do
       visit root_path
 
@@ -17,17 +15,13 @@ describe "Home" do
 
       expect(page).not_to have_content "Recommendations that may interest you"
     end
-
   end
 
   context "For signed in users" do
-
     describe "Recommended" do
-
       before do
-        user = create(:user)
         proposal = create(:proposal, tag_list: "Sport")
-        create(:follow, followable: proposal, user: user)
+        user = create(:user, followables: [proposal])
         login_as(user)
       end
 
@@ -109,7 +103,6 @@ describe "Home" do
         expect(page).not_to have_content "Recommendations that may interest you"
       end
     end
-
   end
 
   describe "IE alert" do

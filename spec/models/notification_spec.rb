@@ -1,11 +1,9 @@
 require "rails_helper"
 
 describe Notification do
-
   let(:notification) { build(:notification) }
 
   context "validations" do
-
     it "is valid" do
       expect(notification).to be_valid
     end
@@ -14,19 +12,16 @@ describe Notification do
       notification.user = nil
       expect(notification).not_to be_valid
     end
-
   end
 
   context "scopes" do
-
     describe "#read" do
       it "returns only read notifications" do
         read_notification1 = create(:notification, :read)
         read_notification2 = create(:notification, :read)
         unread_notification = create(:notification)
 
-        expect(Notification.read).to include read_notification1
-        expect(Notification.read).to include read_notification2
+        expect(Notification.read).to match_array [read_notification1, read_notification2]
         expect(Notification.read).not_to include unread_notification
       end
     end
@@ -37,8 +32,7 @@ describe Notification do
         unread_notification1 = create(:notification)
         unread_notification2 = create(:notification)
 
-        expect(Notification.unread).to include unread_notification1
-        expect(Notification.unread).to include unread_notification2
+        expect(Notification.unread).to match_array [unread_notification1, unread_notification2]
         expect(Notification.unread).not_to include read_notification
       end
     end
@@ -58,7 +52,6 @@ describe Notification do
         Notification.for_render
       end
     end
-
   end
 
   describe "#mark_as_read" do
@@ -107,6 +100,7 @@ describe Notification do
       user = create(:user)
       comment1 = create(:comment)
       comment2 = create(:comment)
+
       create(:notification, user: user, notifiable: comment1)
 
       expect(Notification.existent(user, comment2)).to eq(nil)
@@ -116,7 +110,8 @@ describe Notification do
       user1 = create(:user)
       user2 = create(:user)
       comment = create(:comment)
-      notification = create(:notification, user: user1, notifiable: comment)
+
+      create(:notification, user: user1, notifiable: comment)
 
       expect(Notification.existent(user2, comment)).to eq(nil)
     end
@@ -147,7 +142,7 @@ describe Notification do
       comment = create(:comment)
 
       first_notification = Notification.add(user, comment)
-      first_notification.update(read_at: Time.current)
+      first_notification.update!(read_at: Time.current)
 
       second_notification = Notification.add(user, comment)
 
@@ -172,7 +167,5 @@ describe Notification do
 
       expect(notification.notifiable_action).to eq "replies_to"
     end
-
   end
-
 end

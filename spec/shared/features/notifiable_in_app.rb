@@ -1,7 +1,6 @@
-shared_examples "notifiable in-app" do |described_class|
-
+shared_examples "notifiable in-app" do |factory_name|
   let(:author) { create(:user, :verified) }
-  let!(:notifiable) { create(model_name(described_class), author: author) }
+  let!(:notifiable) { create(factory_name, author: author) }
 
   scenario "Notification icon is shown" do
     create(:notification, notifiable: notifiable, user: author)
@@ -134,7 +133,5 @@ shared_examples "notifiable in-app" do |described_class|
       find(".icon-no-notification").click
       expect(page).to have_css ".notification", count: 0
     end
-
   end
-
 end

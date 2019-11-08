@@ -1,7 +1,6 @@
 require "rails_helper"
 
 describe "Admin polls" do
-
   before do
     admin = create(:administrator)
     login_as(admin.user)
@@ -116,7 +115,6 @@ describe "Admin polls" do
   end
 
   context "Destroy" do
-
     scenario "Can destroy poll without questions", :js do
       poll = create(:poll)
 
@@ -131,23 +129,23 @@ describe "Admin polls" do
     end
 
     scenario "Can destroy poll with questions and answers", :js do
-      poll = create(:poll)
-      question = create(:poll_question, :yes_no, poll: poll)
+      poll = create(:poll, name: "Do you support CONSUL?")
+      create(:poll_question, :yes_no, poll: poll)
 
       visit admin_polls_path
 
-      within("#poll_#{poll.id}") do
+      within(".poll", text: "Do you support CONSUL?") do
         accept_confirm { click_link "Delete" }
       end
 
       expect(page).to     have_content("Poll deleted successfully")
-      expect(page).not_to have_content(poll.name)
+      expect(page).not_to have_content("Do you support CONSUL?")
 
       expect(Poll::Question.count).to eq(0)
       expect(Poll::Question::Answer.count). to eq(0)
     end
 
-    scenario "Can't destroy poll with votes", :js  do
+    scenario "Can't destroy poll with votes", :js do
       poll = create(:poll)
       create(:poll_question, poll: poll)
       create(:poll_voter, :from_booth, :valid_document, poll: poll)
@@ -164,9 +162,7 @@ describe "Admin polls" do
   end
 
   context "Booths" do
-
     context "Poll show" do
-
       scenario "No booths" do
         poll = create(:poll)
         visit admin_poll_path(poll)
@@ -196,9 +192,7 @@ describe "Admin polls" do
   end
 
   context "Officers" do
-
     context "Poll show" do
-
       scenario "No officers", :js do
         poll = create(:poll)
         visit admin_poll_path(poll)
@@ -234,25 +228,19 @@ describe "Admin polls" do
   end
 
   context "Questions" do
-
     context "Poll show" do
-
       scenario "Question list", :js do
         poll = create(:poll)
         question = create(:poll_question, poll: poll)
-        votation_type_question = create(:poll_question_unique, poll: poll)
         other_question = create(:poll_question)
 
         visit admin_poll_path(poll)
 
-        expect(page).to have_content "Questions (2)"
+        expect(page).to have_content "Questions (1)"
         expect(page).to have_content question.title
-        expect(page).to have_content votation_type_question.title
         expect(page).not_to have_content other_question.title
         expect(page).not_to have_content "There are no questions assigned to this poll"
-
       end
-
     end
   end
 
@@ -520,5 +508,4 @@ describe "Admin polls" do
       end
     end
   end
-
 end

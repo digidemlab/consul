@@ -1,7 +1,6 @@
 require "rails_helper"
 
 describe "Voters" do
-
   let(:poll) { create(:poll, :current) }
   let(:booth) { create(:poll_booth) }
   let(:officer) { create(:poll_officer) }
@@ -37,7 +36,7 @@ describe "Voters" do
 
   scenario "Cannot vote" do
     unvotable_poll = create(:poll, :current, geozone_restricted: true, geozones: [create(:geozone, census_code: "02")])
-    officer_assignment = create(:poll_officer_assignment, officer: officer, poll: unvotable_poll, booth: booth)
+    create(:poll_officer_assignment, officer: officer, poll: unvotable_poll, booth: booth)
 
     set_officing_booth(booth)
     visit new_officing_residence_path
@@ -84,10 +83,9 @@ describe "Voters" do
   end
 
   context "Polls displayed to officers" do
-
     scenario "Display current polls assigned to a booth" do
       poll = create(:poll, :current)
-      officer_assignment = create(:poll_officer_assignment, officer: officer, poll: poll, booth: booth)
+      create(:poll_officer_assignment, officer: officer, poll: poll, booth: booth)
 
       set_officing_booth(booth)
       visit new_officing_residence_path
@@ -99,7 +97,7 @@ describe "Voters" do
 
     scenario "Display polls that the user can vote" do
       votable_poll = create(:poll, :current, geozone_restricted: true, geozones: [Geozone.first])
-      officer_assignment = create(:poll_officer_assignment, officer: officer, poll: votable_poll, booth: booth)
+      create(:poll_officer_assignment, officer: officer, poll: votable_poll, booth: booth)
 
       set_officing_booth(booth)
       visit new_officing_residence_path
@@ -111,7 +109,7 @@ describe "Voters" do
 
     scenario "Display polls that the user cannot vote" do
       unvotable_poll = create(:poll, :current, geozone_restricted: true, geozones: [create(:geozone, census_code: "02")])
-      officer_assignment = create(:poll_officer_assignment, officer: officer, poll: unvotable_poll, booth: booth)
+      create(:poll_officer_assignment, officer: officer, poll: unvotable_poll, booth: booth)
 
       set_officing_booth(booth)
       visit new_officing_residence_path
@@ -123,7 +121,7 @@ describe "Voters" do
 
     scenario "Do not display expired polls" do
       expired_poll = create(:poll, :expired)
-      officer_assignment = create(:poll_officer_assignment, officer: officer, poll: expired_poll, booth: booth)
+      create(:poll_officer_assignment, officer: officer, poll: expired_poll, booth: booth)
 
       set_officing_booth(booth)
       visit new_officing_residence_path
@@ -140,8 +138,8 @@ describe "Voters" do
       booth1 = create(:poll_booth)
       booth2 = create(:poll_booth)
 
-      officer_assignment1 = create(:poll_officer_assignment, officer: officer, poll: poll1, booth: booth1)
-      officer_assignment2 = create(:poll_officer_assignment, officer: officer, poll: poll2, booth: booth2)
+      create(:poll_officer_assignment, officer: officer, poll: poll1, booth: booth1)
+      create(:poll_officer_assignment, officer: officer, poll: poll2, booth: booth2)
 
       set_officing_booth(booth1)
       visit new_officing_residence_path

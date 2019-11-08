@@ -15,7 +15,7 @@ module Dashboard::GroupSupports
 
     def accumulate_supports(grouped_votes)
       grouped_votes.each do |group, votes|
-        grouped_votes[group] = votes.inject(0) { |sum, vote| sum + vote.vote_weight }
+        grouped_votes[group] = votes.reduce(0) { |sum, vote| sum + vote.vote_weight }
       end
 
       accumulated = 0
@@ -47,6 +47,7 @@ module Dashboard::GroupSupports
     def interval
       return 1.week if params[:group_by] == "week"
       return 1.month if params[:group_by] == "month"
+
       1.day
     end
   end

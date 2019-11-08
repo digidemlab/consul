@@ -10,7 +10,7 @@ describe UserSegments do
       active_user = create(:user)
       erased_user = create(:user, erased_at: Time.current)
 
-      expect(UserSegments.all_users).to include active_user
+      expect(UserSegments.all_users).to eq [active_user]
       expect(UserSegments.all_users).not_to include erased_user
     end
   end
@@ -21,7 +21,7 @@ describe UserSegments do
       active_admin = create(:administrator).user
       erased_user = create(:user, erased_at: Time.current)
 
-      expect(UserSegments.administrators).to include active_admin
+      expect(UserSegments.administrators).to eq [active_admin]
       expect(UserSegments.administrators).not_to include active_user
       expect(UserSegments.administrators).not_to include erased_user
     end
@@ -34,9 +34,8 @@ describe UserSegments do
       create(:proposal, :retired, author: user3)
 
       all_proposal_authors = UserSegments.all_proposal_authors
-      expect(all_proposal_authors).to include user1
-      expect(all_proposal_authors).to include user2
-      expect(all_proposal_authors).to include user3
+
+      expect(all_proposal_authors).to match_array [user1, user2, user3]
     end
 
     it "does not return duplicated users" do
@@ -45,7 +44,8 @@ describe UserSegments do
       create(:proposal, :retired, author: user1)
 
       all_proposal_authors = UserSegments.all_proposal_authors
-      expect(all_proposal_authors).to contain_exactly(user1)
+
+      expect(all_proposal_authors).to eq [user1]
     end
   end
 
@@ -54,8 +54,8 @@ describe UserSegments do
       create(:proposal, author: user1)
 
       proposal_authors = UserSegments.proposal_authors
-      expect(proposal_authors).to include user1
-      expect(proposal_authors).not_to include user2
+
+      expect(proposal_authors).to eq [user1]
     end
 
     it "does not return duplicated users" do
@@ -71,19 +71,19 @@ describe UserSegments do
     it "returns users that have created a budget investment" do
       investment = create(:budget_investment, author: user1)
       budget = create(:budget)
-      investment.update(budget: budget)
+      investment.update!(budget: budget)
 
       investment_authors = UserSegments.investment_authors
-      expect(investment_authors).to include user1
-      expect(investment_authors).not_to include user2
+
+      expect(investment_authors).to eq [user1]
     end
 
     it "does not return duplicated users" do
       investment1 = create(:budget_investment, author: user1)
       investment2 = create(:budget_investment, author: user1)
       budget = create(:budget)
-      investment1.update(budget: budget)
-      investment2.update(budget: budget)
+      investment1.update!(budget: budget)
+      investment2.update!(budget: budget)
 
       investment_authors = UserSegments.investment_authors
       expect(investment_authors).to contain_exactly(user1)
@@ -104,19 +104,15 @@ describe UserSegments do
       unfeasible_investment_finished = create(:budget_investment, :unfeasible, :finished, author: user6)
 
       budget = create(:budget)
-      feasible_investment_finished.update(budget: budget)
-      undecided_investment_finished.update(budget: budget)
-      feasible_investment_unfinished.update(budget: budget)
-      undecided_investment_unfinished.update(budget: budget)
-      unfeasible_investment_unfinished.update(budget: budget)
-      unfeasible_investment_finished.update(budget: budget)
+      feasible_investment_finished.update!(budget: budget)
+      undecided_investment_finished.update!(budget: budget)
+      feasible_investment_unfinished.update!(budget: budget)
+      undecided_investment_unfinished.update!(budget: budget)
+      unfeasible_investment_unfinished.update!(budget: budget)
+      unfeasible_investment_finished.update!(budget: budget)
 
       investment_authors = UserSegments.feasible_and_undecided_investment_authors
-      expect(investment_authors).to include user1
-      expect(investment_authors).to include user2
-      expect(investment_authors).to include user3
-      expect(investment_authors).to include user4
-      expect(investment_authors).to include user5
+      expect(investment_authors).to match_array [user1, user2, user3, user4, user5]
       expect(investment_authors).not_to include user6
     end
 
@@ -124,8 +120,8 @@ describe UserSegments do
       feasible_investment = create(:budget_investment, :feasible, author: user1)
       undecided_investment = create(:budget_investment, :undecided, author: user1)
       budget = create(:budget)
-      feasible_investment.update(budget: budget)
-      undecided_investment.update(budget: budget)
+      feasible_investment.update!(budget: budget)
+      undecided_investment.update!(budget: budget)
 
       investment_authors = UserSegments.feasible_and_undecided_investment_authors
       expect(investment_authors).to contain_exactly(user1)
@@ -137,20 +133,20 @@ describe UserSegments do
       selected_investment = create(:budget_investment, :selected, author: user1)
       unselected_investment = create(:budget_investment, :unselected, author: user2)
       budget = create(:budget)
-      selected_investment.update(budget: budget)
-      unselected_investment.update(budget: budget)
+      selected_investment.update!(budget: budget)
+      unselected_investment.update!(budget: budget)
 
       investment_authors = UserSegments.selected_investment_authors
-      expect(investment_authors).to include user1
-      expect(investment_authors).not_to include user2
+
+      expect(investment_authors).to eq [user1]
     end
 
     it "does not return duplicated users" do
       selected_investment1 = create(:budget_investment, :selected, author: user1)
       selected_investment2 = create(:budget_investment, :selected, author: user1)
       budget = create(:budget)
-      selected_investment1.update(budget: budget)
-      selected_investment2.update(budget: budget)
+      selected_investment1.update!(budget: budget)
+      selected_investment2.update!(budget: budget)
 
       investment_authors = UserSegments.selected_investment_authors
       expect(investment_authors).to contain_exactly(user1)
@@ -162,20 +158,20 @@ describe UserSegments do
       winner_investment = create(:budget_investment, :winner, author: user1)
       selected_investment = create(:budget_investment, :selected, author: user2)
       budget = create(:budget)
-      winner_investment.update(budget: budget)
-      selected_investment.update(budget: budget)
+      winner_investment.update!(budget: budget)
+      selected_investment.update!(budget: budget)
 
       investment_authors = UserSegments.winner_investment_authors
-      expect(investment_authors).to include user1
-      expect(investment_authors).not_to include user2
+
+      expect(investment_authors).to eq [user1]
     end
 
     it "does not return duplicated users" do
       winner_investment1 = create(:budget_investment, :winner, author: user1)
       winner_investment2 = create(:budget_investment, :winner, author: user1)
       budget = create(:budget)
-      winner_investment1.update(budget: budget)
-      winner_investment2.update(budget: budget)
+      winner_investment1.update!(budget: budget)
+      winner_investment2.update!(budget: budget)
 
       investment_authors = UserSegments.winner_investment_authors
       expect(investment_authors).to contain_exactly(user1)
@@ -187,10 +183,11 @@ describe UserSegments do
       investment1 = create(:budget_investment, author: create(:user))
       investment2 = create(:budget_investment, author: create(:user))
       budget = create(:budget)
-      investment1.update(budget: budget)
+      investment1.update!(budget: budget)
 
       current_budget_investments = UserSegments.current_budget_investments
-      expect(current_budget_investments).to include investment1
+
+      expect(current_budget_investments).to eq [investment1]
       expect(current_budget_investments).not_to include investment2
     end
   end
@@ -202,8 +199,8 @@ describe UserSegments do
       budget = create(:budget)
       investment1.vote_by(voter: user1, vote: "yes")
       investment2.vote_by(voter: user2, vote: "yes")
-      investment1.update(budget: budget)
-      investment2.update(budget: budget)
+      investment1.update!(budget: budget)
+      investment2.update!(budget: budget)
 
       not_supported_on_current_budget = UserSegments.not_supported_on_current_budget
       expect(not_supported_on_current_budget).to include user3
@@ -218,9 +215,7 @@ describe UserSegments do
       create(:user, email: "last@email.com")
 
       emails = UserSegments.user_segment_emails(:all_users)
-      expect(emails.first).to eq "first@email.com"
-      expect(emails.last).to eq "last@email.com"
+      expect(emails).to eq ["first@email.com", "last@email.com"]
     end
   end
-
 end

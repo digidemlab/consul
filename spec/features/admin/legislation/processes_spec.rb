@@ -1,7 +1,6 @@
 require "rails_helper"
 
 describe "Admin collaborative legislation" do
-
   before do
     admin = create(:administrator)
     login_as(admin.user)
@@ -12,17 +11,14 @@ describe "Admin collaborative legislation" do
                   "admin_legislation_process_milestones_path"
 
   context "Feature flag" do
-
     scenario "Disabled with a feature flag" do
       Setting["process.legislation"] = nil
       expect { visit admin_legislation_processes_path }
       .to raise_exception(FeatureFlags::FeatureDisabled)
     end
-
   end
 
   context "Index" do
-
     scenario "Displaying collaborative legislation" do
       process_1 = create(:legislation_process, title: "Process open")
       process_2 = create(:legislation_process, title: "Process for the future",
@@ -51,18 +47,17 @@ describe "Admin collaborative legislation" do
 
       visit admin_legislation_processes_path(filter: "all")
 
-      expect(page).to have_content (process_1.start_date)
-      expect(page).to have_content (process_2.start_date)
-      expect(page).to have_content (process_3.start_date)
+      expect(page).to have_content process_1.start_date
+      expect(page).to have_content process_2.start_date
+      expect(page).to have_content process_3.start_date
 
-      expect(page).to have_content (process_1.end_date)
-      expect(page).to have_content (process_2.end_date)
-      expect(page).to have_content (process_3.end_date)
+      expect(page).to have_content process_1.end_date
+      expect(page).to have_content process_2.end_date
+      expect(page).to have_content process_3.end_date
 
       expect(process_3.title).to appear_before(process_2.title)
       expect(process_2.title).to appear_before(process_1.title)
     end
-
   end
 
   context "Create" do
@@ -162,7 +157,7 @@ describe "Admin collaborative legislation" do
     end
 
     scenario "Create a legislation process with an image", :js do
-      visit new_admin_legislation_process_path()
+      visit new_admin_legislation_process_path
       fill_in "Process Title", with: "An example legislation process"
       fill_in "Summary", with: "Summary of the process"
 
@@ -189,7 +184,6 @@ describe "Admin collaborative legislation" do
       expect(find("#legislation_process_background_color").value).to eq "#e7f2fc"
       expect(find("#legislation_process_font_color").value).to eq "#222222"
     end
-
   end
 
   context "Update" do

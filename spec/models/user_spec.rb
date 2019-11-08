@@ -1,46 +1,33 @@
 require "rails_helper"
 
 describe User do
-
   describe "#headings_voted_within_group" do
     it "returns the headings voted by a user" do
-      user1 = create(:user)
-      user2 = create(:user)
-
       budget = create(:budget)
       group = create(:budget_group, budget: budget)
 
       new_york = create(:budget_heading, group: group, name: "New york")
-      san_franciso = create(:budget_heading, group: group, name: "San Franciso")
+      san_francisco = create(:budget_heading, group: group, name: "San Franciso")
       wyoming = create(:budget_heading, group: group, name: "Wyoming")
       another_heading = create(:budget_heading, group: group)
 
       new_york_investment = create(:budget_investment, heading: new_york)
-      san_franciso_investment = create(:budget_investment, heading: san_franciso)
+      san_franciso_investment = create(:budget_investment, heading: san_francisco)
       wyoming_investment = create(:budget_investment, heading: wyoming)
 
-      create(:vote, votable: wyoming_investment, voter: user1)
-      create(:vote, votable: san_franciso_investment, voter: user1)
-      create(:vote, votable: new_york_investment, voter: user1)
+      user1 = create(:user, votables: [wyoming_investment, san_franciso_investment, new_york_investment])
+      user2 = create(:user)
 
-      headings_names = "#{new_york.name}, #{san_franciso.name}, and #{wyoming.name}"
-
-      expect(user1.headings_voted_within_group(group)).to include(new_york)
-      expect(user1.headings_voted_within_group(group)).to include(san_franciso)
-      expect(user1.headings_voted_within_group(group)).to include(wyoming)
+      expect(user1.headings_voted_within_group(group)).to match_array [new_york, san_francisco, wyoming]
       expect(user1.headings_voted_within_group(group)).not_to include(another_heading)
-      expect(user1.headings_voted_within_group(group).map(&:name).to_sentence).to eq(headings_names)
 
-      expect(user2.headings_voted_within_group(group)).not_to include(new_york)
-      expect(user2.headings_voted_within_group(group)).not_to include(san_franciso)
-      expect(user2.headings_voted_within_group(group)).not_to include(another_heading)
+      expect(user2.headings_voted_within_group(group)).to be_empty
     end
 
     it "returns headings with multiple translations only once" do
-      user = create(:user)
       group = create(:budget_group)
       heading = create(:budget_heading, group: group, name_en: "English", name_es: "Spanish")
-      create(:vote, votable: create(:budget_investment, heading: heading), voter: user)
+      user = create(:user, votables: [create(:budget_investment, heading: heading)])
 
       expect(user.headings_voted_within_group(group).count).to eq 1
     end
@@ -160,7 +147,7 @@ describe User do
     end
 
     it "is true when the user is an admin" do
-      subject.save
+      subject.save!
       create(:administrator, user: subject)
       expect(subject.administrator?).to be true
     end
@@ -172,7 +159,7 @@ describe User do
     end
 
     it "is true when the user is a moderator" do
-      subject.save
+      subject.save!
       create(:moderator, user: subject)
       expect(subject.moderator?).to be true
     end
@@ -184,7 +171,7 @@ describe User do
     end
 
     it "is true when the user is a valuator" do
-      subject.save
+      subject.save!
       create(:valuator, user: subject)
       expect(subject.valuator?).to be true
     end
@@ -196,7 +183,7 @@ describe User do
     end
 
     it "is true when the user is a manager" do
-      subject.save
+      subject.save!
       create(:manager, user: subject)
       expect(subject.manager?).to be true
     end
@@ -208,7 +195,7 @@ describe User do
     end
 
     it "is true when the user is a poll officer" do
-      subject.save
+      subject.save!
       create(:poll_officer, user: subject)
       expect(subject.poll_officer?).to be true
     end
@@ -277,14 +264,14 @@ describe User do
 
     it "is true when the user is an official" do
       subject.official_level = 3
-      subject.save
+      subject.save!
       expect(subject.official?).to be true
     end
   end
 
   describe "add_official_position!" do
-    it "is false when level not valid" do
-      expect(subject.add_official_position!("Boss", 89)).to be false
+    it "raises an exception when level not valid" do
+      expect { subject.add_official_position!("Boss", 89) }.to raise_error ActiveRecord::RecordInvalid
     end
 
     it "updates official position fields" do
@@ -348,14 +335,12 @@ describe User do
       expect(user4.has_official_email?).to eq(false)
 
       # We reset the officials' domain setting
-      Setting.find_by(key: "email_domain_for_officials").update(value: "")
+      Setting.find_by(key: "email_domain_for_officials").update!(value: "")
     end
   end
 
   describe "official_position_badge" do
-
     describe "Users of level 1" do
-
       it "displays the badge if set in preferences" do
         user = create(:user, official_level: 1, official_position_badge: true)
 
@@ -367,11 +352,9 @@ describe User do
 
         expect(user.display_official_position_badge?).to eq false
       end
-
     end
 
     describe "Users higher than level 1" do
-
       it "displays the badge regardless of preferences" do
         user1 = create(:user, official_level: 2, official_position_badge: false)
         user2 = create(:user, official_level: 3, official_position_badge: false)
@@ -383,22 +366,17 @@ describe User do
         expect(user3.display_official_position_badge?).to eq true
         expect(user4.display_official_position_badge?).to eq true
       end
-
     end
-
   end
 
   describe "scopes" do
-
     describe "active" do
-
       it "returns users that have not been erased" do
         user1 = create(:user, erased_at: nil)
         user2 = create(:user, erased_at: nil)
         user3 = create(:user, erased_at: Time.current)
 
-        expect(User.active).to include(user1)
-        expect(User.active).to include(user2)
+        expect(User.active).to match_array [user1, user2]
         expect(User.active).not_to include(user3)
       end
 
@@ -408,25 +386,20 @@ describe User do
         user3 = create(:user)
         user3.block
 
-        expect(User.active).to include(user1)
-        expect(User.active).to include(user2)
+        expect(User.active).to match_array [user1, user2]
         expect(User.active).not_to include(user3)
       end
-
     end
 
     describe "erased" do
-
       it "returns users that have been erased" do
         user1 = create(:user, erased_at: Time.current)
         user2 = create(:user, erased_at: Time.current)
         user3 = create(:user, erased_at: nil)
 
-        expect(User.erased).to include(user1)
-        expect(User.erased).to include(user2)
+        expect(User.erased).to match_array [user1, user2]
         expect(User.erased).not_to include(user3)
       end
-
     end
   end
 
@@ -488,7 +461,6 @@ describe User do
       user.valid?
       expect(user.document_number).to eq("12345678B")
     end
-
   end
 
   describe "#erase" do
@@ -543,7 +515,6 @@ describe User do
 
       expect(Identity.exists?(identity.id)).not_to be
     end
-
   end
 
   describe "#take_votes_from" do
@@ -673,7 +644,6 @@ describe User do
       expect(user_2.reload.former_users_data_log).to include("id: #{user_1.id}")
       expect(user_1.reload.document_number).to be_blank
     end
-
   end
 
   describe "email_required?" do
@@ -705,15 +675,13 @@ describe User do
     let(:user) { create(:user) }
 
     it "returns followed object tags" do
-      proposal = create(:proposal, tag_list: "Sport")
-      create(:follow, followable: proposal, user: user)
+      create(:proposal, tag_list: "Sport", followers: [user])
 
       expect(user.interests).to eq ["Sport"]
     end
 
     it "deals gracefully with hidden proposals" do
-      proposal = create(:proposal, tag_list: "Sport")
-      create(:follow, followable: proposal, user: user)
+      proposal = create(:proposal, tag_list: "Sport", followers: [user])
 
       proposal.hide
 
@@ -721,17 +689,12 @@ describe User do
     end
 
     it "discards followed objects duplicated tags" do
-      proposal1 = create(:proposal, tag_list: "Sport")
-      proposal2 = create(:proposal, tag_list: "Sport")
-      budget_investment = create(:budget_investment, tag_list: "Sport")
-
-      create(:follow, followable: proposal1, user: user)
-      create(:follow, followable: proposal2, user: user)
-      create(:follow, followable: budget_investment, user: user)
+      create(:proposal, tag_list: "Sport", followers: [user])
+      create(:proposal, tag_list: "Sport", followers: [user])
+      create(:budget_investment, tag_list: "Sport", followers: [user])
 
       expect(user.interests).to eq ["Sport"]
     end
-
   end
 
   describe ".find_by_manager_login" do
@@ -746,5 +709,4 @@ describe User do
       expect(User.find_by_manager_login("admin_user_#{user.id}")).to eq user
     end
   end
-
 end
