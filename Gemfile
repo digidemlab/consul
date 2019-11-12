@@ -12,7 +12,7 @@ gem "browser", "~> 2.5.3"
 gem "cancancan", "~> 2.3.0"
 gem "ckeditor", "~> 4.3.0"
 gem "cocoon", "~> 1.2.9"
-gem "daemons", "~> 1.2.4"
+gem "daemons", "~> 1.3.1"
 gem "dalli", "~> 2.7.6"
 gem "delayed_job_active_record", "~> 4.1.3"
 gem "devise", "~> 4.7.1"
@@ -91,7 +91,7 @@ group :development do
   gem "capistrano", "~> 3.10.1", require: false
   gem "capistrano-bundler", "~> 1.2", require: false
   gem "capistrano-rails", "~> 1.4.0", require: false
-  gem "capistrano3-delayed-job", "~> 1.7.3"
+  gem "capistrano3-delayed-job", "~> 1.7.6"
   gem "capistrano3-puma", "~> 4.0.0"
   gem "erb_lint", require: false
   gem "mdl", "~> 0.5.0", require: false
