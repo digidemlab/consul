@@ -121,7 +121,7 @@ GEM
       uniform_notifier (~> 1.11.0)
     byebug (10.0.0)
     cancancan (2.3.0)
-    capistrano (3.10.1)
+    capistrano (3.11.2)
       airbrussh (>= 1.0.0)
       i18n
       rake (>= 10.0.0)
@@ -617,7 +617,7 @@ DEPENDENCIES
   bullet (~> 5.7.0)
   byebug (~> 10.0.0)
   cancancan (~> 2.3.0)
-  capistrano (~> 3.10.1)
+  capistrano (~> 3.11.2)
   capistrano-bundler (~> 1.2)
   capistrano-rails (~> 1.4.0)
   capistrano3-delayed-job (~> 1.7.6)
