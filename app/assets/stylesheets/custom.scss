@@ -4,6 +4,216 @@
 // * Spanish: https://github.com/consul/consul/blob/master/CUSTOMIZE_ES.md#css
 //
 
+header {
+  background: $white;
+}
+
+.top-bar {
+  color: $brand;
+  background: $white !important;
+
+  ul {
+    padding-right: 0;
+  }
+
+  .menu > li {
+    a {
+      color: $brand;
+      text-transform: uppercase;
+    }
+
+    .button {
+
+      @include breakpoint(medium) {
+        background: $brand;
+        color: $white;
+      }
+    }
+  }
+
+  .top-bar-right {
+    .is-active {
+      text-decoration: none;
+    }
+  }
+
+  .has-submenu {
+    &.is-active a {
+      color: $brand;
+    }
+  }
+}
+
+.dropdown.menu > li {
+  &.is-dropdown-submenu-parent > a::after {
+    border-color: $brand transparent transparent;
+  }
+}
+
+.menu-icon {
+  &.dark {
+    &:hover::after,
+    &::after {
+      background: $brand;
+      box-shadow: 0 7px 0 $brand, 0 14px 0 $brand;
+    }
+  }
+}
+
+.subnavigation {
+  ul {
+    li {
+      @include breakpoint(medium) {
+        padding: 0;
+      }
+    }
+  }
+
+  a {
+    font-size: 15px;
+    font-weight: normal;
+    text-transform: uppercase;
+    padding: 0 15px;
+
+    @include breakpoint(small) {
+      color: #000;
+    }
+
+    &:hover {
+      color: $bb-blue;
+      text-decoration: none;
+      background: $bb-sandbox-beige;
+    }
+
+    &.is-active {
+      color: $bb-blue;
+      text-decoration: none;
+      background: $bb-sandbox-beige;
+      border-bottom: 0px;
+    }
+  }
+  .input-group-button {
+    button {
+      background: $border;
+      color: $text;
+    }
+  }
+}
+
+.top-links {
+  background: $white;
+  color: $dark;
+
+  a {
+    color: $dark;
+  }
+}
+
+.locale-form {
+  label {
+    color: $brand;
+  }
+
+  select {
+    option {
+      background: #fff;
+      color: $text;
+    }
+  }
+
+  .locale-switcher {
+    background: $brand;;
+    color: $white;
+  }
+}
+
+.no-margin-top {
+      margin-top: -1.5625rem;
+}
+
+.help-header {
+  background: $bb-sandbox-beige;
+}
+
+.expanded {
+  &.budget {
+    h1,
+    h2,
+    p,
+    a,
+    .back,
+    .icon-angle-left,
+    .description {
+      color: $bb-blue;
+    }
+
+    .info {
+      background: $budget-hover;
+    }
+
+    color: $dark;
+  }
+}
+
+.top-bar .top-bar-title a img {
+  height: 56px;
+}
+
+.budget-timeline {
+  border-left-color: $bb-blue;
+
+  .phase::before {
+    border-color: $bb-blue;
+  }
+
+  .phase.is-active h3 {
+    background-color: $bb-blue;
+  }
+
+  .phase.is-active::before {
+    background-color: $white;
+  }
+}
+
+.jumbo-budget {
+  h2,
+  h3,
+  .back,
+  .icon-angle-left,
+  p,
+  a {
+    color: $bb-blue;
+  }
+
+  .social-share-button a {
+    color: $bb-blue;
+  }
+}
+
+.map {
+  .map-marker {
+    .map-icon {
+      background: $bb-green-marker;
+    }
+  }
+}
+
+.auth-image {
+  background: $white;
+
+  a img {
+    height: 56px;
+  }
+}
+
+.footer {
+  background: $bb-sandbox-beige-light;
+}
+
 .footer-sections {
   padding-bottom: 1rem;
+}
+
+.pagination li {
+  display: inline-block;
 }

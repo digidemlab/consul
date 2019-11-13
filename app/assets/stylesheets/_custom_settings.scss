@@ -3,3 +3,54 @@
 // * English: https://github.com/consul/consul/blob/master/CUSTOMIZE_EN.md#css
 // * Spanish: https://github.com/consul/consul/blob/master/CUSTOMIZE_ES.md#css
 //
+
+@font-face {
+    font-family: 'Quasimoda';
+    src: url('Quasimoda-Bold.eot');
+    src: url('Quasimoda-Bold.eot?#iefix') format('embedded-opentype'),
+         url('Quasimoda-Bold.woff') format('woff'),
+         url('Quasimoda-Bold.svg#Quasimoda-Bold') format('svg');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Quasimoda';
+    src: url('Quasimoda-Medium.eot');
+    src: url('Quasimoda-Medium.eot?#iefix') format('embedded-opentype'),
+         url('Quasimoda-Medium.woff') format('woff'),
+         url('Quasimoda-Medium.svg#Quasimoda-Medium') format('svg');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Quasimoda';
+    src: url('Quasimoda-Regular.eot');
+    src: url('Quasimoda-Regular.eot?#iefix') format('embedded-opentype'),
+         url('Quasimoda-Regular.woff') format('woff'),
+         url('Quasimoda-Regular.svg#Quasimoda-Regular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+$bb-light-blue: #003dac;
+$bb-blue: #063FA6;
+$bb-night-quarter-blue: #00285a;
+$bb-playroom-red: #e3420f;
+$bb-daggturkos: #92d5ac;
+$bb-mermaid-purple: #622066;
+$bb-garden-green: #026937;
+$bb-neighbour-yellow: #ffdf00;
+$bb-sandbox-beige: #ebe6d6;
+$bb-sandbox-beige-light: #F5F2EB;
+
+$bb-green-marker: #99A734;
+
+$body-font-family: "quasimoda", sans-serif !important;
+
+$brand:             $bb-blue;
+$link:              $brand;
+
+$budget:            $bb-sandbox-beige;
+$budget-hover:      $bb-sandbox-beige-light;

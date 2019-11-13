@@ -222,7 +222,7 @@ en:
       consul: CONSUL
       consul_url: http://consulproject.org/en/
       contact_us: Digidem Lab
-      copyright: Göteborgs stad & Digidem Lab, %{year}
+      copyright: Bostadsbolaget & Digidem Lab, %{year}
       description: This portal uses %{consul} which is %{open_source}. Do you want to use CONSUL in your city? Contact
       open_source: open-source software
       open_source_url: https://github.com/digidemlab/consul
