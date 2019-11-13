@@ -83,7 +83,7 @@ GEM
     ast (2.4.0)
     audited (4.9.0)
       activerecord (>= 4.2, < 6.1)
-    autoprefixer-rails (8.2.0)
+    autoprefixer-rails (9.7.1)
       execjs
     aws-eventstream (1.0.3)
     aws-partitions (1.236.0)
@@ -611,7 +611,7 @@ DEPENDENCIES
   ahoy_matey (~> 1.6.0)
   ancestry (~> 3.0.7)
   audited (~> 4.9.0)
-  autoprefixer-rails (~> 8.2.0)
+  autoprefixer-rails (~> 9.7.1)
   aws-sdk-s3 (~> 1)
   browser (~> 2.5.3)
   bullet (~> 5.7.0)
