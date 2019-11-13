@@ -295,7 +295,7 @@ GEM
       rainbow (>= 2.2.2, < 4.0)
       terminal-table (>= 1.5.1)
     ice_nine (0.11.2)
-    initialjs-rails (0.2.0.5)
+    initialjs-rails (0.2.0.8)
       railties (>= 3.1, < 6.0)
     invisible_captcha (0.10.0)
       rails (>= 3.2.0)
@@ -647,7 +647,7 @@ DEPENDENCIES
   groupdate (~> 3.2.0)
   heroku-deflater (~> 0.6.3)
   i18n-tasks (~> 0.9.29)
-  initialjs-rails (~> 0.2.0.5)
+  initialjs-rails (~> 0.2.0.8)
   invisible_captcha (~> 0.10.0)
   jquery-fileupload-rails
   jquery-rails (~> 4.3.5)
