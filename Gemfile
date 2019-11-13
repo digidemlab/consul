@@ -83,7 +83,7 @@ group :test do
   gem "coveralls", "~> 0.8.22", require: false
   gem "database_cleaner", "~> 1.7.0"
   gem "email_spec", "~> 2.2.0"
-  gem "rspec-rails", "~> 3.8"
+  gem "rspec-rails", "~> 3.9"
   gem "selenium-webdriver", "~> 3.141"
 end
 
