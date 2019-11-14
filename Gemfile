@@ -56,7 +56,7 @@ gem "turbolinks", "~> 2.5.3"
 gem "turnout", "~> 2.4.0"
 gem "uglifier", "~> 4.2.0"
 gem "whenever", "~> 1.0.0", require: false
-gem "wicked_pdf", "~> 1.1.0"
+gem "wicked_pdf", "~> 1.4.0"
 gem "wkhtmltopdf-binary", "~> 0.12.4"
 
 source "https://rails-assets.org" do
