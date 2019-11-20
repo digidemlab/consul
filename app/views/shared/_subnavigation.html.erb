@@ -69,6 +69,15 @@
                                   title: t("shared.go_to_page") + "Regler och kriterier",
                                   target: "blank", rel: "nofollow" %>
       </li>
+      <% if current_budget.finished? %>
+      <li>
+        <%= layout_menu_link_to "Resultat 2019",
+                                  budget_results_path(current_budget, heading_id: current_budget.headings.first),
+                                  current_page?(budget_results_path(current_budget, heading_id: current_budget.headings.first)),
+                                  accesskey: "11",
+                                  title: t("shared.go_to_page") + "Resultat 2019" %>
+      </li>
+      <% end %>
       <li>
         <%= layout_menu_link_to "Resultat 2018",
                                   "https://goteborg.se/wps/portal/enhetssida/medborgarbudget-i-majorna-linne/vad-ar-en-medborgarbudget-/medborgarbudget-2018/!ut/p",
