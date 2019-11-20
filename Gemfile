@@ -57,7 +57,7 @@ gem "turnout", "~> 2.4.0"
 gem "uglifier", "~> 4.2.0"
 gem "whenever", "~> 1.0.0", require: false
 gem "wicked_pdf", "~> 1.4.0"
-gem "wkhtmltopdf-binary", "~> 0.12.4"
+gem "wkhtmltopdf-binary", "~> 0.12.5"
 
 source "https://rails-assets.org" do
   gem "rails-assets-leaflet"
