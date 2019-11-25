@@ -84,7 +84,7 @@ group :test do
   gem "database_cleaner", "~> 1.7.0"
   gem "email_spec", "~> 2.2.0"
   gem "rspec-rails", "~> 3.9"
-  gem "selenium-webdriver", "~> 3.141"
+  gem "selenium-webdriver", "~> 3.142"
 end
 
 group :development do
