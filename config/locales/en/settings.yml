@@ -91,6 +91,9 @@ en:
       google_login_description: "Allow users to sign up with their Google Account"
       featured_proposals: "Featured proposals"
       featured_proposals_description: "Shows featured proposals on index proposals page"
+      registration:
+        demographics: Demographics at sign up
+        demographics_description: Asks for gender and year of birth at sign up
       signature_sheets: "Signature sheets"
       signature_sheets_description: "It allows adding from the Administration panel signatures collected on-site to Proposals and investment projects of the Participative Budgets"
       user:

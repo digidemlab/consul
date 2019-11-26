@@ -106,6 +106,13 @@ en:
           waiting_for: "Awaiting confirmation of:"
         new:
           cancel: Cancel login
+          demographics_separator: Help us to know who participates (optional)
+          demographics_gender:
+            title: Gender
+            female: Female
+            male: Male
+            other: Other
+          demographics_year: Year of birth
           email_label: Email
           organization_signup: Do you represent an organisation or collective? %{signup_link}
           organization_signup_link: Sign up here
