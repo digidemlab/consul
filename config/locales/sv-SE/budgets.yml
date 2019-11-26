@@ -47,7 +47,7 @@ sv:
         title: Medborgarbudgetar
         help: Hjälp med medborgarbudgetar
         all_phases: Visa alla faser
-      all_phases: Medborgarbudgetens faser
+      all_phases: Boendebudgetens faser
       map: Geografiskt baserade budgetförslag
       investment_proyects: Lista över budgetförslag
       unfeasible_investment_proyects: Lista över ej genomförbara budgetförslag
