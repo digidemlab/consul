@@ -6,30 +6,30 @@
 
 @font-face {
     font-family: 'Quasimoda';
-    src: url('Quasimoda-Bold.eot');
-    src: url('Quasimoda-Bold.eot?#iefix') format('embedded-opentype'),
-         url('Quasimoda-Bold.woff') format('woff'),
-         url('Quasimoda-Bold.svg#Quasimoda-Bold') format('svg');
+    src: font-url('Quasimoda-Bold.eot');
+    src: font-url('Quasimoda-Bold.eot?#iefix') format('embedded-opentype'),
+         font-url('Quasimoda-Bold.woff') format('woff'),
+         font-url('Quasimoda-Bold.svg#Quasimoda-Bold') format('svg');
     font-weight: bold;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'Quasimoda';
-    src: url('Quasimoda-Medium.eot');
-    src: url('Quasimoda-Medium.eot?#iefix') format('embedded-opentype'),
-         url('Quasimoda-Medium.woff') format('woff'),
-         url('Quasimoda-Medium.svg#Quasimoda-Medium') format('svg');
+    src: font-url('Quasimoda-Medium.eot');
+    src: font-url('Quasimoda-Medium.eot?#iefix') format('embedded-opentype'),
+         font-url('Quasimoda-Medium.woff') format('woff'),
+         font-url('Quasimoda-Medium.svg#Quasimoda-Medium') format('svg');
     font-weight: 500;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'Quasimoda';
-    src: url('Quasimoda-Regular.eot');
-    src: url('Quasimoda-Regular.eot?#iefix') format('embedded-opentype'),
-         url('Quasimoda-Regular.woff') format('woff'),
-         url('Quasimoda-Regular.svg#Quasimoda-Regular') format('svg');
+    src: font-url('Quasimoda-Regular.eot');
+    src: font-url('Quasimoda-Regular.eot?#iefix') format('embedded-opentype'),
+         font-url('Quasimoda-Regular.woff') format('woff'),
+         font-url('Quasimoda-Regular.svg#Quasimoda-Regular') format('svg');
     font-weight: normal;
     font-style: normal;
 }
