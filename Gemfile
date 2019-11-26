@@ -95,7 +95,7 @@ group :development do
   gem "erb_lint", require: false
   gem "github_changelog_generator", "~> 1.15.0"
   gem "mdl", "~> 0.5.0", require: false
-  gem "rubocop", "~> 0.75.0", require: false
+  gem "rubocop", "~> 0.76.0", require: false
   gem "rubocop-performance", "~> 1.4.1", require: false
   gem "rubocop-rails", "~> 2.3.2", require: false
   gem "rubocop-rspec", "~> 1.35.0", require: false
