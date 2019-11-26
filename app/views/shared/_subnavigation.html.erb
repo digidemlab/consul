@@ -45,7 +45,8 @@
                                   accesskey: "5",
                                   title: t("shared.go_to_page") + t("layouts.header.budgets") %>
       </li>
-        <% if current_budget.accepting? %>
+        <% if current_budget %>
+          <% if current_budget.accepting? %>
       <li>
         <%= layout_menu_link_to "Lämna förslag",
                                   new_budget_investment_path(current_budget.id),
@@ -53,7 +54,7 @@
                                   accesskey: "7",
                                   title: t("shared.go_to_page") + "Lämna förslag" %>
       </li>
-        <% end %>
+          <% end %>
       <li>
         <%= layout_menu_link_to "Alla förslag",
                                   budget_investments_path(current_budget.id, heading_id: 1),
@@ -61,7 +62,7 @@
                                   accesskey: "8",
                                   title: t("shared.go_to_page") + "Alla förslag" %>
       </li>
-        <% if current_budget.finished? %>
+          <% if current_budget.finished? %>
       <li>
         <%= layout_menu_link_to "Resultat 2020",
                                   budget_results_path(current_budget, heading_id: current_budget.headings.first),
@@ -69,6 +70,7 @@
                                   accesskey: "11",
                                   title: t("shared.go_to_page") + "Resultat 2019" %>
       </li>
+          <% end %>
         <% end %>
     <% end %>
     <% if feature?(:help_page) %>
