@@ -120,7 +120,7 @@ GEM
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11.0)
     byebug (10.0.0)
-    cancancan (2.3.0)
+    cancancan (3.0.1)
     capistrano (3.10.1)
       airbrussh (>= 1.0.0)
       i18n
@@ -631,7 +631,7 @@ DEPENDENCIES
   aws-sdk-s3 (~> 1)
   bullet (~> 5.7.0)
   byebug (~> 10.0.0)
-  cancancan (~> 2.3.0)
+  cancancan (~> 3.0.1)
   capistrano (~> 3.10.1)
   capistrano-bundler (~> 1.2)
   capistrano-rails (~> 1.4.0)
