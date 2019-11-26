@@ -1,12 +1,13 @@
 module ModerateActions
   extend ActiveSupport::Concern
   include Polymorphic
+  PER_PAGE = 50
 
   def index
     @resources = @resources.send(@current_filter)
                            .send("sort_by_#{@current_order}")
                            .page(params[:page])
-                           .per(50)
+                           .per(PER_PAGE)
     set_resources_instance
   end
 
@@ -27,7 +28,7 @@ module ModerateActions
       User.where(id: author_ids).accessible_by(current_ability, :block).each { |user| block_user user }
     end
 
-    redirect_to request.query_parameters.merge(action: :index)
+    redirect_with_query_params_to(action: :index)
   end
 
   private
