@@ -193,10 +193,22 @@ describe "Legislation" do
 
       scenario "Shows another translation when the default locale isn't available" do
         process = create(:legislation_process, title_fr: "Français")
-        process.translations.where(locale: :en).first.destroy!
+        process.translations.find_by(locale: :en).destroy!
 
         visit legislation_process_path(process)
         expect(page).to have_content("Français")
+      end
+
+      scenario "Shows Create a Proposal button when process is in draft phase" do
+        process = create(:legislation_process,
+                         :in_draft_phase,
+                         proposals_phase_start_date: Date.tomorrow)
+
+        login_as(administrator)
+        visit legislation_process_proposals_path(process)
+        click_link "Create a proposal"
+
+        expect(page).to have_current_path new_legislation_process_proposal_path(process)
       end
     end
 

@@ -47,7 +47,8 @@ Rails.application.configure do
   # config.action_dispatch.x_sendfile_header = "X-Accel-Redirect" # for NGINX
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  config.force_ssl = true
+  # Configure force_ssl in secrets.yml
+  config.force_ssl = Rails.application.secrets.force_ssl
 
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
@@ -71,19 +72,11 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: Rails.application.secrets.server_name }
   config.action_mailer.asset_host = "https://#{Rails.application.secrets.server_name}"
 
-  # Sets the delivery method to what is set in the env variable
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.perform_deliveries = true
-  config.action_mailer.smtp_settings = {
-    :address        => Rails.application.secrets.smtp_address,
-    :port           => Rails.application.secrets.smtp_port,
-    :authentication => Rails.application.secrets.smtp_authentication,
-    :user_name      => Rails.application.secrets.smtp_username,
-    :password       => Rails.application.secrets.smtp_password,
-    :domain         => Rails.application.secrets.smtp_domain,
-    :enable_starttls_auto => Rails.application.secrets.smtp_starttls_auto,
-    :openssl_verify_mode => 'none'
-  }
+  # Configure your SMTP service credentials in secrets.yml
+  if Rails.application.secrets.smtp_settings
+    config.action_mailer.delivery_method = Rails.application.secrets.mailer_delivery_method || :smtp
+    config.action_mailer.smtp_settings = Rails.application.secrets.smtp_settings
+  end
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
