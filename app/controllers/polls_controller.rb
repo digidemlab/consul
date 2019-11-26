@@ -13,7 +13,7 @@ class PollsController < ApplicationController
 
   def index
     @polls = Kaminari.paginate_array(
-      @polls.public_polls.not_budget.send(@current_filter).includes(:geozones).sort_for_list
+      @polls.created_by_admin.not_budget.send(@current_filter).includes(:geozones).sort_for_list
     ).page(params[:page])
   end
 
@@ -43,7 +43,7 @@ class PollsController < ApplicationController
   private
 
     def load_poll
-      @poll = Poll.where(slug: params[:id]).first || Poll.where(id: params[:id]).first
+      @poll = Poll.find_by_slug_or_id!(params[:id])
     end
 
     def load_active_poll
