@@ -66,7 +66,7 @@ end
 group :development, :test do
   gem "bullet", "~> 5.7.0"
   gem "byebug", "~> 10.0.0"
-  gem "factory_bot_rails", "~> 4.8.2"
+  gem "factory_bot_rails", "~> 5.1.1"
   gem "faker", "~> 1.8.7"
   gem "i18n-tasks", "~> 0.9.29"
   gem "knapsack_pro", "~> 1.1.0"
