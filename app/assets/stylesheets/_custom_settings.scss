@@ -45,14 +45,16 @@ $bb-neighbour-yellow: #ffdf00;
 $bb-sandbox-beige: #ebe6d6;
 $bb-sandbox-beige-light: #F5F2EB;
 
+$bb-orange-light: #FEEFE7;
 $bb-green-marker: #99A734;
 
 $body-font-family: "quasimoda", sans-serif !important;
+$header-font-family: $body-font-family;
 
-$brand:             $bb-blue;
+$brand:             $bb-playroom-red;
 $link:              $brand;
 
-$budget:            $bb-sandbox-beige;
-$budget-hover:      $bb-sandbox-beige-light;
+$budget:            $bb-orange-light;
+$budget-hover:      lighten($budget, 0.8);
 
-$highlight:         $bb-sandbox-beige;
+$highlight:         $bb-orange-light;

@@ -80,15 +80,15 @@ header {
     }
 
     &:hover {
-      color: $bb-blue;
+      color: $brand;
       text-decoration: none;
-      background: $bb-sandbox-beige;
+      background: $highlight;
     }
 
     &.is-active {
-      color: $bb-blue;
+      color: $brand;
       text-decoration: none;
-      background: $bb-sandbox-beige;
+      background: $highlight;
       border-bottom: 0px;
     }
   }
@@ -133,7 +133,7 @@ header {
 }
 
 .help-header {
-  background: $bb-sandbox-beige;
+  background: $highlight;
 }
 
 .expanded {
@@ -146,7 +146,7 @@ header {
     .icon-angle-left,
     .description,
     .button {
-      color: $bb-blue;
+      color: $brand;
     }
 
     .info {
@@ -162,14 +162,14 @@ header {
 }
 
 .budget-timeline {
-  border-left-color: $bb-blue;
+  border-left-color: $brand;
 
   .phase::before {
-    border-color: $bb-blue;
+    border-color: $brand;
   }
 
   .phase.is-active h3 {
-    background-color: $bb-blue;
+    background-color: $brand;
   }
 
   .phase.is-active::before {
@@ -184,11 +184,11 @@ header {
   .icon-angle-left,
   p,
   a {
-    color: $bb-blue;
+    color: $brand;
   }
 
   .social-share-button a {
-    color: $bb-blue;
+    color: $brand;
   }
 }
 
@@ -209,7 +209,7 @@ header {
 }
 
 .footer {
-  background: $bb-sandbox-beige-light;
+  background: $highlight;
 }
 
 .footer-sections {
