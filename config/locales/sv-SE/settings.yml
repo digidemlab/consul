@@ -38,6 +38,8 @@ sv:
       registration:
         demographics: Demografisk under registrering
         demographics_description: Tillåter användaren att skriva in sin födelseår och kön under registrering
+        phone_number: Telefonnummer under registrering
+        phone_number_description: Tillåter användaren att skriva in sitt telefonnummer under registrering
       signature_sheets: "Namninsamlingar"
       spending_proposals: "Investeringsförslag"
       user:

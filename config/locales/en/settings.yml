@@ -94,6 +94,8 @@ en:
       registration:
         demographics: Demographics at sign up
         demographics_description: Asks for gender and year of birth at sign up
+        phone_number: Phone number at sign up
+        phone_number_description: Asks for phone number at sign up
       signature_sheets: "Signature sheets"
       signature_sheets_description: "It allows adding from the Administration panel signatures collected on-site to Proposals and investment projects of the Participative Budgets"
       user:
