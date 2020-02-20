@@ -79,10 +79,6 @@ Rails.application.configure do
     config.action_mailer.smtp_settings = Rails.application.secrets.smtp_settings
   end
 
-  # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
-  # the I18n.default_locale when a translation cannot be found).
-  config.i18n.fallbacks = true
-
   # Send deprecation notices to registered listeners.
   config.active_support.deprecation = :notify
 
@@ -112,7 +108,7 @@ Rails.application.configure do
       bucket: Rails.application.secrets.aws_s3_bucket,
       access_key_id: Rails.application.secrets.aws_access_key_id,
       secret_access_key: Rails.application.secrets.aws_secret_access_key,
-      s3_region: Rails.application.secrets.aws_s3_region,
+      s3_region: Rails.application.secrets.aws_s3_region
     }
   }
 end
