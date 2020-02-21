@@ -50,6 +50,7 @@ sv:
       proposals:
         empty_proposals: Det finns inga förslag
         filters:
+          random: Random
           winners: Vald
       debate:
         empty_questions: Det finns inga frågor
@@ -116,3 +117,4 @@ sv:
       form:
         tags_label: "Kategorier"
       not_verified: "Rösta på förslag %{verify_account}."
+      process_title: Medborgardialoger

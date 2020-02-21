@@ -14,6 +14,8 @@ sv:
       edit: Redigera
       configure: Inställningar
       delete: Ta bort
+    officing_booth:
+      title: "You are officing the booth located at %{booth}. If this is not correct, do not continue and call the help phone number. Thank you."
     banners:
       index:
         title: Banners
@@ -92,9 +94,20 @@ sv:
         edit_phase: Redigera fas
         active: Aktiva
         blank_dates: Datumfälten är tomma
+        administrators:
+          zero: "Välj administratörer"
+          one: "1 administratör vald"
+          other: "%{count} administratörer valda"
+        valuators:
+          zero: "Välj bedömare"
+          one: "1 bedömare vald"
+          other: "%{count} bedömare valda"
+        empty_administrators: "Det finns inga administratörer"
+        empty_valuators: "Det finns inga bedömare"
       destroy:
         success_notice: Budgeten raderades
         unable_notice: Du kan inte ta bort en budget som har budgetförslag
+        unable_notice_polls: You cannot delete a budget that has an associated poll
       new:
         title: Ny medborgarbudget
       winners:
@@ -104,16 +117,46 @@ sv:
     budget_groups:
       name: "Namn"
       headings_name: "Områden"
+      headings_edit: "Redigera områden"
       headings_manage: "Hantera områden"
       no_groups: "Det finns inga grupper."
+      amount:
+        one: "Det finns en grupp"
+        other: "Det finns %{count} grupper"
+      create:
+        notice: "Grupp har skapats!"
+      update:
+        notice: "Grupp har uppdaterats"
+      destroy:
+        success_notice: "Grupp har raderats"
+        unable_notice: "You cannot delete a Group that has associated headings"
       form:
         create: "Skapa ny grupp"
         edit: "Redigera delbudget"
         submit: "Spara delbudget"
+      index:
+        back: "Gå tillbaka till budgetar"
     budget_headings:
+      no_headings: "Det finns inga områden."
+      amount:
+        one: "There is 1 heading"
+        other: "There are %{count} headings"
+      create:
+        notice: "Området har skapats!"
+      update:
+        notice: "Området har uppdaterats"
+      destroy:
+        success_notice: "Området har raderats"
+        unable_notice: "Du kan inte ta bort ett område som har budgetförslag"
       form:
         population_info: "Fältet för folkmängd inom ett område används för att föra statistik över hur stor del av befolkningen där som deltagit i omröstningen. Fältet är frivilligt."
+        coordinates_info: "If latitude and longitude are provided, the investments page for this heading will include a map. This map will be centered using those coordinates."
+        content_blocks_info: "If allow content block is checked, you will be able to create custom content related to this heading from the section Settings > Custom content blocks. This content will appear on the investments page for this heading."
+        create: "Skapa nytt område"
+        edit: "Redigera område"
         submit: "Spara område"
+      index:
+        back: "Gå tillbaka till grupper"
     budget_phases:
       edit:
         summary_help_text: Den här texten är för att informera användaren om fasen. Markera rutan nedan för att visa den även om fasen inte är pågående
@@ -141,11 +184,14 @@ sv:
           min_total_supports: Minsta stöd som krävs
           max_total_supports: Max antal stöd
           winners: Vinnare
+          one_filter: "Aktiva filter: <b><em>%{filter}</em></b>"
+          two_filters: "Aktiva filter: <b><em>%{filter}, %{advanced_filters}</em></b>"
         buttons:
           filter: Filtrera
         download_current_selection: "Ladda ner nuvarande markering"
         no_budget_investments: "Det finns inga budgetförslag."
         title: Budgetförslag
+        columns: Kolumner
         assigned_admin: Ansvarig administratör
         no_admin_assigned: Saknar ansvarig administratör
         no_valuators_assigned: Inga ansvariga bedömare
@@ -170,8 +216,10 @@ sv:
           author_username: Skribentens användarnamn
           incompatible: Oförenlig
           price: Pris
+          author: Skribent
         cannot_calculate_winners: Budgeten måste vara i någon av faserna "Omröstning", "Granskning av röstning" eller "Avslutad budget" för att kunna räkna fram vinnande förslag
         see_results: "Visa resultat"
+        milestone_tags_filter_all: "All milestone tags"
       show:
         assigned_admin: Ansvarig administratör
         assigned_valuators: Ansvariga bedömare
@@ -198,6 +246,7 @@ sv:
           "true": "Ja"
           "false": "Nej"
         valuator_groups: "Bedömningsgrupper"
+        preview: Investment preview
       edit:
         classification: Klassificering
         compatibility: Kompatibilitet
@@ -215,6 +264,7 @@ sv:
         table_title: "Titel"
         table_description: "Beskrivning"
         table_publication_date: "Publiceringsdatum"
+        table_status: Status
         table_actions: "Åtgärder"
         delete: "Ta bort milstolpe"
         no_milestones: "Har inga definierade milstolpar"
@@ -223,6 +273,7 @@ sv:
         documents: "Dokument"
         milestone: Milstolpe
         new_milestone: Skapa ny milstolpe
+        milestone_tags: Milstolpe taggar
       form:
         admin_statuses: Administrativ status för budgetförslag
         no_statuses_defined: Det finns ingen definierad status för budgetförslag än
@@ -257,24 +308,48 @@ sv:
       delete:
         notice: Status för budgetförslag har tagits bort
     progress_bars:
+      manage: "Manage progress bars"
       index:
+        title: "Förloppsindikatorer"
+        no_progress_bars: "There are no progress bars"
+        new_progress_bar: "Create new progress bar"
+        primary: "Primary progress bar"
         table_id: "Legitimation"
         table_kind: "Typ"
         table_title: "Titel"
+        table_percentage: "Aktuellt framsteg"
+      new:
+        creating: "Create progress bar"
+      edit:
+        title:
+          primary: "Edit primary progress bar"
+          secondary: "Edit progress bar %{title}"
+      create:
+        notice: "Progress bar created successfully!"
+      update:
+        notice: "Progress bar updated successfully"
+      delete:
+        notice: "Progress bar deleted successfully"
     comments:
       index:
         id: "ID"
         content: "Innehåll"
+        author: "Skribent"
         commentable_type: "Typ"
         title: Kommentarer
+        no_comments: Det finns inga kommentarer.
         table_link: "Länk"
     hidden_comments:
       index:
+        filter: Filtrera
         filters:
           all: Alla
           with_confirmed_hide: Godkända
+          without_confirmed_hide: Väntande
+        hidden_debate: Dold debatt
         hidden_proposal: Gömt förslag
         title: Dolda kommentarer
+        no_hidden_comments: There are no hidden comments.
     dashboard:
       index:
         back: Gå tillbaka till %{org}
@@ -282,54 +357,90 @@ sv:
         description: Välkommen till administrationspanelen för %{org}.
       actions:
         index:
+          description: "When users create proposals they can access a dashboard of their proposal, where you can propose resources and recommendations to get support for their idea."
+          create: Create resource or action
           edit: Redigera
           delete: Radera
           active: 'Ja'
           inactive: 'Nej'
+          title: Resurser och åtgärder
           action_title: Titel
           action_type: Typ
           required_supports: Minsta stöd som krävs
+          day_offset: Minsta dagar som krävs
           action_active: Aktiva
           order: Sortera efter
+          published_proposal: Publicerat förslag
           default:
             email: E-post
             polls: Omröstningar
+            poster: Affisch
         new:
+          creating: New action for the proposals dashboard
           back: Tillbaka till lista
+        create:
+          notice: Åtgärden har skapats
         edit:
+          editing: Edit action for the proposals dashboard
           back: Tillbaka till lista
+        delete:
+          success: Åtgärden har tagits bort
         form:
           submit_button: Spara
+          help_text: Enter 0 so that this value is not taken into account
+          published_proposal_help_text: Mark this checkbox to create the action only for published proposals
       administrator_tasks:
         index:
+          description: "Resources published in the dashboard of proposals may include a button to be requested to administrators. User requests are shown below."
+          title: Resurser begärt
           solve: Lösa
+          no_records: There are no resources requested
           source: Källa
+          resource: Requested resource
           filter: Filtrera
           filters:
             pending: Väntande
             done: Löst
+        edit:
+          back: Back to pending tasks list
+          solving: Solve pending task
         form:
+          solve: Mark as solved
           proposal: Förslag
+          request: Requested resource
+        update:
+          success: The task has been marked as solved.
     debates:
       index:
         id: ID
+        author: Skribent
         title: Debatter
+        no_debates: Det finns inga debatter.
     hidden_debates:
       index:
+        filter: Filtrera
         filters:
           all: Alla
           with_confirmed_hide: Godkända
+          without_confirmed_hide: Väntande
         title: Dolda debatter
+        no_hidden_debates: Det finns inga dolda debatter.
     documents:
       new:
         title: "Ladda upp ett dokument"
+        submit_button: "Ladda upp"
       index:
         new_link: "Lägg till ett nytt dokument"
+        no_documents: "Det finns inga dokument."
         title: "Dokument"
+        format: "Format"
         size: "Storlek"
         url: "URL"
       create:
+        success_notice: "Document uploaded succesfully"
         unable_notice: "Ogiltigt dokument"
+      destroy:
+        success_notice: "Dokumentet har raderats"
     hidden_users:
       index:
         filter: Filtrera
@@ -339,7 +450,7 @@ sv:
           without_confirmed_hide: Väntande
         title: Dolda användare
         user: Användare
-        no_hidden_users: Det finns inga dolda kommentarer.
+        no_hidden_users: Det finns inga dolda användare.
       show:
         email: "E-post:"
         hidden_at: "Dold:"
@@ -372,12 +483,15 @@ sv:
           process: Process
           debate_phase: Diskussionsfas
           draft_phase: Utkastsfas
+          draft_phase_description: If this phase is active, the process won't be listed on processes index. Allow to preview the process and create content before the start.
+          allegations_phase: Kommenteringsfas
           proposals_phase: Förslagsfas
           use_markdown: Använda Markdown för att formatera texten
           title_placeholder: Titel på processen
           summary_placeholder: Kort sammanfattning
           description_placeholder: Lägg till en beskrivning av processen
           additional_info_placeholder: Lägga till ytterligare information som du anser vara användbar
+          homepage_description: Here you can explain the content of the process
           banner_title: Färger för sidhuvud
         index:
           create: Ny process
@@ -412,6 +526,9 @@ sv:
           questions: Debattera
           proposals: Förslag
           milestones: Följer
+      homepage:
+        edit:
+          title: Configure your process homepage
       proposals:
         index:
           title: Titel
@@ -421,6 +538,7 @@ sv:
         form:
           custom_categories: Kategorier
           custom_categories_description: Kategorier som användare kan välja när de skapar förslaget.
+          custom_categories_placeholder: Enter the tags you would like to use, separated by commas (,) and between quotes ("")
       draft_versions:
         create:
           notice: 'Utkastet har skapats. <a href="%{link}">Klicka här för att visa det</a>'
@@ -435,6 +553,7 @@ sv:
           submit_button: Spara ändringar
           warning: Du har redigerat texten, glöm inte att klicka på Spara för att spara dina ändringar.
         form:
+          title: 'Editing <span class="strong">%{draft_version_title}</span> from the process <span class="strong">%{process_title}</span>'
           launch_text_editor: Öppna textredigerare
           close_text_editor: Stäng textredigerare
           use_markdown: Använd Markdown för att formatera texten
@@ -550,6 +669,7 @@ sv:
         content_blocks: Anpassade innehållsblock
         information_texts: Anpassade informationstexter
         information_texts_menu:
+          basic: "Basic customization"
           debates: "Debatter"
           community: "Gemenskap"
           proposals: "Förslag"
@@ -560,6 +680,8 @@ sv:
           welcome: "Välkommen"
         buttons:
           save: "Spara"
+          content_block:
+            update: "Uppdatera block"
       title_moderated_content: Modererat innehåll
       title_profiles: Profiler
       title_settings: Inställningar
@@ -567,8 +689,12 @@ sv:
       title_booths: Röststationer
       legislation: Medborgardialoger
       users: Användare
+      dashboard: Instrumentbräda för förslag
+      administrator_tasks: Resurser begärt
+      dashboard_actions: Resurser och åtgärder
       debates: "Debatter"
       comments: "Kommentarer"
+      local_census_records: Manage local census
     administrators:
       index:
         title: Administratörer
@@ -585,6 +711,7 @@ sv:
         title: "Administratörer: Sök användare"
       form:
         edit_title: "Redigera administratör"
+        updated: "Administrator updated successfully"
     moderators:
       index:
         title: Moderatorer
@@ -599,6 +726,7 @@ sv:
     segment_recipient:
       all_users: Alla användare
       administrators: Administratörer
+      all_proposal_authors: Proposal authors (including archived and retired)
       proposal_authors: Förslagslämnarna
       investment_authors: Förslagslämnare för den aktuella budgeten
       feasible_and_undecided_investment_authors: "Förslagslämnare till budgetförslag i den aktuella budgeten som inte överensstämmer med: [valuation finished unfesasible]"
@@ -625,12 +753,17 @@ sv:
         empty_newsletters: Det finns inga nyhetsbrev att visa
       new:
         title: Nytt nyhetsbrev
+        header_footer_help_text: "The heading and footer are the same for all emails, you can modify them on <code>app/views/layouts/mailer_header</code> and <code>app/views/layouts/mailer_footer</code>.<br>You can replace header image on %{link}."
+        image_link: "anpassade bilder"
       edit:
         title: Redigera nyhetsbrev
       show:
         title: Förhandsgranskning av nyhetsbrev
         send: Skicka
         affected_users: (%{n} påverkade användare)
+        sent_emails:
+          one: 1 e-post skickad
+          other: "%{count} e-post skickade"
         sent_at: Registrerat
         subject: Ämne
         segment_recipient: Mottagare
@@ -658,8 +791,10 @@ sv:
         empty_notifications: Det finns inga aviseringar att visa
       new:
         section_title: Ny avisering
+        submit_button: Skapa avisering
       edit:
         section_title: Redigera avisering
+        submit_button: Uppdatera avisering
       show:
         section_title: Förhandsgranska avisering
         send: Skicka avisering
@@ -718,7 +853,14 @@ sv:
       evaluation_comment:
         title: "Ny kommentar kring utvärdering"
         description: "Skickas till administratörer och bedömare knutna till ett kommenterat budgetförslag"
+      edit_info: "You can edit this email in"
       message_title: "Meddelandes titel"
+      message_body: "This is a sample of message's content."
+      alert:
+        no_investments: "There aren't any budget investment created. Some example data is needed in order to preview the email."
+        no_comments: "There aren't any comments created. Some example data is needed in order to preview the email."
+        no_replies: "There aren't any replies created. Some example data is needed in order to preview the email."
+        no_evaluation_comments: "There aren't any evaluation comments created. Some example data is needed in order to preview the email."
     emails_download:
       index:
         title: Hämta e-postadresser
@@ -736,7 +878,9 @@ sv:
         valuator_groups: "Bedömningsgrupper"
         group: "Delbudget"
         no_group: "Ingen grupp"
+        abilities: "Abilities"
         can_comment: "Kan kommentera"
+        can_edit_dossier: "Can edit dossier"
       valuator:
         add: Lägg till bedömare
         delete: Ta bort
@@ -749,8 +893,10 @@ sv:
         description: "Beskrivning"
         email: "E-post"
         group: "Delbudget"
+        abilities: "Abilities"
         no_description: "Utan beskrivning"
         no_group: "Utan grupp"
+        no_abilities: "Without abilities"
     valuator_groups:
       index:
         title: "Bedömningsgrupper"
@@ -777,6 +923,7 @@ sv:
         email_placeholder: Sök användare efter e-post
         search: Sök
         user_not_found: Användaren hittades inte
+        help: "To add or remove Poll officers use the search form below."
     poll_officer_assignments:
       index:
         officers_title: "Lista över funktionärer"
@@ -811,6 +958,7 @@ sv:
       flash:
         create: "Arbetspasset har lagts till"
         destroy: "Arbetspasset har tagits bort"
+        unable_to_destroy: "Shifts with associated results or recounts cannot be deleted"
         date_missing: "Datum är obligatoriskt"
       vote_collection: Samla röster
       recount_scrutiny: Rösträkning och granskning
@@ -848,6 +996,9 @@ sv:
     active_polls:
       edit:
         title: "Omröstningsbeskrivning"
+      form:
+        description:
+          help_text: "This text will appear in the header of the polls page. It can be used to add a context to the open polls."
     polls:
       index:
         title: "Lista över opinionsundersökningar"
@@ -878,6 +1029,10 @@ sv:
       flash:
         question_added: "Frågan har lagts till i omröstningen"
         error_on_question_added: "Frågan kunde inte läggas till i omröstningen"
+      destroy:
+        alert: "This action will remove the poll and all its associated questions."
+        success_notice: "Poll deleted successfully"
+        unable_notice: "You cannot delete a poll that has votes"
     questions:
       index:
         title: "Frågor"
@@ -891,6 +1046,7 @@ sv:
         table_proposal: "Förslag"
         table_question: "Fråga"
         table_poll: "Omröstning"
+        poll_not_assigned: "Poll not assigned"
       edit:
         title: "Redigera fråga"
       new:
@@ -944,6 +1100,9 @@ sv:
       index:
         title: "Rösträkning"
         no_recounts: "Det finns inga röster att räkna"
+        all_booths_total: "Cumulative total from all booths:"
+        total_final: "Slutresultat"
+        total_system: "Röster (automatisk)"
         table_booth_name: "Röststation"
         table_total_recount: "Total rösträkning (av funktionär)"
         table_system_count: "Röster (automatisk)"
@@ -990,6 +1149,7 @@ sv:
         official_updated: Uppgifter för representant för staden har sparats
       index:
         title: Representanter för staden
+        help: User accounts marked as officials will have their interventions on the platform highlighted. You can define the label that appears next to the user names of these accounts from most important (level 1) to least (level 5).
         no_officials: Det finns inga representanter för staden.
         name: Namn
         official_position: Titel
@@ -1013,6 +1173,9 @@ sv:
           pending: Väntande
           rejected: Avvisade
           verified: Verifierade
+        hidden_count:
+          one: Det finns också <strong>en organisation</strong> utan användare eller med dolda användare.
+          other: Det finns också <strong>%{count} organisationer</strong> utan användare eller med dolda användare.
         name: Namn
         email: E-post
         phone_number: Telefon
@@ -1035,10 +1198,16 @@ sv:
         title: Förslag
         id: ID
         author: Skribent
+        select: Välj
         selected: Vald
         milestones: Milstolpar
+        no_proposals: Det finns inga förslag.
+      show:
+        create_question: Add this proposal to a poll to be voted
       form:
         update: Uppdatera förslag
+      update:
+        notice: Proposal updated successfully
     hidden_proposals:
       index:
         filter: Filtrera
@@ -1062,7 +1231,10 @@ sv:
         updated: Uppdaterad värde
       index:
         title: Konfigurationsinställningar
+        general: Konfigurationsinställningar
         update_setting: Uppdatera
+        participation_processes: "Participation processes"
+        images_and_documents: "Bilder och dokument"
         feature_flags: Funktioner
         features:
           enabled: "Aktiverad funktion"
@@ -1079,7 +1251,15 @@ sv:
           how_to_enable: 'För att visa kartan måste man aktivera "Geografisk plats för förslag och budgetförslag" på sidan "Funktioner".'
         dashboard:
           title: Instrumentbräda för förslag
+        remote_census:
+          title: Remote Census configuration
+          how_to_enable: 'To configure remote census (SOAP) you must enable "Configure connection to remote census (SOAP)" on "Features" tab.'
+      remote_census_general_name: Generell information
+      remote_census_request_name: Begär data
+      remote_census_response_name: Svar data
+      setting: Funktioner
       setting_actions: Åtgärder
+      setting_name: Inställning
       setting_status: Status
       setting_value: Värde
       no_description: "Ingen beskrivning"
@@ -1099,6 +1279,7 @@ sv:
         button: Sök
         placeholder: Sök förslag efter titel, kod, beskrivning eller fråga
       debate_search:
+        button: Sök
         placeholder: Sök debatter med titel eller beskrivning
       user_search:
         button: Sök
@@ -1117,6 +1298,7 @@ sv:
       content: Innehåll
       created_at: Skapad den
       delete: Ta bort
+      color_help: Hexadecimal format
       show_results_and_stats: "Visa resultat och statistik"
       results_and_stats_reminder: "Genom att markera dessa rutor kommer omröstningens resultat och/eller statistik att visas för alla användare."
     geozones:
@@ -1129,7 +1311,9 @@ sv:
         name: Namn
         external_code: Extern kod
         census_code: Områdeskod
+        code_help: Response code for this geozone on the census API
         coordinates: Koordinater
+        coordinates_help: Coordinates that will generate a clickable area on an HTML image map
       edit:
         form:
           submit_button: Spara ändringar
@@ -1153,10 +1337,17 @@ sv:
         title: Ny namninsamling
         document_numbers_note: "Fyll i siffrorna separerade av semikolon (;)"
         submit: Skapa namninsamling
+        text_help:
+          required_fields_note: "To verify a user, your application needs: Document number"
+          date_of_birth_note: ", Day of birth (dd/mm/yyyy)"
+          postal_code_note: " och Postkod"
+          required_fields_structure_note: "Required fields for each user must be separated by commas and each user must be separated by semicolons."
+          example_text: "Exempel: "
       show:
         created_at: Skapad
         author: Skribent
         users: Användare
+        signature_count: "Antal signaturer:"
         verified:
           one: "Det finns %{count} giltig underskrift"
           other: "Det finns %{count} giltiga underskrifter"
@@ -1164,6 +1355,10 @@ sv:
           one: "Det finns %{count} ogiltiga underskrifter"
           other: "Det finns %{count} ogiltiga underskrifter"
         unverified_error: (Ej verifierad adress)
+        voted:
+          zero: "There are no votes created from the verified signatures."
+          one: "There is %{count} vote created from the verified signatures."
+          other: "There is %{count} votes created from verified signatures."
         loading: "Det finns fortfarande underskrifter som kontrolleras mot adressregistret, vänligen uppdatera sidan om en stund"
     stats:
       show:
@@ -1186,18 +1381,29 @@ sv:
           visits: Visningar
           votes: Totalt antal röster
         budgets_title: Medborgarbudgetar
+        participatory_budgets: Medborgarbudgetar
         direct_messages: Direktmeddelanden
         proposal_notifications: Aviseringar om förslag
         incomplete_verifications: Ofullständiga verifieringar
         polls: Omröstningar
       graph:
         debate_created: Debatter
+        visit: Visningar
+        level_2_user: Användare nivå två
+        proposal_created: Medborgarförslag
       budgets:
+        no_data_before_balloting_phase: "There isn't any data to show before the balloting phase."
+        title: "Participatory Budgets - Participation stats"
         supporting_phase: Stödfas
+        balloting_phase: Omröstning
       budget_balloting:
+        title: "Omröstningsstatistik"
         vote_count: Röster
         participant_count: Deltagare
+        votes_per_heading: Röster per område
+        participants_per_district: Deltagare efter område
       budget_supporting:
+        title: "Supporting phase stats"
         headings: Områden
         users: Användare
         vote_count: Röster
@@ -1210,6 +1416,7 @@ sv:
         title: Aviseringar om förslag
         total: Totalt
         proposals_with_notifications: Förslag med aviseringar
+        not_available: "Proposal not available"
       polls:
         title: Statistik för omröstning
         all: Omröstningar
@@ -1251,6 +1458,7 @@ sv:
       content_blocks:
         information: Information om innehållsblock
         about: "Du kan skapa innehållsblock i HTML som kan infogas i sidhuvudet eller sidfoten på din CONSUL-installation."
+        html_format: "A content block is a group of links, and it must have the following format:"
         no_blocks: "Det finns inga innehållsblock."
         create:
           notice: Innehållsblocket har skapats
@@ -1273,6 +1481,9 @@ sv:
           name: Namn
           names:
             top_links: Topp länkar
+            footer: Footer
+            subnavigation_left: Main Navigation Left
+            subnavigation_right: Main Navigation Right
       images:
         index:
           title: Anpassade bilder
@@ -1305,6 +1516,7 @@ sv:
           see_page: Visa sida
         new:
           title: Skapa ny anpassad sida
+          slug_help: "Text to identify this page on URL, for example <code>https://consulproject.org/page-slug</code>"
         page:
           created_at: Skapad den
           status: Status
@@ -1321,6 +1533,13 @@ sv:
           description: Beskrivning
           link_text: Länktext
           link_url: Länk-URL
+          columns_help: "Width of the card in number of columns. On mobile screens it's always a width of 100%."
+          create:
+            notice: "Card created successfully!"
+          update:
+            notice: "Card updated successfully"
+          destroy:
+            notice: "Card removed successfully"
     homepage:
       title: Startsida
       description: De aktiva modulerna visas på startsidan i samma ordning som här.
@@ -1349,9 +1568,51 @@ sv:
         submit_header: Spara sidhuvud
         card_title: Redigera kort
         submit_card: Spara kort
+    audits:
+      title: "Change Log"
+      changes: "Lista över ändringar"
+      id: "ID"
+      field: "Fält"
+      new_value: "Nytt värde"
+      old_value: "Gammalt värde"
+      edited_at: "Redigerad"
+      edited_by: "Redigerad av"
+      actions: "Åtgärder"
+      empty: "There are no changes logged"
     local_census_records:
       index:
+        title: Manage local census
+        create: Create new local census record
+        no_local_census_records: There are no local census records.
         document_type: Dokumenttyp
+        document_number: Dokumentnummer
         date_of_birth: Födelsedatum
         postal_code: Postkod
+        search:
+          placeholder: Search by document number
+          search: Sök
         import: Importera CSV
+      new:
+        creating: Creating new local census record
+      create:
+        notice: New local census record created successfully!
+      edit:
+        editing: Editing local census record
+      update:
+        notice: Local census record updated successfully!
+      destroy:
+        notice: Local census record removed successfully!
+      imports:
+        new:
+          title: Local census records
+          subtitle: Importera CSV fil
+        create:
+          notice: Local census records import process executed successfully!
+        show:
+          title: Manage local census
+          subtitle: Import process results
+          import: Importera igen
+          errored: Felaktiga rader
+          created: Created records
+        local_census_records:
+          no_records_found: Inga rader.

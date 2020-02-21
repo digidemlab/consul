@@ -42,8 +42,12 @@ sv:
         other: "%{count} svar"
       responses_show:
         zero: Inga svar
+        one: "1 svar (visa)"
+        other: "%{count} svar (visa)"
       responses_collapse:
         zero: Inga svar
+        one: "1 svar (göm)"
+        other: "%{count} svar (göm)"
       user_deleted: Användaren är borttagen
       votes:
         zero: Inga röster
@@ -112,6 +116,9 @@ sv:
         button: Sök
         placeholder: Sök debatter...
         title: Sök
+      search_results:
+        one: " som innehåller <strong>'%{search_term}'</strong>"
+        other: " som innehåller <strong>'%{search_term}'</strong>"
       select_order: Sortera efter
       start_debate: Starta en debatt
       title: Debatter
@@ -162,12 +169,18 @@ sv:
     direct_message: privat meddelande
     error: fel
     errors: fel
+    not_saved: "gjorde att %{resource} inte kunde sparas. <br>Kontrollera och rätta till de markerade fälten:"
     policy: Sekretesspolicy
+    banner: banner
     proposal: Förslag
     proposal_notification: "Avisering"
     budget/investment: Budgetförslag
     budget/group: Budgetgrupp
     budget/heading: Budgetrubrik
+    geozone: geografiska områden
+    legislation/draft_version: utkast
+    legislation/process: process
+    legislation/question: fråga
     poll/shift: Arbetspass
     poll/question/answer: Svar
     user: Konto
@@ -176,6 +189,10 @@ sv:
     document: Dokument
     topic: Ämne
     image: Bild
+    local_census_record: Local Census Record
+    local_census_records/import: Local Census Records Import
+    site_customization/content_block: innehållsblock
+    site_customization/page: sida
   geozones:
     none: Hela staden
   layouts:
@@ -188,8 +205,10 @@ sv:
       proposal_header:
         published: Publicerad
         draft: Utkast
+        retired: Retired
       proposal_totals:
         active_resources: Aktiva resurser
+        community: Participants in your community
         show_proposal: Visa förslag
         preview_proposal: Förhandsvisa förslag
         current_goal: Nuvarande mål
@@ -286,6 +305,17 @@ sv:
     create:
       form:
         submit_button: Skapa förslag
+    created:
+      title: Congratulations! You have taken the first step.
+      motivation: "It is important to prepare the launch campaign for your proposal to be successful. The first few days are decisive."
+      motivation_2: "<strong>If you want recommendations to prepare the publishing leave your proposal as a draft and we will guide you.</strong>"
+      publish: Nej, jag vill publicera medborgarförslaget
+      dashboard: Yes, I want help and I'll publish later
+      preview_title: This is how your proposal will look when you publish it
+    share:
+      improve_it: Få mer stöd genom att förbättra ditt förslag.
+      dashboard: Visa mer information
+      message: "I supported the proposal %{title} in %{handle}. If you're interested, support it too!"
     edit:
       editing: Redigera förslag
       form:
@@ -337,6 +367,9 @@ sv:
           error: "Ett fel har uppstått. Var vänlig och gå till \"Mitt konto\" för att manuellt inaktivera rekommenderade förslag"
       retired_proposals: Förslag som dragits tillbaka
       retired_proposals_link: "Förslag som dragits tillbaka av förslagslämnaren"
+      selected_proposals: Valda förslag
+      selected_proposals_link: Visa valda förslag
+      archived_proposals: Arkiverade förslag
       proposals_lists: Förslagslista
       retired_links:
         all: Alla
@@ -349,6 +382,9 @@ sv:
         button: Sök
         placeholder: Sök förslag...
         title: Sök
+      search_results:
+        one: " containing the term <strong>'%{search_term}'</strong>"
+        other: " containing the term <strong>'%{search_term}'</strong>"
       select_order: Sortera efter
       select_order_long: "Du visar förslag enligt:"
       start_proposal: Skapa ett förslag
@@ -373,6 +409,7 @@ sv:
       start_new: Skapa ett förslag
     notice:
       retired: Förslag som dragits tillbaka
+      published: The proposal has been published
     proposal:
       created: "Du har skapat ett förslag!"
       share:
@@ -395,9 +432,11 @@ sv:
         one: 1 röst
         other: "%{count} röster"
       supports_necessary: "behöver stöd från %{number} personer"
+      reason_for_supports_necessary: ""
       total_percent: 100%
       archived: "Förslaget har arkiverats och kan inte längre stödjas."
       successful: "Förslaget har fått tillräckligt med stöd."
+      selected: "Valt förslag"
     show:
       author_deleted: Användaren är borttagen
       code: "Förslagskod:"
@@ -418,22 +457,38 @@ sv:
       embed_video_title: "Video om %{proposal}"
       title_video_url: "Extern video"
       author: Skribent
+      draft: Proposal in draft. Cannot yet get supports, nor does it appear in the list of proposals.
     update:
       form:
         submit_button: Spara ändringar
   dashboard:
     menu:
       my_proposal: Redigera mitt förslag
+      progress: Framsteg
       resources: Resurser
       community: Gemenskap
       polls: Omröstningar
       mailing: E-post
+      poster: Affisch
       recommended_actions: Rekommenderade åtgärder
+      messages: Meddelande till användare
+      related_content: Relaterat innehåll
+    form:
+      request: Begäran
+    create_request:
+      success: The request has been successfully sent. We will contact you as soon as possible to inform you about it.
+      archived: This proposal is archived and can not request resources.
     progress:
+      title: Graphic
+      group_by_month: Månadsvis
+      group_by_week: Veckovis
       group_by_date: Daglig
+      progress: Acumulated progress
       supports: Stöd
+      success: Ideal progress
       new_action: Ny
     index:
+      title: Redigering
       edit_proposal_link: Redigera förslag
       publish: Publicera förslag
       retire: Ta tillbaka förslaget
@@ -442,28 +497,55 @@ sv:
     resources:
       available_resources: Tillgängliga resurser
     resource:
+      required_days: "%{days} days required"
+      required_supports: "%{supports} supports required"
       and: och
       view_resource: Se resurs
+      resource_requested: Resurser redan begärt
+      request_resource: Begär resurs
+      resource_locked: Resource locked
     recommended_actions:
       title: Rekommenderade åtgärder
+      goto_proposed_actions: Gå till rekommenderade åtgärder
+      see_proposed_actions: Check out recommended actions
+      hide_proposed_actions: Hide recommended actions
+      pending_title: Väntande
       show_description: Visa beskrivning
+      without_pending_actions: No recommended actions pending
       done_title: Genomfört
+      without_done_actions: No recommended actions done
     next_goal:
       title: Mål
+      see_complete_course: Check out the complete course
+      hide_course: Hide course
     goal:
+      target_supports:
+        one: Get %{count} support for your proposal
+        other: Get %{count} supports for your proposal
       days:
         one: "%{count} dag"
         other: "%{count} dagar"
+      locked_resource: Resource locked
+      ideal_time: Ideal time
     community:
+      access_community: Gå med i gemenskapen
+      latest_activity: "Latest activity of the community: %{at}"
       participants: Deltagare
       debates: Debatter
       comments: Kommentarer
       latest_comments: Senaste meddelande
+    messages:
+      send_notification: Send message to proposal supporters
+      previous_notifications: See previous notifications
     polls:
       index:
         title: Omröstningar
         create: Skapa omröstning
+        count:
+          one: You have created %{count} poll.
+          other: You have created %{count} polls.
         links: Länkar
+        additiontal_information: Ytterligare information
       new:
         title: Ny omröstning
         submit: Skapa omröstning
@@ -475,27 +557,52 @@ sv:
           other: "%{count} svar"
         view_results: Se resultat
         edit_poll: Redigera omröstning
+        show_results_help: If you check this box the results will be public and all users will be able to see them
         delete: Ta bort enkät
+        alert_notice: This action will remove the survey and all its associated questions.
+        success_notice: Survey deleted successfully
+        unable_notice: You cannot destroy a survey that has responses
       form:
         name: Enkättitel
         add_question: Lägg till fråga
       question_fields:
+        remove_question: Ta bort fråga
         add_answer: Lägg till svar
       question_answer_fields:
         remove_answer: Ta bort svar
     poster:
       index:
+        title: Poster preview
+        poster_title: "Do not keep looking,"
+        poster_subtitle: "back me up! ;)"
+        intro_text: "<strong>I am participating in %{org}</strong> with my own citizen proposal and only if you also add you can I achieve the necessary support to make the city we all want."
+        proposal_code: "Code of the proposal: %{code}"
         support: Stöd mitt förslag
+        footer: "<strong>Visit %{link} and support this proposal.</strong> We need to be many. Decide your too. Thank you!"
+      new:
+        title: Poster of your proposal
       options:
         preview: Förhandsvisning
         download: Ladda ner
     mailing:
+      index:
+        title: E-mail preview
+      new:
+        title: E-mail model to share
       mailing_options:
+        send: Send to %{address}
         preview: Förhandsvisning
+      create:
+        sent: The email has been sent
     mailer:
       forward:
+        subtitle: "If you support me, <br>we will achieve it."
+        support_button: Stöd förslaget
         share_in: Dela på
         hi: "Hej!"
+        introduction: I am writing to let you know that I am participating in %{org}, the platform we can decide which city we want. And for that, I created my own citizen proposal and now, I'm going to need your support! But do not worry because It is very simple.
+        support: "You just have to click on the button that you will see below 'Support this proposal' and you can inform yourself about before promoting it. Only the proposals that achieve the maximum support will be carried out by the City Council, and I thought that you, I'm sure you help me achieve it!"
+        share: "And if you also do me the great favor of sharing my proposal with your friends, family and contacts, it would be perfect!"
   polls:
     all: "Alla"
     no_dates: "inget datum har valts"
@@ -529,6 +636,7 @@ sv:
       back: Tillbaka till omröstningar
       cant_answer_not_logged_in: "Du behöver %{signin} eller %{signup} för att kunna delta."
       comments_tab: Kommentarer
+      cant_answer_verify: "Du måste %{verify_link} för att svara."
       verify_link: "verifiera ditt konto"
       cant_answer_expired: "Omröstningen är avslutad."
       cant_answer_wrong_geozone: "Den här frågan är inte tillgänglig i ditt område."
@@ -564,6 +672,7 @@ sv:
     new:
       title: "Skicka meddelande"
       submit_button: "Skicka meddelande"
+      info_about_receivers: "Det här meddelandet kommer att skickas till <strong>%{count} personer</strong> och visas på %{proposal_page}.<br> Meddelanden skickas inte på en gång, utan som regelbundna e-postmeddelanden med aviseringar om förslagen."
       proposal_page: "förslagets sida"
     show:
       back: "Gå tillbaka till min aktivitet"
@@ -603,6 +712,17 @@ sv:
     follow: "Följ"
     following: "Följer"
     follow_entity: "Följ %{entity}"
+    followable:
+      budget_investment:
+        create:
+          notice: "Du följer nu det här budgetförslaget! <br> Vi meddelar dig om alla ändringar så att du kan hålla dig uppdaterad."
+        destroy:
+          notice: "Du har slutat följa det här budgetförslaget! <br> Vi kommer inte längre skicka aviseringar om förslaget."
+      proposal:
+        create:
+          notice: "Now you are following this citizen proposal! <br> We will notify you of changes as they occur so that you are up-to-date."
+        destroy:
+          notice: "You have stopped following this citizen proposal! <br> You will no longer receive notifications related to this proposal."
     hide: Dölj
     print:
       print_button: Skriv ut informationen
@@ -632,6 +752,7 @@ sv:
       districts: "Stadsdelar"
       districts_list: "Lista över stadsdelar"
       categories: "Kategorier"
+    target_blank: " (länken öppnas i ett nytt fönster)"
     you_are_in: "Du är på"
     unflag: Ta bort flagga
     unfollow_entity: "Sluta följa %{entity}"
@@ -651,6 +772,14 @@ sv:
       title: Rekommendationer
       see_more: Visa fler rekommendationer
       hide: Dölj rekommendationer
+    translations:
+      select_language_prompt: Välj språk
+      remove_language: Ta bort språk
+      add_language: Lägg till språk
+      languages_in_use:
+        zero: "0 languages in use"
+        one: "1 language in use"
+        other: "%{count} languages in use"
   social:
     facebook: "%{org} på Facebook"
     twitter: "%{org} på Twitter"
@@ -675,6 +804,11 @@ sv:
     manage:
       all: "Du har inte behörighet att utföra åtgärden '%{action}' på %{subject}."
   users:
+    login_to_comment: "Du behöver %{signin} eller %{signup} för att kunna kommentera."
+    login_to_continue: "Du behöver %{signin} eller %{signup} för att fortsätta."
+    signin: "logga in"
+    signup: "registrera dig"
+    verify_account: "verifiera ditt konto"
     direct_messages:
       new:
         direct_messages_bloqued: "Användaren tar inte emot direkta meddelanden"
@@ -721,6 +855,7 @@ sv:
       published: Publicerad
       see: "Visa förslag"
       actions: Åtgärder
+      retired_help_text: Dashboard not available for retired proposals
   votes:
     agree: Jag håller med
     anonymous: För många anonyma röster för att godkänna omröstningen %{verify_account}.
@@ -814,6 +949,7 @@ sv:
       cancel_button: Avbryt
     nested_links:
       title: Länkar
+      note: Add the links that are of interest
       add_new_link: Lägg till ny länk
     link_fields:
       label_placeholder: Länktitel
@@ -821,5 +957,14 @@ sv:
   communities:
     show:
       surveys: Enkäter
+      complete_survey: Complete the survey
     subnav:
       surveys: Enkäter
+    poll:
+      take_part: Take part from %{from} to %{to}
+  remote_translations:
+    text: The content of this page is not available in your language
+    all_remote_translations_enqueued_text: In a short period of time refreshing the page you will be able to see all the content in your language.
+    create:
+      enqueue_remote_translation: Translations have been correctly requested.
+    button: Översätta sida

@@ -18,6 +18,7 @@ sv:
         title: "Debatter"
         description: "I %{link}-delen kan du presentera dina åsikter och diskutera frågor som rör staden. Det är också en plats för att utveckla idéer som kan tas vidare till andra delar av %{org} och leda till konkreta åtgärder från kommunen."
         link: "debatter"
+        feature: "Du kan skriva debattinlägg och kommentera och betygsätta andras inlägg med <strong>Jag håller med</strong> eller <strong>Jag håller inte med</strong>. För att göra det behöver du %{link}."
         feature_link: "registrera dig på %{org}"
         image_alt: "Knappar för att betygsätta diskussioner"
         figcaption: 'Knappar för "Jag håller med" och "Jag håller inte med" för att betygsätta diskussioner.'
@@ -26,11 +27,13 @@ sv:
         description: "I %{link}-delen kan du skriva förslag som du vill att kommunen ska genomföra. Förslagen behöver få tillräckligt med stöd för att gå vidare till omröstning. De förslag som vinner en omröstning kommer att genomföras av kommunen."
         link: "medborgarförslag"
         image_alt: "Knapp för att stödja förslag"
+        figcaption: 'Knapp för att "stödja" ett förslag.'
       budgets:
         title: "Medborgarbudget"
         description: "I %{link}-delen beslutar invånarna om hur en del av stadens budget ska användas."
         link: "medborgarbudgetar"
         image_alt: "Olika faser av en medborgarbudget"
+        figcaption: '"Support" and "Voting" phases of participatory budgets.'
       polls:
         title: "Omröstningar"
         description: "%{link}-delen aktiveras varje gång ett förslag får 1% stöd och går vidare till omröstning, eller när kommunfullmäktige lämnar ett förslag till omröstning."
@@ -66,7 +69,7 @@ sv:
     accessibility:
       title: Tillgänglighet
       description: |-
-        Tillgänglighet på webben hänvisar till allas möjlighet att tillträda webben och dess innehåll oavsett de funktionshinder (fysiska, intellektuella eller tekniska) som kan uppstå eller från det som beror på användarsammanhang (teknisk eller miljömässig).
+        Tillgänglighet på webben hänvisar till allas möjlighet att tillträda webben och dess innehåll oavsett de funktionshinder (fysiska, intellektuella eller tekniska) som kan uppstå eller från det som beror på användarsammanhang (teknisk eller miljömässig). 
 
         När webbplatser designas med tillgänglighet i åtanke, kan alla användare få tillgång till innehållet på jämlika villkor, exempelvis:
       examples:
@@ -82,37 +85,43 @@ sv:
           key_header: Tangent
           page_header: Sida
           rows:
-            - key_column: 0
-              page_column: Home
-            - key_column: 1
-              page_column: Debates
-            - key_column: 2
-              page_column: Proposals
-            - key_column: 3
-              page_column: Votes
-            - key_column: 4
-              page_column: Participatory budgets
-            - key_column: 5
-              page_column: Legislative processes
+            - 
+              key_column: 0
+              page_column: Hem
+            - 
+              key_column: 1
+              page_column: Debatter
+            - 
+              key_column: 2
+              page_column: Förslag
+            - 
+              key_column: 3
+              page_column: Röster
+            - 
+              key_column: 4
+              page_column: Medborgarbudgetar
+            - 
+              key_column: 5
+              page_column: Dialoger
         browser_table:
           description: "Beroende på det operativsystem och webbläsare som används är tangentkombinationen följande:"
           caption: Tangentkombinationen beror på operativsystemet och webbläsare
           browser_header: Webbläsare
           key_header: Tangentkombination
           rows:
-            -
+            - 
               browser_column: IE
               key_column: ALT + genväg sen ENTER
-            -
+            - 
               browser_column: Firefox
               key_column: ALT + CAPS + genväg
-            -
+            - 
               browser_column: Chrome
               key_column: ALT + genväg (CTRL + ALT + genvägar för MAC)
-            -
+            - 
               browser_column: Safari
               key_column: ALT + genväg (CMD + genvägar för MAC)
-            -
+            - 
               browser_column: Opera
               key_column: CAPS + ESC + genväg
       textsize:
@@ -122,32 +131,33 @@ sv:
           browser_header: Webbläsare
           action_header: Åtgärd att ta
           rows:
-            -
+            - 
               browser_column: IE
               action_column: Visa > Textstorlek
-            -
+            - 
               browser_column: Firefox
               action_column: Visa > Storlek
-            -
+            - 
               browser_column: Chrome
               action_column: Inställningar (ikon) > Alternativ > Avancerat > Webbinnehåll > Textstorlek
-            -
+            - 
               browser_column: Safari
               action_column: Visa > Zooma in/Zooma ut
-            -
+            - 
               browser_column: Opera
               action_column: Visa > skala
         browser_shortcuts_table:
           description: "Ett annat sätt att justera textstorlek är att använda tangentbordets genvägar som definieras i webbläsare, särskilt tangentkombinationen:"
           rows:
-            -
+            - 
               shortcut_column: CTRL och + (CMD och + på MAC)
               description_column: Ökar textstorlek
-            -
+            - 
               shortcut_column: CTRL och - (CMD och - på MAC)
               description_column: Minskar textstorlek
       compatibility:
         title: Förenlighet med standarder och visuell design
+        description: 'Alla sidor av denna webbplats följer <strong>Riktlinjer för Tillgänglighet</strong> eller generella principer för tillgänglig design som etablerats av Arbetsgruppen <abbr title="Web Accessibility Initiative" lang="en">WAI</abbr> som tillhör W3C.'
     titles:
       help: "Vad är %{org}? - Medborgardeltagande"
     verify:
