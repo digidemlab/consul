@@ -79,6 +79,10 @@ Rails.application.configure do
     config.action_mailer.smtp_settings = Rails.application.secrets.smtp_settings
   end
 
+  # Disable locale fallbacks for I18n
+  # (prevents using fallback locales set in application.rb).
+  # config.i18n.fallbacks = false
+
   # Send deprecation notices to registered listeners.
   config.active_support.deprecation = :notify
 
