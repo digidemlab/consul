@@ -19,6 +19,7 @@
         <%= @user.name %>
         <% if current_administrator? %>
           <small><%= @user.email %></small>
+          <small><%= @user.phone_number %></small>
         <% end %>
       </h2>
 

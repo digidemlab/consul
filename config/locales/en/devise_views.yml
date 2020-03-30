@@ -118,6 +118,8 @@ en:
           organization_signup_link: Sign up here
           password_confirmation_label: Confirm password
           password_label: Password
+          phone_number_label: Phone number
+          phone_number_note: We'll only use it to contact you to discuss your proposal if you submit one
           redeemable_code: Verification code received via email (optional)
           submit: Register
           terms: By registering you accept the %{terms}

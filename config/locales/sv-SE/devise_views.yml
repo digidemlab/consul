@@ -111,6 +111,8 @@ sv:
           organization_signup_link: Registrera dig här
           password_confirmation_label: Bekräfta lösenord
           password_label: Lösenord
+          phone_number_label: Telefonnummer
+          phone_number_note: Vi kommer bara använda den för att kontakta dig om ditt förslag om du lämnar något
           redeemable_code: Bekräftelsekod via e-post (frivilligt fält)
           submit: Registrera dig
           terms: Genom att registrera dig godkänner du %{terms}

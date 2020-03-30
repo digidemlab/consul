@@ -1,8 +1,8 @@
 production:
   piwik:
-    id_site: <%= ENV["MATOMO_SITE_ID"] %>
+    id_site: 20
     url: matomo.digidemlab.org
-    disabled: <%= ENV["MATOMO_SITE_ID"].blank? %>
+    disabled: false
 
 preproduction:
   piwik:

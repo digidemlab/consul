@@ -25,6 +25,12 @@
 
       <%= f.email_field :email,     placeholder: t("devise_views.users.registrations.new.email_label") %>
 
+      <% if feature?("registration.phone_number") %>
+      <%= f.text_field :phone_number,
+                                   placeholder: t("devise_views.users.registrations.new.phone_number_label"),
+                                   hint: t("devise_views.users.registrations.new.phone_number_note") %>
+      <% end %>
+
       <%= f.password_field :password, autocomplete: "off",
                            placeholder: t("devise_views.users.registrations.new.password_label") %>
 

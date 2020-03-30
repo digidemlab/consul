@@ -41,6 +41,14 @@ sv:
       twitter_login: "Twitter-inloggning"
       facebook_login: "Facebook-inloggning"
       google_login: "Google-inloggning"
+      google_login_description: "Allow users to sign up with their Google Account"
+      featured_proposals: "Featured proposals"
+      featured_proposals_description: "Shows featured proposals on index proposals page"
+      registration:
+        demographics: Demografisk under registrering
+        demographics_description: Tillåter användaren att skriva in sin födelseår och kön under registrering
+        phone_number: Telefonnummer under registrering
+        phone_number_description: Tillåter användaren att skriva in sitt telefonnummer under registrering
       signature_sheets: "Namninsamlingar"
       user:
         recommendations: "Rekommendationer"
