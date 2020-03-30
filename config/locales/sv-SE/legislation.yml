@@ -50,7 +50,6 @@ sv:
       proposals:
         empty_proposals: Det finns inga förslag
         filters:
-          random: Random
           winners: Vald
       debate:
         empty_questions: Det finns inga frågor

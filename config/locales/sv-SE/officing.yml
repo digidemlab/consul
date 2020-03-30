@@ -17,16 +17,12 @@ sv:
         select_poll: Välj omröstning
         add_results: Lägg till resultat
     poll_budgets:
-      see_ballot_sheets: See ballot sheets list
       index:
-        title: "%{poll_budget} - Ballot sheets list"
         ballot_sheet: "Valsedel %{id}"
         ballot_sheet_name: Namn
         ballot_sheet_author: Skribent
         ballot_sheet_creation_date: Tillverkningsdatum
-        empty_results: There are no ballot sheets for this poll yet
       new:
-        title: "%{poll_budget} - New ballot sheet"
         booth: Röststation
         select_booth: Välj röststation
         csv_data: CSV data
@@ -82,7 +78,6 @@ sv:
         not_to_vote: Personen har bestämt sig för att inte rösta den här gången
       show:
         can_vote: Kan rösta
-        cannot_vote: The person cannot vote because they are not registered in the district(s) where the voting takes place.
         error_already_voted: Du har redan deltagit i den här omröstningen
         submit: Bekräfta röst
         success: "Du har röstat!"

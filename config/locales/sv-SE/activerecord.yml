@@ -117,18 +117,12 @@ sv:
       proposal_notification:
         one: "Avisering om förslag"
         other: "Aviseringar om förslag"
-      dashboard/action:
-        one: Proposal dashboard action
-        other: Proposal dashboard actions
       dashboard/administrator_task:
         one: Åtgärd
         other: Åtgärder
       link:
         one: Länk
         other: Länk
-      local_census_record:
-        one: Local census record
-        other: Local census records
     attributes:
       budget:
         name: "Namn"
@@ -172,9 +166,6 @@ sv:
         description: "Beskrivning"
       geozone:
         name: Namn
-        external_code: "External code (optional)"
-        census_code: "Census code (optional)"
-        html_map_coordinates: "HTML <map> Coordinates (optional)"
       milestone:
         status_id: "Nuvarande status för budgetförslag (frivilligt fält)"
         title: "Titel"
@@ -197,7 +188,6 @@ sv:
       budget/group/translation:
         name: "Gruppnamn"
       budget/heading:
-        allow_custom_content: "Allow content block"
         latitude: "Latitud (frivilligt fält)"
         longitude: "Longitud (frivilligt fält)"
         name: "Område"
@@ -230,7 +220,6 @@ sv:
         question: "Fråga"
         description: "Beskrivning"
         responsible_name: "Förslagslämnarens fullständiga namn"
-        retired_reason: "Reason to retire the proposal"
         selected: "Markera som valda"
         terms_of_service: "Användarvillkor"
         video_url: "Extern video URL"
@@ -258,7 +247,6 @@ sv:
         public_activity: "Visa min lista över aktiviteter offentligt"
         public_interests: "Visa etiketterna för de ämnen jag följer offentligt"
         recommended_debates: "Visa rekommenderade debatter"
-        recommended_proposals: "Show proposals recommendations"
         redeemable_code: "Mottagen bekräftelsekod"
       direct_message:
         title: "Titel"
@@ -293,7 +281,6 @@ sv:
       poll/ballot_sheet:
         data: CSV data
         poll_id: Omröstning
-        officer_assignment_id: Officer assignment
       poll/shift:
         task: "Åtgärd"
       proposal_notification:
@@ -441,15 +428,9 @@ sv:
         short_description: Kort beskrivning
         description: Beskrivning
         link: Extern länk
-        request_to_administrators: Include in the resource a button to request the resource from administrators
-        day_offset: How many days after the creation of the proposal do you want it to be activated?
-        required_supports: How much supports does the proposal have to get in order to be activated?
-        order: You can enter the position where this action will be shown to the user in the list of actions
         active: Aktiv
         action_type: Typ
-        action_type_proposed_action: "Proposed action"
         action_type_resource: "Resurs"
-        published_proposal: "For published proposals?"
       dashboard/administrator_task:
         source: Källa
         user: Genomfört av
@@ -459,8 +440,6 @@ sv:
       valuator:
         description: Beskrivning
         valuator_group_id: Bedömningsgrupp
-        can_comment: Can create comments
-        can_edit_dossier: Can edit dossiers
       valuator_group:
         name: "Gruppnamn"
       local_census_record:
@@ -514,10 +493,6 @@ sv:
               invalid_date_range: måste vara på eller efter startdatum för utkastet
             allegations_end_date:
               invalid_date_range: måste vara på eller efter startdatum för fasen för att kommentera utkast
-        local_census_record:
-          attributes:
-            document_type:
-              inclusion: is not included in the list, allowed values are 1 for DNI, 2 for passport and 3 for residence card.
         proposal:
           attributes:
             tag_list:
@@ -549,9 +524,7 @@ sv:
             valuation:
               cannot_comment_valuation: "Du kan inte kommentera en kostnadsberäkning"
       messages:
-        translations_too_short: Is mandatory to provide one translation at least
         record_invalid: "Felmeddelanden: %{errors}"
-        another_poll_active: There is another poll active for the given period
         restrict_dependent_destroy:
           has_one: "Inlägget kan inte raderas eftersom det hänger ihop med inlägget %{record}"
           has_many: "Inlägget kan inte raderas eftersom det hänger ihop med inlägget %{record}"

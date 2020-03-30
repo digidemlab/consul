@@ -9,7 +9,7 @@ sv:
       - fre
       - lör
     abbr_month_names:
-      -
+      - 
       - jan
       - feb
       - mars
@@ -35,7 +35,7 @@ sv:
       long: "%d %B, %Y"
       short: "%d %b"
     month_names:
-      -
+      - 
       - januari
       - februari
       - mars
@@ -164,9 +164,7 @@ sv:
           quadrillion: triljon
           thousand: tusen
           trillion: biljon
-          unit: ""
       format:
-        delimiter: ""
         precision: 3
         significant: true
         strip_insignificant_zeros: true
@@ -182,11 +180,7 @@ sv:
           tb: TB
     percentage:
       format:
-        delimiter: ""
         format: "%n%"
-    precision:
-      format:
-        delimiter: ""
   support:
     array:
       last_word_connector: ", och "
