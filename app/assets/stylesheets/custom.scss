@@ -157,6 +157,45 @@ header {
   }
 }
 
+.progress-votes {
+  .total-amount,
+  .spent-amount-text {
+    color: $brand;
+  }
+}
+
+.investment-project,
+.investment-project-show,
+.budget-investment,
+.budget-investment-show {
+
+  .supports {
+    @include supports;
+
+    .investment-project-amount,
+    .budget-investment-amount {
+      color: $brand;
+    }
+
+    .button-support {
+      background: $brand;
+      color: #fff;
+
+      &:hover {
+        background: $bb-light-blue;
+      }
+    }
+
+    .total-supports {
+      color: $brand;
+    }
+
+    .remove .icon-check-circle {
+      color: $brand;
+    }
+  }
+}
+
 .top-bar .top-bar-title a img {
   height: 56px;
 }
